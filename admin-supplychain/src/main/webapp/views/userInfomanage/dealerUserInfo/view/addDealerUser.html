@@ -1,0 +1,134 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">{{title}}</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_busUserManage_form" method="post"
+              enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">用户名 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="name" ng-required="true" class="form-control" type="text" size="8" ng-model="addDealerUserData.name"/>
+                            <div class="m-t-xs" ng-show="add_busUserManage_form.name.$invalid && add_busUserManage_form.submitted">
+                                <small class="text-danger" ng-show="add_busUserManage_form.name.$error.required">请输入用户名</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">密码 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="password" ng-required="true" class="form-control" type="{{type ? 'text' : 'password'}}" size="8" ng-model="addDealerUserData.password"/>
+                            <input type="checkbox" ng-model="type" />显示密码
+                            <div class="m-t-xs" ng-show="add_busUserManage_form.password.$invalid && add_busUserManage_form.submitted">
+                                <small class="text-danger" ng-show="add_busUserManage_form.password.$error.required">请输入密码</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                    <label class="col-lg-3 control-label required">关联商户 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="merchantCode" ng-disabled="alreadyShipped" uis-open-close="onOpenClose(isOpen)" ng-required="true" ng-model="addDealerUserData.merchantCode"
+                                           theme="bootstrap" ng-keyup="myKeyUp()" id="sendMerchantNo">
+                                    <ui-select-match placeholder="请输入内容进行查询">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in sendMerchantNoList | filter: $select.search">
+                                        <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search" ng-click="sendMerchantClick(sendMerchantNoList)"></div>
+                                    </ui-select-choices>
+                                    <ui-select-no-choice style="padding: 10px;text-align: center;">
+                                        没有匹配的数据
+                                    </ui-select-no-choice>
+                                </ui-select>
+                                <p >未找到需要的商户,<a href="javascript:void(0)" class="text-info" ng-click="addNewDealer()">
+                                    点击创建
+                                </a></p>
+                                <div class="m-t-xs" ng-show="add_busUserManage_form.merchantCode.$invalid && add_busUserManage_form.submitted">
+                                    <small class="text-danger"
+                                           ng-show="add_busUserManage_form.merchantCode.$error.required">请选择发往商户号
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">用户渠道 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="userSource" ng-required="true" style="width: 200px" ng-model="addDealerUserData.channel" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in userChannelList">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_busUserManage_form.userSource.$invalid && add_busUserManage_form.submitted">
+                                <small class="text-danger" ng-show="add_busUserManage_form.userSource.$error.required">请选择商户类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">用户类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="type" ng-required="true" style="width: 200px" ng-model="addDealerUserData.type" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in merchantTypeList">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_busUserManage_form.type.$invalid && add_busUserManage_form.submitted">
+                                <small class="text-danger" ng-show="add_busUserManage_form.type.$error.required">请选择商户类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">销售模式 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="saleMode" ng-required="true" style="width: 200px" ng-model="addDealerUserData.saleMode" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in salesModelList">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_busUserManage_form.saleMode.$invalid && add_busUserManage_form.submitted">
+                                <small class="text-danger" ng-show="add_busUserManage_form.saleMode.$error.required">请选择经销模式</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">确认</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

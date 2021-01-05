@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.oreframework.boot:ore-boot-starter-dubbo:1.0.10-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/oreframework/boot/ore-boot-starter-dubbo/1.0.10-SNAPSHOT/ore-boot-starter-dubbo-1.0.10-20200919.140008-24.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/oreframework/boot/ore-boot-starter-dubbo/1.0.10-SNAPSHOT/ore-boot-starter-dubbo-1.0.10-20200919.140008-24-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/oreframework/boot/ore-boot-starter-dubbo/1.0.10-SNAPSHOT/ore-boot-starter-dubbo-1.0.10-20200919.140008-24-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

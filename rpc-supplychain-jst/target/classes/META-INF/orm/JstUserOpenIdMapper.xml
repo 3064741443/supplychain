@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.JstUserOpenIdMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.JstUserOpenId">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="OPENID" jdbcType="VARCHAR" property="openid" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="CONSUMER" jdbcType="VARCHAR" property="consumer" />
+    <result column="VERSION" jdbcType="VARCHAR" property="version" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="ROLE" jdbcType="VARCHAR" property="role" />
+    <result column="LOGIN_TYPE" jdbcType="VARCHAR" property="loginType" />
+    <result column="SHOP_CODE" jdbcType="VARCHAR" property="shopCode" />
+    <result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, OPENID, MERCHANT_CODE, MERCHANT_NAME, PASSWORD, CONSUMER, VERSION, PHONE, ROLE, 
+    LOGIN_TYPE, SHOP_CODE, SHOP_NAME, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.JstUserOpenId">
+    insert into jst_user_open_id (ID, OPENID, MERCHANT_CODE, 
+      MERCHANT_NAME, PASSWORD, CONSUMER, 
+      VERSION, PHONE, ROLE, 
+      LOGIN_TYPE, SHOP_CODE, SHOP_NAME, 
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{merchantCode,jdbcType=VARCHAR}, 
+      #{merchantName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{consumer,jdbcType=VARCHAR}, 
+      #{version,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}, 
+      #{loginType,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, #{shopName,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.JstUserOpenId">
+    insert into jst_user_open_id
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="openid != null">
+        OPENID,
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE,
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="consumer != null">
+        CONSUMER,
+      </if>
+      <if test="version != null">
+        VERSION,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="role != null">
+        ROLE,
+      </if>
+      <if test="loginType != null">
+        LOGIN_TYPE,
+      </if>
+      <if test="shopCode != null">
+        SHOP_CODE,
+      </if>
+      <if test="shopName != null">
+        SHOP_NAME,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="consumer != null">
+        #{consumer,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="loginType != null">
+        #{loginType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.JstUserOpenId">
+    update jst_user_open_id
+    <set>
+      <if test="openid != null">
+        OPENID = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="consumer != null">
+        CONSUMER = #{consumer,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        VERSION = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        ROLE = #{role,jdbcType=VARCHAR},
+      </if>
+      <if test="loginType != null">
+        LOGIN_TYPE = #{loginType,jdbcType=VARCHAR},
+      </if>
+      <if test="shopCode != null">
+        SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.JstUserOpenId">
+    update jst_user_open_id
+    set OPENID = #{openid,jdbcType=VARCHAR},
+      MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      CONSUMER = #{consumer,jdbcType=VARCHAR},
+      VERSION = #{version,jdbcType=VARCHAR},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      ROLE = #{role,jdbcType=VARCHAR},
+      LOGIN_TYPE = #{loginType,jdbcType=VARCHAR},
+      SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+      SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

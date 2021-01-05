@@ -1,0 +1,85 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">我的订单详情</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+            <colgroup>
+                <col width="20%" />
+                <col width="30%" />
+                <col width="20%" />
+                <col width="30%" />
+            </colgroup>
+            <tbody>
+            <tr>
+                <td class="text-right">设备类型 :</td>
+                <td class="text-left">{{ productTypeName}}</td>
+            </tr>
+            <tr>
+                <td class="text-right">产品名称 :</td>
+                <td class="text-left">{{ productInfo.name}}</td>
+            </tr>
+            <tr>
+                <td class="text-right">产品规格 :</td>
+                <td class="text-left">{{ productInfo.specification }}</td>
+            </tr>
+            <tr>
+                <td class="text-right">产品数量 :</td>
+                <td class="text-left">{{productNumber}}</td>
+            </tr>
+            <tr ng-repeat="sn in detailAfterOrderData.snList">
+                <td class="text-right">{{sn.name}}</td>
+                <td class="text-left">{{sn.sn}}     {{sn.deviceAfterReason}}</td>
+            </tr>
+            <tr>
+                <td class="text-right">实际签收SN数量 :</td>
+                <td class="text-left">{{signQuantity}}</td>
+            </tr>
+            <tr ng-repeat="signInfo in detailAfterOrderData.signInfo">
+                <td class="text-right">{{signInfo.name}}</td>
+                <td class="text-left">{{signInfo.sn}}</td>
+            </tr>
+            <tr>
+                <td class="text-right">售后类型 :</td>
+                <td class="text-left">{{ detailAfterOrderData.type }}</td>
+            </tr>
+            <tr>
+                <td class="text-right">联系人 :</td>
+                <td class="text-left">{{ detailAfterOrderData.logistics.receiveAddress.name }}/{{
+                    detailAfterOrderData.logistics.receiveAddress.mobile }}</td>
+            </tr>
+            <tr>
+                <td class="text-right">收货地址 :</td>
+                <td class="text-left">{{ detailAfterOrderData.logistics.receiveAddress.provinceName }}{{
+                    detailAfterOrderData.logistics.receiveAddress.cityName }}{{ detailAfterOrderData.logistics.receiveAddress.areaName
+                    }}{{ detailAfterOrderData.logistics.receiveAddress.address }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <div class="form-group" ng-if="repairShow">
+            <label class="col-lg-2 control-label">维修费 :</label>
+            <div class="control-content">
+                <div class="col-lg-10 addSn" style="margin-left: -90px;">
+                    <div style="display: inline-block;width:80%;position: relative;margin-left: 18%;"
+                         ng-repeat="item in mainTainTypeAndPriceArr">
+                        <input name="repairCostType"  disabled class="form-control  myafterManageSn" placeholder="收费类别"
+                               type="text" style="width: 50%;float: left;margin-right: 30px;" ng-model="item.repairCostType"/>
+                        <input name="price" disabled class="form-control price" placeholder="金额"
+                               type="text" style="width: 30%;display: inline-block;margin-right: 15px;" ng-model="item.price"/>元
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label" style="margin-top: 10px">维修费总计 :{{detailAfterOrderData.repairCost.toFixed(2)}}</label>
+            </div>
+        </div>
+    </div>
+
+</div>

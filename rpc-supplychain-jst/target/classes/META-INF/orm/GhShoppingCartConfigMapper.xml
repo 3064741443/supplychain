@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.GhShoppingCartConfigMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.GhShoppingCartConfig">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="cart_code" jdbcType="VARCHAR" property="cartCode" />
+    <result column="attrib_info_id" jdbcType="INTEGER" property="attribInfoId" />
+    <result column="option" jdbcType="VARCHAR" property="option" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, cart_code, attrib_info_id, `option`, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+  
+  <insert id="insertCartConfigList" parameterType="java.util.List">
+  	insert into gh_shopping_cart_config(cart_code, attrib_info_id, `option`, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG)values
+    <foreach collection="list" item="item" index="index" separator=",">
+    	(
+    		#{item.cartCode}, 
+    		#{item.attribInfoId}, 
+    		#{item.option},
+    		#{item.createdBy},
+    		#{item.createdDate},
+    		#{item.updatedBy},
+    		#{item.updatedDate},
+    		#{item.deletedFlag}
+    	)
+    </foreach>
+  </insert>
+  
+  <select id="selectCartConfig" parameterType="cn.com.glsx.supplychain.jst.model.GhShoppingCartConfig" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from gh_shopping_cart_config
+  	<where>
+  		<if test="cartCode != null">
+  			and cart_code = #{cartCode}
+  		</if>
+  		<if test="listCartCodes != null">
+  			and cart_code in
+  			<foreach collection="listCartCodes" item="configCode" open="(" close=")" separator=",">
+  				#{configCode}
+  			</foreach>
+  		</if>
+  	</where>
+  </select>
+  
+  <delete id="deletCartConfig" parameterType="cn.com.glsx.supplychain.jst.model.GhShoppingCartConfig">
+  	delete from gh_shopping_cart_config 
+  	<where>
+  		<if test="listCartCodes != null">
+  			and cart_code in
+  			<foreach collection="listCartCodes" item="configCode" open="(" close=")" separator=",">
+  				#{configCode}
+  			</foreach>
+  		</if>
+  	</where>
+  </delete>
+</mapper>

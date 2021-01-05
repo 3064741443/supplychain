@@ -1,0 +1,30 @@
+{
+    "list": [
+      {
+        "imei": "1111",
+        "iccid":"34523",
+        "imsi":"2323523",
+        "netCardNo":"4534534",
+        "verCode":"2534545",
+        "batchId":"67567",
+        "deviceType":"obd",
+        "deviceName":"虎哥大屏",
+        "packageName":"嘀嘀虎尊享版",
+        "operatorMerchantName":"重庆联通",
+        "sendMerchantName":"广汇富恒业",
+        "merchantId":"213123",
+        "importTime":"2018-03-08 10:34:45",
+        "outStorageTime":"2018-05-01 12:21:23",
+        "iccid":"64564",
+        "imsi":"3453425",
+        "userFlag":"13123432344",
+        "createdDate":"2018-05-01 12:21:23",
+        "userFlag":"3562346546",
+        "createdDate":"2018-05-01 12:21:23",
+        "termCode":"21002/AIMI_3G",
+        "moduleType":"ert",
+        "moduleVersion":"v1.0"
+      }
+    ]
+}
+

@@ -1,0 +1,22 @@
+{
+  "condition": null,
+  "draw": 0,
+  "error": null,
+  "total": 5,
+  "recordsFiltered": 5,
+  "recordsTotal": 5,
+  "data": [
+    {
+      "logisticsCompany": "顺丰快递", 
+      "logisticsOrder": "123243433434", 
+      "sendCount": "30", 
+      "sendTime": "2020/06/30"
+    },
+    {
+      "logisticsCompany": "圆通速递", 
+      "logisticsOrder": "234234242322", 
+      "sendCount": "50", 
+      "sendTime": "2020/06/29"
+    }
+  ]
+}

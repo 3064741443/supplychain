@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.DeviceFileVirtualMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.DeviceFileVirtual">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+    <result column="DEVICE_CODE" jdbcType="INTEGER" property="deviceCode" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMSI" jdbcType="VARCHAR" property="imsi" />
+    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+    <result column="VERIF_CODE" jdbcType="VARCHAR" property="verifCode" />
+    <result column="BATCH_NO" jdbcType="VARCHAR" property="batchNo" />
+    <result column="PACKAGE_ID" jdbcType="INTEGER" property="packageId" />
+    <result column="ANDROID_PACKAGE_ID" jdbcType="INTEGER" property="androidPackageId" />
+    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+    <result column="MANUFACTURER_CODE" jdbcType="VARCHAR" property="manufacturerCode" />
+    <result column="OUT_STORAGE_TYPE" jdbcType="VARCHAR" property="outStorageType" />
+    <result column="FIRMWARE_ID" jdbcType="INTEGER" property="firmwareId" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SN,DEVICE_CODE, PHONE, ICCID, IMSI, OPERATOR_MERCHANT_NO, VERIF_CODE, BATCH_NO, PACKAGE_ID, 
+    ANDROID_PACKAGE_ID, SEND_MERCHANT_NO, MANUFACTURER_CODE, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG,OUT_STORAGE_TYPE,FIRMWARE_ID
+  </sql>
+  
+  <select id="selectFileVirtual" parameterType="cn.com.glsx.supplychain.model.DeviceFileVirtual" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from device_file_virtual
+    where DELETED_FLAG = 'N'
+	      <if test="iccid != null and iccid != '' ">
+	        AND (ICCID LIKE CONCAT('%',#{iccid},'%')
+	      </if>
+	      <if test="imsi != null and imsi != ''">
+	        or IMSI LIKE CONCAT('%',#{imsi},'%'))
+	      </if>
+           <if test="deviceCode != null and deviceCode != 0">
+           AND DEVICE_CODE LIKE CONCAT('%',#{deviceCode,jdbcType=INTEGER},'%')
+           </if>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_file_virtual
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByImsi" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from device_file_virtual
+  	where IMSI=#{imsi,jdbcType=VARCHAR}
+  </select>
+  <select id="getDeviceFileVirtualByIccid" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from device_file_virtual
+  	where ICCID=#{iccid} and ICCID IS NOT NULL and ICCID != '' AND DELETED_FLAG='N'
+  </select>
+  <select id="getDeviceFileVirtualByIccids" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select ICCID from device_file_virtual
+  	where DELETED_FLAG='N' and iccid in
+  	<foreach collection="list" item="iccid" open="(" close=")" separator=",">
+  		#{iccid,jdbcType=VARCHAR}
+  	</foreach>
+  </select>
+  
+  <select id="getDeviceFileVirtualByImsis" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" /> 
+	from device_file_virtual
+  	where DELETED_FLAG='N' and imsi in
+  	<foreach collection="list" item="imsi" open="(" close=")" separator=",">
+  			#{imsi,jdbcType=VARCHAR}
+  	</foreach>
+  </select>
+  
+  
+  <select id="countDeviceFilesByDeviceCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	select count(1) from device_file_virtual where DEVICE_CODE=#{_parameter,jdbcType=INTEGER} and DELETED_FLAG='N'
+  </select>
+  <select id="countDevicesByDeviceType" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	select count(1) from device_file_virtual as f left join device_code as c on(f.DEVICE_CODE=c.DEVICE_CODE) where c.TYPE_ID = #{_parameter,jdbcType=INTEGER}
+  </select>
+  <select id="countDevices" resultType="java.lang.Integer">
+  	select count(1) from device_file_virtual
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_file_virtual
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.DeviceFileVirtual">
+  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      	SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_file_virtual (ID, SN,DEVICE_CODE, PHONE, 
+      ICCID, IMSI, OPERATOR_MERCHANT_NO, 
+      VERIF_CODE, BATCH_NO, PACKAGE_ID, 
+      ANDROID_PACKAGE_ID, SEND_MERCHANT_NO, MANUFACTURER_CODE, 
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG,OUT_STORAGE_TYPE,FIRMWARE_ID)
+    values (#{id,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR},#{deviceCode,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, 
+      #{iccid,jdbcType=VARCHAR}, #{imsi,jdbcType=VARCHAR}, #{operatorMerchantNo,jdbcType=VARCHAR}, 
+      #{verifCode,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{packageId,jdbcType=INTEGER}, 
+      #{androidPackageId,jdbcType=INTEGER}, #{sendMerchantNo,jdbcType=VARCHAR}, #{manufacturerCode,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR},#{outStorageType,jdbcType=VARCHAR},#{firmwareId,jdbcType=INTEGER})
+  </insert>
+  <insert id="batchInsertOnDuplicateKeyUpdate" parameterType="java.util.List">
+  	insert into device_file_virtual(DEVICE_CODE,PHONE,ICCID,IMSI,VERIF_CODE,BATCH_NO,PACKAGE_ID,SEND_MERCHANT_NO,OUT_STORAGE_TYPE,DELETED_FLAG,CREATED_BY, CREATED_DATE, UPDATED_BY,UPDATED_DATE) 
+  	values
+  	<foreach collection="list" item="item" index="index" separator=",">
+  		(#{item.deviceCode,jdbcType=INTEGER},
+  		 #{item.phone,jdbcType=VARCHAR},
+  		 #{item.iccid,jdbcType=VARCHAR},
+  		 #{item.imsi,jdbcType=VARCHAR},
+  		 #{item.verifCode,jdbcType=VARCHAR},
+  		 #{item.batchNo,jdbcType=VARCHAR},
+  		 #{item.packageId,jdbcType=INTEGER},	
+  		 #{item.sendMerchantNo,jdbcType=VARCHAR},
+  		 #{item.outStorageType,jdbcType=VARCHAR},
+  		 #{item.deletedFlag,jdbcType=VARCHAR},
+  		 #{item.createdBy,jdbcType=VARCHAR},
+  		 #{item.createdDate,jdbcType=TIMESTAMP},
+  		 #{item.updatedBy,jdbcType=VARCHAR},
+  		 #{item.updatedDate,jdbcType=TIMESTAMP}
+  		)
+  	</foreach>
+  	on duplicate key update 
+  	DEVICE_CODE = values(DEVICE_CODE),
+  	PHONE = values(PHONE),
+  	ICCID = values(ICCID),
+  	IMSI = values(IMSI),
+  	VERIF_CODE = values(VERIF_CODE),
+  	BATCH_NO = values(BATCH_NO),
+  	PACKAGE_ID = values(PACKAGE_ID),
+  	SEND_MERCHANT_NO = values(SEND_MERCHANT_NO),
+  	OUT_STORAGE_TYPE = values(OUT_STORAGE_TYPE),
+  	DELETED_FLAG = values(DELETED_FLAG),
+  	UPDATED_BY = values(UPDATED_BY),
+  	UPDATED_DATE = values(UPDATED_DATE)
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.DeviceFileVirtual">
+  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      	SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_file_virtual
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sn != null">
+        SN,
+      </if>
+      <if test="deviceCode != null">
+        DEVICE_CODE,
+      </if>
+      <if test="phone != null">
+        PHONE,
+      </if>
+      <if test="iccid != null">
+        ICCID,
+      </if>
+      <if test="imsi != null">
+        IMSI,
+      </if>
+      <if test="operatorMerchantNo != null">
+        OPERATOR_MERCHANT_NO,
+      </if>
+      <if test="verifCode != null">
+        VERIF_CODE,
+      </if>
+      <if test="batchNo != null">
+        BATCH_NO,
+      </if>
+      <if test="packageId != null">
+        PACKAGE_ID,
+      </if>
+      <if test="androidPackageId != null">
+        ANDROID_PACKAGE_ID,
+      </if>
+      <if test="sendMerchantNo != null">
+        SEND_MERCHANT_NO,
+      </if>
+      <if test="manufacturerCode != null">
+        MANUFACTURER_CODE,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="outStorageType != null">
+        OUT_STORAGE_TYPE,
+      </if>
+      <if test="firmwareId != null">
+        FIRMWARE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        #{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imsi != null">
+        #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorMerchantNo != null">
+        #{operatorMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="verifCode != null">
+        #{verifCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null">
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="packageId != null">
+        #{packageId,jdbcType=INTEGER},
+      </if>
+      <if test="androidPackageId != null">
+        #{androidPackageId,jdbcType=INTEGER},
+      </if>
+      <if test="sendMerchantNo != null">
+        #{sendMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerCode != null">
+        #{manufacturerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageType != null">
+        #{outStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareId != null">
+      	#{firmwareId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.DeviceFileVirtual">
+    update device_file_virtual
+    <set>
+      <if test="sn != null">
+        SN = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imsi != null">
+        IMSI = #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorMerchantNo != null">
+        OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="verifCode != null">
+        VERIF_CODE = #{verifCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null">
+        BATCH_NO = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="packageId != null">
+        PACKAGE_ID = #{packageId,jdbcType=INTEGER},
+      </if>
+      <if test="androidPackageId != null">
+        ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER},
+      </if>
+      <if test="sendMerchantNo != null">
+        SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerCode != null">
+        MANUFACTURER_CODE = #{manufacturerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageType != null">
+        OUT_STORAGE_TYPE = #{outStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareId != null">
+      	FIRMWARE_ID = #{firmwareId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.DeviceFileVirtual">
+    update device_file_virtual
+    set SN = #{sn,jdbcType=VARCHAR},
+      DEVICE_CODE=#{deviceCode,jdbcType=INTEGER},
+      PHONE = #{phone,jdbcType=VARCHAR},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      IMSI = #{imsi,jdbcType=VARCHAR},
+      OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      VERIF_CODE = #{verifCode,jdbcType=VARCHAR},
+      BATCH_NO = #{batchNo,jdbcType=VARCHAR},
+      PACKAGE_ID = #{packageId,jdbcType=INTEGER},
+      ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER},
+      SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      MANUFACTURER_CODE = #{manufacturerCode,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      OUT_STORAGE_TYPE = #{outStorageType,jdbcType=VARCHAR},
+      FIRMWARE_ID = #{firmwareId,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

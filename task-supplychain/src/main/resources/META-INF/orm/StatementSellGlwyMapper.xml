@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.am.StatementSellGlwyMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.StatementSellGlwy">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SETTLE_CUSTOMER_CODE" property="settleCustomerCode" jdbcType="VARCHAR" />
+    <result column="SETTLE_CUSTOMER_NAME" property="settleCustomerName" jdbcType="VARCHAR" />
+    <result column="FINANCING_MATURITY_SPLIT" jdbcType="VARCHAR" property="financingMaturitySplit" />
+    <result column="CONTRACT_DATE_SPLIT" jdbcType="TIMESTAMP" property="contractDateSplit" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="REASONS" property="reasons" jdbcType="VARCHAR" />
+    <result column="SALE_GROUP_CODE" property="saleGroupCode" jdbcType="VARCHAR" />
+    <result column="SALE_GROUP_NAME" property="saleGroupName" jdbcType="VARCHAR" />
+    <result column="BELONG_COMPANY" jdbcType="VARCHAR" property="belongCompany" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="SHOP_CODE" jdbcType="VARCHAR" property="shopCode" />
+    <result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName" />
+    <result column="APPLY_NO" jdbcType="VARCHAR" property="applyNo" />
+    <result column="CONTRACT_PAYMENT_NO" jdbcType="VARCHAR" property="contractPaymentNo" />
+    <result column="CUSTOMER_CODE" jdbcType="VARCHAR" property="customerCode" />
+    <result column="CUSTOMER_NAME" jdbcType="VARCHAR" property="customerName" />
+    <result column="RENT_ATTRIBLE" jdbcType="VARCHAR" property="rentAttrible" />
+    <result column="FINANCIAL_DES" jdbcType="VARCHAR" property="financialDes" />
+    <result column="VIN_NO" jdbcType="VARCHAR" property="vinNo" />
+    <result column="ENGINE_NO" jdbcType="VARCHAR" property="engineNo" />
+    <result column="CONTRACT_DATE" jdbcType="TIMESTAMP" property="contractDate" />
+    <result column="INSURE_YEAR" jdbcType="VARCHAR" property="insureYear" />
+    <result column="GLWY_INSURE_MONEY" jdbcType="DOUBLE" property="glwyInsureMoney" />
+    <result column="GLWY_SETTLE_MONEY" jdbcType="DOUBLE" property="glwySettleMoney" />
+    <result column="RENT_PROFIT_MONEY" jdbcType="DOUBLE" property="rentProfitMoney" />
+    <result column="INSURE_ASSURE_MONEY" jdbcType="DOUBLE" property="insureAssureMoney" />
+    <result column="CONTRACT_STATU" jdbcType="VARCHAR" property="contractStatu" />
+    <result column="FINANCING_MATURITY" jdbcType="VARCHAR" property="financingMaturity" />
+    <result column="SHOP_ATTRIB" jdbcType="VARCHAR" property="shopAttrib" />
+    <result column="SETTLE_STATU" jdbcType="VARCHAR" property="settleStatu" />
+    <result column="BILL_NO" jdbcType="VARCHAR" property="billNo" />
+    <result column="APPLY_DATE" jdbcType="TIMESTAMP" property="applyDate" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID,SETTLE_CUSTOMER_CODE,SETTLE_CUSTOMER_NAME,FINANCING_MATURITY_SPLIT,CONTRACT_DATE_SPLIT,STATUS,REASONS,SALE_GROUP_CODE, SALE_GROUP_NAME,BELONG_COMPANY, AREA, SHOP_CODE,SHOP_NAME, APPLY_NO, CONTRACT_PAYMENT_NO, CUSTOMER_CODE, 
+    CUSTOMER_NAME, RENT_ATTRIBLE, FINANCIAL_DES, VIN_NO, ENGINE_NO, CONTRACT_DATE, INSURE_YEAR, 
+    GLWY_INSURE_MONEY, GLWY_SETTLE_MONEY, RENT_PROFIT_MONEY, INSURE_ASSURE_MONEY, CONTRACT_STATU, 
+    FINANCING_MATURITY, SHOP_ATTRIB, SETTLE_STATU, BILL_NO, APPLY_DATE, WORK_ORDER, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <update id="setSuccessStatusByIds" parameterType="java.util.List">
+  	update am_statement_sell_glwy set `STATUS` = 2 where ID in
+  	<foreach collection="list" item="id" index="index" open=" (" close=")" separator=",">
+  		#{id}
+  	</foreach>
+  </update>
+  
+  <update id="setFailedStatusByIds" parameterType="java.util.List">
+  	update am_statement_sell_glwy set `STATUS` = 3,`REASONS`='根据融资期限未找到对应的物料' where ID in
+  	<foreach collection="list" item="id" index="index" open=" (" close=")" separator=",">
+  		#{id}
+  	</foreach>
+  </update>
+</mapper>

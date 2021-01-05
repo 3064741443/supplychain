@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.AddressMapper">
+    <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.Address">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="MOBILE" property="mobile" jdbcType="VARCHAR"/>
+        <result column="PROVINCE_ID" property="provinceId" jdbcType="INTEGER"/>
+        <result column="PROVINCE_NAME" property="provinceName" jdbcType="VARCHAR"/>
+        <result column="CITY_ID" property="cityId" jdbcType="INTEGER"/>
+        <result column="CITY_NAME" property="cityName" jdbcType="VARCHAR"/>
+        <result column="AREA_ID" property="areaId" jdbcType="INTEGER"/>
+        <result column="AREA_NAME" property="areaName" jdbcType="VARCHAR"/>
+        <result column="ADDRESS" property="address" jdbcType="VARCHAR"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, NAME, MOBILE,PROVINCE_ID, PROVINCE_NAME,CITY_ID, CITY_NAME,AREA_ID, AREA_NAME, ADDRESS,MERCHANT_CODE, CREATED_BY,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+   <select id="selectByPhoneAndAddress" parameterType="glsx.com.cn.task.model.Address" resultMap="BaseResultMap">
+   		select
+   		<include refid="Base_Column_List" />
+   		from bs_address
+   		where MOBILE=#{mobile,jdbcType=VARCHAR} and ADDRESS=#{address,jdbcType=VARCHAR}
+   </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_address
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insert" parameterType="glsx.com.cn.task.model.Address">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="mobile != null">
+                MOBILE,
+            </if>
+            <if test="provinceId != null">
+                PROVINCE_ID,
+            </if>
+            <if test="provinceName != null">
+                PROVINCE_NAME,
+            </if>
+            <if test="cityId != null">
+                CITY_ID,
+            </if>
+            <if test="cityName != null">
+                CITY_NAME,
+            </if>
+            <if test="areaId != null">
+                AREA_ID,
+            </if>
+            <if test="areaName != null">
+                AREA_NAME,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="provinceName != null">
+                #{provinceName,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="cityName != null">
+                #{cityName,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="areaName != null">
+                #{areaName,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

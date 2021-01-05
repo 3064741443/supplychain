@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.STKMerchantProductConfigMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.STKMerchantProductConfig">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="config_code" jdbcType="VARCHAR" property="configCode" />
+    <result column="operate_code" jdbcType="VARCHAR" property="operateCode" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="warehouse_code" jdbcType="VARCHAR" property="warehouseCode" />
+    <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="period_start" jdbcType="TIMESTAMP" property="periodStart" />
+    <result column="period_end" jdbcType="TIMESTAMP" property="periodEnd" />
+    <result column="period_status" jdbcType="VARCHAR" property="periodStatus" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, config_code,operate_code, merchant_code, merchant_name, warehouse_code, warehouse_name, period_start, 
+    period_end,period_status, created_by, created_date, updated_by, updated_date, deleted_flag
+  </sql>
+  
+  <select id="pageMerchantProductConfig" parameterType="cn.com.glsx.supplychain.jxc.model.STKMerchantProductConfig"
+  				resultType="cn.com.glsx.supplychain.jxc.dto.STKProductConfigDTO">
+  select 
+  distinct smpc.config_code as configCode,
+  smpc.operate_code as operateCode,
+  smpc.merchant_code as merchantCode,
+  smpc.merchant_name as merchantName,
+  smpc.warehouse_code as warehouseCode,
+  smpc.warehouse_name as warehouseName,
+  smpc.period_status as periodStatus,
+  smpc.period_start as periodStart,
+  smpc.period_end as periodEnd
+  from stk_merchant_product_config as smpc
+  left join stk_merchant_product_config_detail as smpcd on(smpcd.config_code = smpc.config_code)
+  <where>
+  	<if test="deletedFlag != null">
+  		and smpc.deleted_flag = #{deletedFlag,jdbcType=VARCHAR}
+  	</if>
+  	<if test="merchantCode != null">
+  		and smpc.merchant_code = #{merchantCode,jdbcType=VARCHAR}
+  	</if>
+  	<if test="periodStatus != null">
+  		and smpc.period_status = #{periodStatus,jdbcType=VARCHAR}
+  	</if>
+  	<if test="materialCode != null">
+  		and (smpcd.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="materialName != null">
+  		or smpcd.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+  	</if>
+  </where>
+  order by smpc.id desc
+  </select>
+</mapper>

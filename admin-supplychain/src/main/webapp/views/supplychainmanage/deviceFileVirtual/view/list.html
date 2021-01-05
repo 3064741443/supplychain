@@ -1,0 +1,41 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="supplychain_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">请输入</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="ICCID、IMSI" name="searchKey" ng-model="form.searchKey" />
+                    </div>
+                </div>
+            </div>
+             <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">设备编号</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" ng-change="dvcode()" placeholder="请输入设备编号" name="deviceCode" ng-model="form.deviceCode"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<div class="col-lg-2 pull-right">
+            <div class="form-group">
+                <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>IMSI虚拟设备</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

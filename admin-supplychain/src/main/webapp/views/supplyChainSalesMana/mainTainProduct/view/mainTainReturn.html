@@ -1,0 +1,61 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="return_goods_form" method="post"
+              enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="control-label" style="float: left"><h3>请选择需要退货处理项目</h3></label>
+            <p style="float:left;margin: 10px -90px 0px 100px" ng-repeat="item in checkBoxList"><input type="checkbox" name="checkbox" value={{item.number}} ng-click="returnCheck($event,$index)"/>{{item.text}}</p>
+        </div>
+
+        <div class="form-group">
+        <label class="col-lg-2 control-label required">是否切换SN :</label>
+        <div class="control-content">
+            <div class="row">
+                <div class="col-lg-3">
+                    <ui-select name="changeFlag" ng-change="changeSnFlag(form.changeFlag)" ng-required="true" ng-model="form.changeFlag" theme="bootstrap">
+                        <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                        <ui-select-choices repeat="item in changSnFlagList">
+                            <div ng-bind="item.text "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <div class="iccid" style="width: 50%;margin-left: 18%;" ng-if="iccidShow">
+                <input name="iccid" ng-required="true" maxlength="20" ng-blur="checkIccidInfo(form.iccid)" placeholder="请输入新ICCID" class="form-control"
+                       ng-pattern="/^[1-9]\d*$/" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="text" ng-model="form.iccid"/>
+                <div class="m-t-xs" ng-show="return_goods_form.iccid.$invalid && return_goods_form.submitted">
+                    <small class="text-danger" ng-show="return_goods_form.iccid.$error.required">请输入正确的ICCID</small>
+                </div>
+            </div>
+
+            <div class="imei" style="width: 50%;margin-left: 18%;" ng-if="imeiShow">
+                <input name="imei" ng-required="true" maxlength="18" ng-blur="checkImei(form.imei)" placeholder="请输入新IMEI" class="form-control"
+                       ng-pattern="/^[1-9]\d*$/" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" type="text" ng-model="form.imei"/>
+                <div class="m-t-xs" ng-show="return_goods_form.imei.$invalid && return_goods_form.submitted">
+                    <small class="text-danger" ng-show="return_goods_form.imei.$error.required">请输入IMEI</small>
+                </div>
+            </div>
+
+            <div class="sn" style="width: 50%;margin-left: 18%;" ng-if="snShow">
+                <input name="sn" ng-required="true" maxlength="18" ng-blur="checkSn(form.sn)" placeholder="请输入新SN"
+                       ng-pattern="/^[1-9]\d*$/" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" class="form-control" type="text" ng-model="form.sn"/>
+                <div class="m-t-xs" ng-show="return_goods_form.sn.$invalid && return_goods_form.submitted">
+                    <small class="text-danger" ng-show="return_goods_form.sn.$error.required">请输入SN</small>
+                </div>
+            </div>
+
+     </form>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button  type="submit" class="btn btn-primary" ng-click="ok();">确认退货</button>
+        <button  type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

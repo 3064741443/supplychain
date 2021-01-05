@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.glsx:platform-goods-common:1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/platform-goods-common/1.0.0-SNAPSHOT/platform-goods-common-1.0.0-20180816.092854-111.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/platform-goods-common/1.0.0-SNAPSHOT/platform-goods-common-1.0.0-20180816.092854-111-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/platform-goods-common/1.0.0-SNAPSHOT/platform-goods-common-1.0.0-20180816.092854-111-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

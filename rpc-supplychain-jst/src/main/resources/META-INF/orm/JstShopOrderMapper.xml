@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.JstShopOrderMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.JstShopOrder">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="SHOP_ORDER_CODE" jdbcType="VARCHAR" property="shopOrderCode"/>
+        <result column="SHOP_CODE" jdbcType="VARCHAR" property="shopCode"/>
+        <result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName"/>
+        <result column="AGENT_MERCHANT_CODE" jdbcType="VARCHAR" property="agentMerchantCode"/>
+        <result column="AGENT_MERCHANT_NAME" jdbcType="VARCHAR" property="agentMerchantName"/>
+        <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode"/>
+        <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName"/>
+        <result column="SERVICE_TYPE" jdbcType="TINYINT" property="serviceType"/>
+        <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode"/>
+        <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName"/>
+        <result column="MATERIAL_TYPE" jdbcType="TINYINT" property="materialType"/>
+        <result column="TOTAL" jdbcType="INTEGER" property="total"/>
+        <result column="PRICE" jdbcType="DOUBLE" property="price"/>
+        <result column="PRODUCT_SPLIT_PRICE_TIME" jdbcType="TIMESTAMP" property="productSplitPriceTime"/>
+        <result column="SERVICE_TIME" jdbcType="VARCHAR" property="serviceTime"/>
+        <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne"/>
+        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+        <result column="ADDRESS" jdbcType="VARCHAR" property="address"/>
+        <result column="PROVINCE_ID" jdbcType="INTEGER" property="provinceId"/>
+        <result column="PROVINCE_NAME" jdbcType="VARCHAR" property="provinceName"/>
+        <result column="CITY_ID" jdbcType="INTEGER" property="cityId"/>
+        <result column="CITY_NAME" jdbcType="VARCHAR" property="cityName"/>
+        <result column="AREA_ID" jdbcType="INTEGER" property="areaId"/>
+        <result column="AREA_NAME" jdbcType="VARCHAR" property="areaName"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="MOBILE" jdbcType="VARCHAR" property="mobile"/>
+        <result column="scan_type" jdbcType="VARCHAR" property="scanType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+         ID, SHOP_ORDER_CODE, SHOP_CODE, SHOP_NAME, AGENT_MERCHANT_CODE, AGENT_MERCHANT_NAME,
+    PRODUCT_CODE, PRODUCT_NAME, SERVICE_TYPE,SERVICE_TIME,PACKAGE_ONE, MATERIAL_CODE, MATERIAL_NAME, MATERIAL_TYPE,TOTAL, PRICE,
+    PRODUCT_SPLIT_PRICE_TIME, PACKAGE_ONE,STATUS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,
+    DELETED_FLAG,scan_type
+  </sql>
+
+  <select id="pageWxJspShopOrder" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrder" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from jst_shop_order
+  	<where>
+  		<if test="status != null and status !=''">
+  			AND `STATUS` = #{status,jdbcType=VARCHAR}
+  		</if>
+  		<if test="orderTime != null and orderTime !=''">
+  			AND `CREATED_DATE` like CONCAT('%',#{orderTime},'%')
+  		</if>
+  		<if test="serviceType != null">
+  			AND `SERVICE_TYPE` = #{serviceType,jdbcType=TINYINT}
+  		</if>
+  		<if test="productName != null and productName !=''">
+			AND PRODUCT_NAME like CONCAT('%',#{productName},'%')
+		</if>
+		<if test="shopCode != null and shopCode !=''">
+			AND SHOP_CODE = #{shopCode,jdbcType=VARCHAR}
+		</if>
+		<if test="agentMerchantCode != null and agentMerchantCode!=''">
+			AND AGENT_MERCHANT_CODE = #{agentMerchantCode,jdbcType=VARCHAR}
+		</if>
+  	</where>
+  	ORDER BY ID DESC limit #{pageStart},#{pageSize}
+  </select>
+
+    <sql id="Jso_Base_Column_List">
+    jso.ID, jso.SHOP_ORDER_CODE, jso.SHOP_CODE, jso.SHOP_NAME, jso.AGENT_MERCHANT_CODE, jso.AGENT_MERCHANT_NAME,jso.MATERIAL_TYPE,
+    jso.PRODUCT_CODE, jso.PRODUCT_NAME, jso.SERVICE_TYPE, jso.MATERIAL_CODE, jso.MATERIAL_NAME, jso.TOTAL, jso.PRICE,
+    jso.PRODUCT_SPLIT_PRICE_TIME,jso.SERVICE_TIME,jso.PACKAGE_ONE, jso.STATUS, jso.CREATED_BY,jso.CREATED_DATE, jso.UPDATED_BY, jso.UPDATED_DATE,
+    jso.DELETED_FLAG,jso.scan_type
+  </sql>
+    <select id="pageJstShopOrder" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrder"
+            resultMap="BaseResultMap">
+        select
+        ba.ADDRESS,ba.NAME,ba.MOBILE,ba.PROVINCE_ID,ba.PROVINCE_NAME,ba.CITY_ID,ba.CITY_NAME,ba.AREA_ID,ba.AREA_NAME,
+        <include refid="Jso_Base_Column_List"/>
+        from jst_shop_order jso
+        left join bs_logistics bl on jso.SHOP_ORDER_CODE = bl.SERVICE_CODE
+        left join bs_address ba on ba.ID = bl.RECEIVE_ID       
+        <where>
+            jso.DELETED_FLAG = 'N'
+            and bl.DELETED_FLAG = 'N'
+            and ba.DELETED_FLAG = 'N'
+            and bl.TYPE = 6
+            <if test="noOrder != null and noOrder !=''">
+            	<choose>
+            		<when test="noOrder == 'Y'.toString()">
+            			and jso.SHOP_ORDER_CODE like CONCAT('JST','%')
+            		</when>
+            		<when test="noOrder == 'N'.toString()">
+            			and jso.SHOP_ORDER_CODE like CONCAT('AST','%')
+            		</when>
+            	</choose>
+            </if>
+           	<if test="shopName != null">
+           		and jso.SHOP_NAME LIKE "%"#{shopName,jdbcType=VARCHAR}"%"
+           	</if>
+            <if test="productName != null">
+                and jso.PRODUCT_NAME LIKE "%"#{productName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="materialName != null">
+                and jso.MATERIAL_NAME LIKE "%"#{materialName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="agentMerchantCode != null">
+                and jso.AGENT_MERCHANT_CODE = #{agentMerchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="materialCode != null">
+                and jso.MATERIAL_CODE like "%"#{materialCode,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="status != null">
+                and jso.STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="scanType != null">
+            	and jso.scan_type = #{scanType,jdbcType=VARCHAR}
+            </if>
+            <if test="createdDateStart != null">
+                and CONVERT(DATE_FORMAT(jso.CREATED_DATE,'%Y%m%d%'),SIGNED) &gt;=
+                CONVERT(DATE_FORMAT(#{createdDateStart},'%Y%m%d'),SIGNED)
+            </if>
+            <if test="createdDateEnd != null">
+                and CONVERT(DATE_FORMAT(jso.CREATED_DATE,'%Y%m%d'),SIGNED) &lt;=
+                CONVERT(DATE_FORMAT(#{createdDateEnd},'%Y%m%d'),SIGNED)
+            </if>
+        </where>
+        order by jso.CREATED_DATE desc
+    </select>
+
+    <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrder">
+    insert into jst_shop_order (ID, SHOP_ORDER_CODE, SHOP_CODE, 
+      SHOP_NAME, AGENT_MERCHANT_CODE, AGENT_MERCHANT_NAME, 
+      PRODUCT_CODE, PRODUCT_NAME, SERVICE_TYPE, 
+      MATERIAL_CODE, MATERIAL_NAME, MATERIAL_TYPE,TOTAL, 
+      PRICE, PRODUCT_SPLIT_PRICE_TIME,SERVICE_TIME,PACKAGE_ONE, STATUS,
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG,scan_type)
+    values (#{id,jdbcType=INTEGER}, #{shopOrderCode,jdbcType=VARCHAR}, #{shopCode,jdbcType=VARCHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{agentMerchantCode,jdbcType=VARCHAR}, #{agentMerchantName,jdbcType=VARCHAR}, 
+      #{productCode,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{serviceType,jdbcType=TINYINT}, 
+      #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{materialType,jdbcType=TINYINT}, #{total,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{productSplitPriceTime,jdbcType=TIMESTAMP},#{serviceTime,jdbcType=VARCHAR}, #{packageOne,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR},#{scanType,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrder">
+        insert into jst_shop_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="shopOrderCode != null">
+                SHOP_ORDER_CODE,
+            </if>
+            <if test="shopCode != null">
+                SHOP_CODE,
+            </if>
+            <if test="shopName != null">
+                SHOP_NAME,
+            </if>
+            <if test="agentMerchantCode != null">
+                AGENT_MERCHANT_CODE,
+            </if>
+            <if test="agentMerchantName != null">
+                AGENT_MERCHANT_NAME,
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+            <if test="productName != null">
+                PRODUCT_NAME,
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE,
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE,
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME,
+            </if>
+            <if test="materialType != null">
+            	MATERIAL_TYPE,
+            </if>
+            <if test="total != null">
+                TOTAL,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="productSplitPriceTime != null">
+                PRODUCT_SPLIT_PRICE_TIME,
+            </if>
+            <if test="serviceTime != null">
+                SERVICE_TIME,
+            </if>
+            <if test="packageOne != null">
+                PACKAGE_ONE,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+            <if test="scanType != null">
+            	scan_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="shopOrderCode != null">
+                #{shopOrderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="shopCode != null">
+                #{shopCode,jdbcType=VARCHAR},
+            </if>
+            <if test="shopName != null">
+                #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantCode != null">
+                #{agentMerchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantName != null">
+                #{agentMerchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialType != null">
+            	#{materialType,jdbcType=TINYINT},
+            </if>
+            <if test="total != null">
+                #{total,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="productSplitPriceTime != null">
+                #{productSplitPriceTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceTime != null">
+                #{serviceTime,jdbcType=VARCHAR},
+            </if>
+            <if test="packageOne != null">
+                #{packageOne,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="scanType != null">
+            	#{scanType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrder">
+        update jst_shop_order
+        <set>
+            <if test="shopOrderCode != null">
+                SHOP_ORDER_CODE = #{shopOrderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="shopCode != null">
+                SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+            </if>
+            <if test="shopName != null">
+                SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantCode != null">
+                AGENT_MERCHANT_CODE = #{agentMerchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantName != null">
+                AGENT_MERCHANT_NAME = #{agentMerchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialType != null">
+            	MATERIAL_TYPE = #{materialType,jdbcType=TINYINT},
+            </if>
+            <if test="total != null">
+                TOTAL = #{total,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="productSplitPriceTime != null">
+                PRODUCT_SPLIT_PRICE_TIME = #{productSplitPriceTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="serviceTime != null">
+                SERVICE_TIME = #{serviceTime,jdbcType=VARCHAR},
+            </if>
+            <if test="packageOne != null">
+                PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="scanType != null">
+            	scan_type = #{scanType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrder">
+    update jst_shop_order
+    set SHOP_ORDER_CODE = #{shopOrderCode,jdbcType=VARCHAR},
+      SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+      SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+      AGENT_MERCHANT_CODE = #{agentMerchantCode,jdbcType=VARCHAR},
+      AGENT_MERCHANT_NAME = #{agentMerchantName,jdbcType=VARCHAR},
+      PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+      SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+      MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      MATERIAL_TYPE = #{materialType,jdbcType=TINYINT},
+      TOTAL = #{total,jdbcType=INTEGER},
+      PRICE = #{price,jdbcType=DOUBLE},
+      PRODUCT_SPLIT_PRICE_TIME = #{productSplitPriceTime,jdbcType=TIMESTAMP},
+      SERVICE_TIME = #{serviceTime,jdbcType=VARCHAR},
+      PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      scan_type = #{scanType,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

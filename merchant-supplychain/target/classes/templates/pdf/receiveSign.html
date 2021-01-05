@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>货物签收单</title>
+	<style type="text/css">
+		*{ padding: 0;margin: 0; list-style: none; }
+		body { 
+			font-size: 10px; 
+			font-family: 'SimSun'; 
+			color: #333333; 
+		}
+		.clearfix:after {
+			display: block;
+			content: "";
+			clear: both;
+		}
+
+		.container {
+			margin: 30px auto;
+			width:680px;
+		}
+
+		.header {
+			/* font-size: 20px; */
+			text-align: center;
+			margin-top: 20px; 
+			font-weight:bold;
+		}
+
+		.mg-tb-20 {
+			margin: 20px 0;
+		}
+
+		table tr {
+			text-align: center;
+			color: #666666;
+		}
+		.tr-header {
+			text-align: left !important;
+		}
+		.tr-header .title{
+	/* 		font-size: 20px; */
+			font-weight:bold;
+			display: inline;
+		}
+
+		.txt-table tr{
+			height: 37px;
+		}
+
+		.img-table tr {
+			height: 60px;
+		}
+
+		.bg-gray {
+			background-color: #EEEEEE;
+		}
+
+		.footer {
+			width: 80%;
+			text-align: right;
+		}
+
+		img {
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<img src="http://img01.glsx.com.cn/merchant-supplychain/signtitle.png "></img>
+		<p class="header">
+			<span>${signOrderDate!"  "}  货物签收单</span>
+		</p>
+		<table width="100%" border="1" cellspacing="0" class="txt-table">
+			<tr><td colspan="8" class="tr-header"><div class="title">单据号:</div><span>${signOrderNo!"  "}</span></td></tr>
+			<tr><td colspan="8" class="tr-header"><div class="title">收货公司:</div><span>${signRecvCompany!"  "}</span><div class="title">收货人:</div><span>${signRecvContact!"  "}</span><div class="title">电话:</div><span>${signRecvPhone!"  "}</span></td></tr>
+			<tr><td colspan="8" class="tr-header"><div class="title">收货地址:</div><span>${signRecvAddr!"  "}</span></td></tr>
+			<tr class="bg-gray">
+				<th>序号</th>
+				<th>订单编号</th>
+				<th>厂家</th>	
+				<th>物料名称</th>
+				<th>数量</th>
+				<th>发货日期</th>
+				<th>物流公司</th>
+				<th>备注</th>	
+			</tr>
+			${signOrderDetail!"  "}		
+		</table>
+		<p class="mg-tb-20">合计:${signTotal!"  "}</p>
+		<p class="mg-tb-20 footer">收货公司：</p>
+		<p class="mg-tb-20 footer">签收人：</p>
+	</div>
+</body>
+</html>

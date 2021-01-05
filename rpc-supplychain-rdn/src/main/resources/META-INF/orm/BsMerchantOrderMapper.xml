@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.rpc.supplychain.rdn.mapper.BsMerchantOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MerchantOrder">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="ORDER_TIME" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="HOPE_TIME" jdbcType="TIMESTAMP" property="hopeTime" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="TOTAL_ORDER" jdbcType="INTEGER" property="totalOrder" />
+    <result column="TOTAL_CHECK" jdbcType="INTEGER" property="totalCheck" />
+    <result column="TOTAL_AMOUNT" jdbcType="DOUBLE" property="totalAmount" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="check_remark" jdbcType="VARCHAR" property="checkRemark" />
+    <result column="sign_status" jdbcType="TINYINT" property="signStatus"/>
+    <result column="reback_reason" jdbcType="VARCHAR" property="rebackReason" />
+    <result column="finish_reason" jdbcType="VARCHAR" property="finishReason" />
+    <result column="recall_reason" jdbcType="VARCHAR" property="recallReason" />
+    <result column="product_total" jdbcType="INTEGER" property="productTotal" />
+    <result column="model_device" jdbcType="VARCHAR" property="modelDevice" />
+    <result column="url_dispatch_bills" jdbcType="VARCHAR" property="urlDispatchBills" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_NUMBER, ORDER_TIME, HOPE_TIME, MERCHANT_CODE, TOTAL_ORDER, TOTAL_CHECK, 
+    TOTAL_AMOUNT, STATUS, REMARKS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG, check_remark, sign_status,reback_reason,finish_reason,recall_reason,product_total,model_device,urlDispatchBills
+  </sql>
+  
+  <select id="pageBsMerchantOrderBSS" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MerchantOrder"
+  			resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.BsMerchantOrderVo">
+  	SELECT 
+		mmorm.mo_order_code AS moOrderCode,
+		bmo.order_number AS merchantOrder,
+		bdui.name AS merchantName,
+		bdui.channel AS channelId,
+		aps.product_code AS productCode,
+		aps.product_name AS productName,
+		bpd.material_name AS materialName,
+		bpd.material_code AS materialCode,
+		bpd.order_material_code AS orderMaterialCode,
+		bpd.order_material_name AS orderMaterialName,
+		bmo.total_order AS totalOrder,
+		bmo.total_check AS totalCheck,
+		bmod.accept_quantity AS acceptQuantity,
+		emo.ALREADY_SHIPMENT_QUANTITY AS totalSends,
+		bmo.status AS STATUS,
+		bmo.sign_status AS signStatus, 
+		bmo.order_time AS orderTime,
+		bmod.check_time AS checkTime,
+		bmod.check_by AS checkBy,
+		bmo.check_remark AS checkRemark,
+		bmo.reback_reason AS rebackReason,
+		bmo.finish_reason AS finishReason,
+		bmo.remarks AS remarks 
+	FROM bs_merchant_order AS bmo
+	LEFT JOIN bs_merchant_order_detail AS bmod ON(bmo.order_number = bmod.merchant_order_number) 
+	LEFT JOIN bs_product AS bp ON(bp.code=bmod.product_code)
+	LEFT JOIN bs_dealer_user_info AS bdui ON(bdui.merchant_code=bmo.merchant_code AND bdui.deleted_flag = 'N')
+	LEFT JOIN bs_product_detail AS bpd ON(bpd.product_code=bmod.product_code)
+	LEFT JOIN am_product_split AS aps ON(aps.id= bp.product_split_id)
+	LEFT JOIN mt_merchant_order_reflect_mcode AS mmorm ON(mmorm.merchant_order=bmo.order_number)
+	LEFT JOIN ec_merchant_order AS emo ON(emo.ORDER_NUMBER=bmo.order_number)
+	WHERE (bpd.type=0 OR bpd.type=7)
+	<if test="orderNumber != null">
+		and bmo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+	</if>	
+	<if test="status != null">
+		and bmo.status = #{status,jdbcType=TINYINT}
+	</if>	
+	<if test="signStatus != null">
+		and bmo.sign_status = #{signStatus,jdbcType=TINYINT}
+	</if>
+	<if test="channelId != null">
+		and bdui.channel = #{channelId,jdbcType=TINYINT}
+	</if>
+	<if test="orderTimeStart != null">
+  		and bmo.ORDER_TIME &gt;= #{orderTimeStart,jdbcType=TIMESTAMP}
+  	</if> 
+  	<if test="orderTimeEnd != null">
+  		and  bmo.ORDER_TIME &lt;= #{orderTimeEnd,jdbcType=TIMESTAMP}
+  	</if>
+  	<if test="merchantCode != null">
+  		and (bdui.merchant_code = #{merchantCode,jdbcType=VARCHAR}
+  	</if>
+  	<if test="merchantName != null">
+  		or bdui.merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+  	</if>
+  	<if test="productTypeId != null">
+  		and aps.service_type = #{productTypeId,jdbcType=TINYINT}
+  	</if>
+  	<if test="productCode != null">
+  		and (aps.product_code like concat('%',#{productCode,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="productName != null">
+  		or aps.product_name like concat('%',#{productName,jdbcType=VARCHAR},'%'))
+  	</if>
+  	<if test="materialCode != null">
+  		and (bpd.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="materialName != null">
+  		or bpd.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+  	</if>
+  </select>
+  
+  <select id="exportBsMerchantOrderBSS" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MerchantOrder"
+  			resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.BsMerchantOrderBssVo">
+  		select 
+  			mmorm.mo_order_code AS moOrderCode,
+			bmo.order_number AS merchantOrder,
+			bdui.name AS merchantName,
+			bdui.channel AS channelId,			
+			aps.product_name AS productName,
+			bpd.material_name AS materialName,
+			bpd.material_code AS materialCode,
+			bpd.order_material_code AS orderMaterialCode,
+			bpd.order_material_name AS orderMaterialName,
+			ami.device_type as mdeviceTypeName,
+			emo.price as price,
+			bmo.check_remark AS checkRemark,
+			bs.name as subjectName,
+			bmod.insure as insure,
+			bmov.dispatch_order_code as dispatchOrderCode,
+			bmov.bs_total as bsTotal,
+			bmov.bs_check_quantity as bsCheckQuantity,
+			bmov.bs_parent_brand_name as bsParentBrandName,
+			bmov.bs_sub_brand_name as bsSubBrandName,
+			bmov.bs_audi_name as bsAudiName,
+			bmov.bs_motorcycle as bsMotorcycle,
+			bmov.bs_remark as bsRemark,
+			oi.contacts as contacts,
+			oi.mobile as mobile,
+			oi.address as address,
+			oi.send_quanlity as bsSendQuantity,
+			wi.name as warehouseName,
+	        bmo.status AS STATUS,
+	        bmo.order_time AS orderTime,
+	        bmod.check_time AS checkTime,
+	        bmod.check_by as checkBy
+		from bs_merchant_order AS bmo
+		LEFT JOIN bs_merchant_order_detail AS bmod ON(bmo.order_number = bmod.merchant_order_number)
+		LEFT JOIN bs_product AS bp ON(bp.code=bmod.product_code)
+		LEFT JOIN bs_dealer_user_info AS bdui ON(bdui.merchant_code=bmo.merchant_code AND bdui.deleted_flag = 'N')
+		LEFT JOIN bs_product_detail AS bpd ON(bpd.product_code=bmod.product_code)
+		LEFT JOIN am_product_split AS aps ON(aps.id= bp.product_split_id)
+		LEFT JOIN mt_merchant_order_reflect_mcode AS mmorm ON(mmorm.merchant_order=bmo.order_number)
+		LEFT JOIN ec_merchant_order AS emo ON(emo.ORDER_NUMBER=bmo.order_number)
+		LEFT JOIN bs_merchant_order_vehicle as bmov on(bmov.merchant_order=bmo.order_number)
+		LEFT JOIN order_info AS oi on(oi.order_code=bmov.dispatch_order_code)
+		LEFT JOIN warehouse_info AS wi on(wi.id=oi.warehouse_id)
+		LEFT JOIN am_material_info AS ami on(bpd.material_code = ami.material_code)
+		LEFT JOIN bs_subject AS bs on(bs.id=bmod.subject_id)
+		WHERE (bpd.type=0 OR bpd.type=7) and bmo.status != 9
+		<if test="orderNumber != null">
+            and bmo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="status != null">
+        	<choose>
+        		<when test="status != 2">
+        			and bmo.status = #{status,jdbcType=TINYINT}
+        		</when>
+        		<otherwise>
+        			and (bmo.status = 2 or bmo.status=8)
+        		</otherwise>
+        	</choose>
+        </if>
+		<if test="signStatus != null">
+			and bmo.sign_status = #{signStatus,jdbcType=TINYINT}
+		</if>
+		<if test="channel != null">
+			and bdui.channel = #{channel,jdbcType=TINYINT}
+		</if>
+		<if test="orderTimeStart != null">
+	  		and bmo.ORDER_TIME &gt;= #{orderTimeStart,jdbcType=TIMESTAMP}
+	  	</if> 
+	  	<if test="orderTimeEnd != null">
+	  		and  bmo.ORDER_TIME &lt;= #{orderTimeEnd,jdbcType=TIMESTAMP}
+	  	</if>
+	  	<if test="merchantCode != null">
+	  		and (bdui.merchant_code = #{merchantCode,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="merchantName != null">
+	  		or bdui.merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+	  	</if>
+	  	<if test="productTypeId != null">
+	  		and aps.service_type = #{productTypeId,jdbcType=TINYINT}
+	  	</if>
+	  	<if test="productCode != null">
+	  		and (aps.product_code like concat('%',#{productCode,jdbcType=VARCHAR},'%')
+	  	</if>
+	  	<if test="productName != null">
+	  		or aps.product_name like concat('%',#{productName,jdbcType=VARCHAR},'%'))
+	  	</if>
+	  	<if test="materialName != null">
+       		and (bpd.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+            or bpd.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%')
+            or bpd.order_material_code like concat('%',#{materialName,jdbcType=VARCHAR},'%')
+            or bpd.order_material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+        </if>  
+        <if test="checkStartDate != null">
+            and bmod.check_time &gt;= #{checkStartDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="checkEndDate != null">
+            and bmod.check_time &lt;= #{checkEndDate,jdbcType=TIMESTAMP}
+        </if>
+        order by bmo.id desc  
+  </select>
+  
+  <select id="pageBsMerchantOrderBSP" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MerchantOrder"
+  			resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.SpMerchantOrderVo">
+  	SELECT 	
+		bmo.order_number AS merchantOrder,
+		bdui.merchant_code as merchantCode,
+		bdui.name AS merchantName,
+		bdui.channel AS channelId,
+		aps.product_code AS productCode,
+		aps.product_name AS productName,
+		bpd.material_name AS materialName,
+		bpd.material_code AS materialCode,
+		bp.type AS deviceTypeId,
+		dt.name AS deviceTypeName,
+		bmo.total_check AS totalCheck,
+		emo.ALREADY_SHIPMENT_QUANTITY AS totalSends,
+		bmo.status AS STATUS,
+		bmod.check_time AS checkTime,
+		bmod.check_by AS checkBy,
+		bs.id as subjectId,
+		bs.name as subjectName,
+		bmo.check_remark AS checkRemark,
+		bmo.reback_reason AS rebackReason,
+		bmo.finish_reason AS finishReason,
+		bmo.remarks AS remarks,
+		ami.nd_scan as deviceScanType,
+		bmo.url_dispatch_bills as urlDispatchBills
+	FROM bs_merchant_order AS bmo
+	LEFT JOIN bs_merchant_order_detail AS bmod ON(bmo.order_number = bmod.merchant_order_number) 
+	LEFT JOIN bs_product AS bp ON(bp.code=bmod.product_code)
+	LEFT JOIN bs_dealer_user_info AS bdui ON(bdui.merchant_code=bmo.merchant_code AND bdui.deleted_flag = 'N')
+	LEFT JOIN bs_product_detail AS bpd ON(bpd.product_code=bmod.product_code)
+	LEFT JOIN am_product_split AS aps ON(aps.id= bp.product_split_id)
+	LEFT JOIN ec_merchant_order AS emo ON(emo.ORDER_NUMBER=bmo.order_number)
+	LEFT JOIN am_material_info AS ami ON(ami.material_code=bpd.material_code)
+	LEFT JOIN bs_subject AS bs on(bs.id = bmod.subject_id)
+	LEFT JOIN device_type AS dt ON(bp.type=dt.id)
+	WHERE (bpd.type=0 OR bpd.type=7)
+	<if test="orderNumber != null">
+		and bmo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+	</if>	
+	<if test="listOrderNums != null">
+		and bmo.order_number in 
+		<foreach collection="listOrderNums" item="item" index="index" open="(" close=")" separator=",">
+			#{item,jdbcType=VARCHAR}
+		</foreach>
+	</if>
+	<if test="status != null">
+		and bmo.status = #{status,jdbcType=TINYINT}
+	</if>	
+	<if test="merchantCode != null">
+  		and (bdui.merchant_code = #{merchantCode,jdbcType=VARCHAR}
+  	</if>
+  	<if test="merchantName != null">
+  		or bdui.merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+  	</if>
+  	<if test="materialCode != null">
+  		and (bpd.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="materialName != null">
+  		or bpd.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+  	</if>
+  	<if test="channelId != null">
+		and bdui.channel = #{channelId,jdbcType=TINYINT}
+	</if>
+  	<if test="orderTimeStart != null">
+  		and bmod.check_time &gt;= #{orderTimeStart,jdbcType=TIMESTAMP}
+  	</if> 
+  	<if test="orderTimeEnd != null">
+  		and  bmod.check_time &lt;= #{orderTimeEnd,jdbcType=TIMESTAMP}
+  	</if>
+  </select>
+  
+  <select id="exportBsMerchantOrderBSP" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MerchantOrder"
+  			resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.BsMerchantOrderBspVo">
+  	select		
+		bdui.name AS merchantName,
+		bdui.channel AS channelId,			
+		bpd.material_name AS materialName,
+		bpd.material_code AS materialCode,
+		ami.device_type as mdeviceTypeName,
+		bmo.check_remark AS checkRemark,
+		bmo.order_number as merchantOrderCode,
+		bs.name as subjectName,
+		bmod.check_time as checkTime,
+		bmod.check_by as checkBy,
+		bmov.dispatch_order_code as dispatchOrderCode,
+		bmov.bs_check_quantity as bsCheckQuantity,
+		bmov.bs_parent_brand_name as bsParentBrandName,
+		bmov.bs_sub_brand_name as bsSubBrandName,
+		bmov.bs_audi_name as bsAudiName,
+		bmov.bs_motorcycle as bsMotorcycle,
+		bmov.bs_remark as bsRemark,
+		bmo.status as dispatchOrderStatus,
+		oi.contacts as contacts,
+		oi.mobile as mobile,
+		oi.address as address,
+		oi.send_quanlity as bsSendQuantity,
+		wi.name as warehouseName,	
+		bl.order_number as orderNumber,
+		bl.company as company,
+		bl.shipments_quantity as shipmentsQuantity
+		from bs_merchant_order AS bmo
+		LEFT JOIN bs_merchant_order_detail AS bmod ON(bmo.order_number = bmod.merchant_order_number)
+		LEFT JOIN bs_product AS bp ON(bp.code=bmod.product_code)
+		LEFT JOIN bs_dealer_user_info AS bdui ON(bdui.merchant_code=bmo.merchant_code AND bdui.deleted_flag = 'N')
+		LEFT JOIN bs_product_detail AS bpd ON(bpd.product_code=bmod.product_code)
+		LEFT JOIN am_product_split AS aps ON(aps.id= bp.product_split_id)
+		LEFT JOIN ec_merchant_order AS emo ON(emo.ORDER_NUMBER=bmo.order_number)
+		LEFT JOIN bs_merchant_order_vehicle as bmov on(bmov.merchant_order=bmo.order_number)
+		LEFT JOIN order_info AS oi on(oi.order_code=bmov.dispatch_order_code)
+		LEFT JOIN warehouse_info AS wi on(wi.id=oi.warehouse_id)
+		LEFT JOIN am_material_info AS ami on(bpd.material_code = ami.material_code)
+		LEFT JOIN bs_subject AS bs on(bs.id=bmod.subject_id)
+		LEFT JOIN bs_logistics AS bl on(bl.service_code=oi.order_code)
+		WHERE (bpd.type=0 OR bpd.type=7) and bmo.status in(2,3,5,7,8)
+		<if test="orderNumber != null">
+			and bmo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+		</if>	
+		<if test="listOrderNums != null">
+			and bmo.order_number in 
+			<foreach collection="listOrderNums" item="item" index="index" open="(" close=")" separator=",">
+				#{item,jdbcType=VARCHAR}
+			</foreach>
+		</if>
+		<if test="status != null">
+			and bmo.status = #{status,jdbcType=TINYINT}
+		</if>	
+		<if test="merchantCode != null">
+	  		and (bdui.merchant_code = #{merchantCode,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="merchantName != null">
+	  		or bdui.merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+	  	</if>
+	  	<if test="materialCode != null">
+	  		and (bpd.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+	  	</if>
+	  	<if test="materialName != null">
+	  		or bpd.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+	  	</if>
+	  	<if test="channel != null">
+			and bdui.channel = #{channel,jdbcType=TINYINT}
+		</if>
+	  	<if test="orderTimeStart != null">
+	  		and bmod.check_time &gt;= #{orderTimeStart,jdbcType=TIMESTAMP}
+	  	</if> 
+	  	<if test="orderTimeEnd != null">
+	  		and  bmod.check_time &lt;= #{orderTimeEnd,jdbcType=TIMESTAMP}
+	  	</if>
+	  order by bmod.check_time desc
+  </select>
+  
+  <select id="pageBsMerchantOrderJXC" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MerchantOrder"
+            resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.BsMerchantOrderVo">
+  	select 
+  	mmorm.mo_order_code AS moOrderCode,
+  	bmo.order_number AS merchantOrder,
+  	aps.product_code AS productCode,
+  	aps.product_name AS productName,
+  	bpd.material_name as materialName,
+  	bpd.material_code as materialCode,
+  	bpd.order_material_code as orderMaterialCode,
+  	bpd.order_material_name as orderMaterialName,
+	bpd.prop_quantity AS propQuantity,
+	bmo.total_order AS totalOrder,
+	bmo.total_check AS totalCheck,
+	bmod.accept_quantity AS acceptQuantity,
+	emo.ALREADY_SHIPMENT_QUANTITY as totalSends,
+	bmo.status AS status, 
+	bmo.remarks as remarks,
+	bmo.order_time as orderTime 
+	from bs_merchant_order AS bmo LEFT JOIN bs_merchant_order_detail AS bmod ON(bmo.order_number = bmod.merchant_order_number)
+	LEFT JOIN bs_product AS bp ON(bp.code=bmod.product_code)
+	LEFT JOIN bs_product_detail AS bpd ON(bpd.product_code=bmod.product_code)
+	LEFT JOIN am_product_split AS aps ON(aps.id= bp.product_split_id)
+	LEFT JOIN mt_merchant_order_reflect_mcode AS mmorm ON(mmorm.merchant_order=bmo.order_number)
+	LEFT JOIN ec_merchant_order as emo on(emo.ORDER_NUMBER=bmo.order_number)
+	where (bpd.type=0 OR bpd.type=7) and bmo.merchant_code=#{merchantCode}
+	<if test="status != null">
+		and bmo.status = #{status,jdbcType=TINYINT}
+	</if>
+	<if test="signStatus != null">
+		and bmo.signStatus = #{signStatus,jdbcType=TINYINT}
+	</if>
+  	<if test="orderTimeStart != null">
+  		and bmo.ORDER_TIME &gt;= #{orderTimeStart,jdbcType=TIMESTAMP}
+  	</if> 
+  	<if test="orderTimeEnd != null">
+  		and  bmo.ORDER_TIME &lt;= #{orderTimeEnd,jdbcType=TIMESTAMP}
+  	</if> 
+  	<if test="moOrderCode != null">
+  		and mmorm.mo_order_code like concat('%',#{moOrderCode,jdbcType=VARCHAR},'%')
+  	</if>        
+  	<if test="orderNumber != null">
+  		and bmo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="productCode != null">
+  		and (aps.product_code like concat('%',#{productCode,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="productName != null">
+  		or aps.product_name like concat('%',#{productName,jdbcType=VARCHAR},'%'))
+  	</if>
+  	<if test="materialName != null">
+  		and (bdp.order_material_name like concat('%',#{orderMaterialName,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="materialCode != null">
+  		or bdp.order_material_code like concat('%',#{orderMaterialName,jdbcType=VARCHAR},'%'))
+  	</if>
+  	order by bmo.id desc
+  </select>
+
+	<select id="exportBsMerchantOrderJXC" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MerchantOrder"
+			resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.BsMerchantOrderVo">
+		select mmorm.mo_order_code AS moOrderCode,bmo.order_number AS merchantOrder,aps.product_code AS productCode,
+		aps.product_name AS productName,bpd.material_name as materialName,bpd.material_code as materialCode,
+		bpd.order_material_code as orderMaterialCode,bpd.order_material_name as orderMaterialName,
+		bpd.prop_quantity AS propQuantity,bmo.total_order AS totalOrder,bmo.total_check AS totalCheck,
+		bmod.accept_quantity AS acceptQuantity,emo.ALREADY_SHIPMENT_QUANTITY as totalSends,
+		bmo.status AS status, bmo.remarks as remarks,bmo.order_time as orderTime from bs_merchant_order AS bmo LEFT JOIN bs_merchant_order_detail AS bmod ON(bmo.order_number = bmod.merchant_order_number)
+		LEFT JOIN bs_product AS bp ON(bp.code=bmod.product_code)
+		LEFT JOIN bs_product_detail AS bpd ON(bpd.product_code=bmod.product_code)
+		LEFT JOIN am_product_split AS aps ON(aps.id= bp.product_split_id)
+		LEFT JOIN mt_merchant_order_reflect_mcode AS mmorm ON(mmorm.merchant_order=bmo.order_number)
+		LEFT JOIN ec_merchant_order as emo on(emo.ORDER_NUMBER=bmo.order_number)
+		where (bpd.type=0 OR bpd.type=7) and bmo.merchant_code=#{merchantCode}
+		<if test="status != null">
+        	<choose>
+        		<when test="status != 2">
+        			and bmo.status = #{status,jdbcType=TINYINT}
+        		</when>
+        		<otherwise>
+        			and (bmo.status = 2 or bmo.status=8)
+        		</otherwise>
+        	</choose>
+        </if>      
+		<if test="signStatus != null">
+			and bmo.signStatus = #{signStatus,jdbcType=TINYINT}
+		</if>
+		<if test="orderTimeStart != null">
+			and bmo.ORDER_TIME &gt;= #{orderTimeStart,jdbcType=TIMESTAMP}
+		</if>
+		<if test="orderTimeEnd != null">
+			and  bmo.ORDER_TIME &lt;= #{orderTimeEnd,jdbcType=TIMESTAMP}
+		</if>
+		<if test="moOrderCode != null">
+			and mmorm.mo_order_code like concat('%',#{moOrderCode,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="orderNumber != null">
+			and bmo.order_number like concat('%',#{orderNumber,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="productName != null">
+			and aps.product_name like concat('%',#{productName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="materialName != null">
+			and (bpd.order_material_name like concat('%',#{orderMaterialName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="materialCode != null">
+			or bpd.order_material_code like concat('%',#{orderMaterialCode,jdbcType=VARCHAR},'%'))
+		</if>
+		order by bmo.id desc
+	</select>
+  
+  <select id="listMaterialInfoByMerchantOrder" parameterType="java.util.List" 
+  		resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.BsMerchantOrderVo">
+  	select bpd.material_name as materialName,bdp.material_code as materialCode,bmod.merchant_order_number as merchantOrder
+  	from bs_merchant_order_detail AS bmod 
+  	LEFT JOIN bs_product_detail AS bpd ON(bmod.product_code=bpd.product_code)
+  	where (bpd.type=0 OR bpd.type=7) and bmod.merchant_order_number in
+  	<foreach collection="list" item="code" index="index" open="(" close=")" separator=",">
+  		#{code,jdbcType=VARCHAR}
+  	</foreach>	
+  </select>
+</mapper>

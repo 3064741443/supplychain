@@ -1,0 +1,198 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">订单确认</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h5>确认您的订单信息</h5>
+        <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="add_Order_form"
+              method="post" enctype="multipart/form-data">
+            <table style="width: 80%;margin-bottom: 30px;margin-left: 110px">
+                <colgroup>
+                    <col width="13%"/>
+                    <col width="13%"/>
+                    <col width="5%"/>
+                    <col width="10%"/>
+                    <col width="15%"/>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>物料名称</th>
+                    <th>物料编号</th>
+                    <th>单价</th>
+                    <th>数量</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat='item in orderOKData'>
+                    <td>{{item.materialCode}}</td>
+                    <td>{{item.materialName}}</td>
+                    <td>{{}}</td>
+                    <td><input class="number" type="text" maxlength="10" style="width: 70%"
+                               ng-model="item.orderQuantity" ng-pattern="/^[1-9]\d*$/" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"></td>
+                    <td><textarea class="productRemarks" style="width: 100%;height: 30px" type="text" maxlength="150" ng-model="item.productRemarks"/></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="form-group">
+                <label class="col-lg-1 control-label required">期望到货时间:</label>
+                <div class="col-sm-4">
+                    <input date-range-picker options="singleDateSettings" name="date" ng-required="true"
+                           class="form-control date-picker" type="text" ng-model="addOrderData.date"/>
+                </div>
+                <div class="m-t-xs"
+                     ng-show="add_Order_form.date.$invalid && add_Order_form.submitted">
+                    <small class="text-danger">请选择时间
+                    </small>
+                </div>
+            </div>
+
+            <div class="addressTip">
+                <p style="color: #428bca;margin-left: 120px">点击地址簿按钮可以展开历史使用地址和联系人信息</p>
+            </div>
+            <button type="submit" class="btn btn-primary" ng-click="addressbook(item);" style="margin-left: 15%">地址簿
+            </button>
+            <div class="form-group" ng-show="isaddress" style="overflow-y:auto;">
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <tbody>
+                            <div class="addressBox">
+                                <div class="addressBook">
+                                    <div class="addressInfo" ng-repeat="addresslist in addressbookList"
+                                         ng-click="addressChecked($index)">
+                                        <p class="content">
+                                            联系人 :{{addresslist.name}}/{{addresslist.mobile}}
+                                        </p>
+                                        <p>
+                                            收货地址
+                                            :{{addresslist.provinceName}}{{addresslist.cityName}}{{addresslist.areaName}}{{addresslist.address}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            </tbody>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">联系人 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="name" ng-required="true" placeholder="联系人姓名" class="form-control" type="text"
+                                   ng-pattern="/^[A-Za-z\u4e00-\u9fa5]+$/" style="float: left;width: 30%; margin-right: 25px" ng-model="addOrderData.name"/>
+                            <div class="m-t-xs"
+                                 ng-show="add_Order_form.name.$invalid && add_Order_form.submitted">
+                                <small class="text-danger" ng-show="add_Order_form.name.$error.required">请输入联系人
+                                </small>
+                                <small class="text-danger" ng-show="add_Order_form.name.$error.pattern">联系人只能为字母和汉字
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">联系电话 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="mobile" ng-required="true" placeholder="联系电话" class="form-control" type="text"
+                                   ng-pattern="/^(((0\d{2,3}-?)?\d{7,8})|(1[0-9]{10}))$/" style="float: left;width: 50%;" ng-model="addOrderData.mobile"/>
+                            <div class="m-t-xs"
+                                 ng-show="add_Order_form.mobile.$invalid && add_Order_form.submitted">
+                                <small class="text-danger" ng-show="add_Order_form.mobile.$error.required">请输入联系电话
+                                </small>
+                                <small class="text-danger" ng-show="add_Order_form.mobile.$error.pattern">请输入正确的联系电话
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">收货地址 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="particularsAddress" ng-required="true" maxlength="200" check-length="200" placeholder="详细地址" class="form-control" type="text"
+                                   style="width: 100%" ng-model="addOrderData.particularsAddress"/>
+                            <div class="m-t-xs"
+                                 ng-show="add_Order_form.particularsAddress.$invalid && add_Order_form.submitted">
+                                <small class="text-danger">请输入详细地址
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label ">备注信息 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <textarea class="form-control" maxlength="200" check-length="200" style="height: 80px" ng-model="addOrderData.remark"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="ok();">确认</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">返回</button>
+    </div>
+</div>
+<style>
+    .addressBox {
+        position: relative;
+        padding-top: 10px;
+    }
+
+    .addressBox .addressBook {
+        width: 100%;
+        display: inline-block;
+        border: 1px solid #dddddd;
+        height: 120px;
+        overflow-y: auto;
+    }
+
+    .addressBox .addressBook p {
+        margin: 0;
+    }
+
+    .addressBox .addressBook .addressInfo {
+        padding: 10px 10px;
+        /*margin: 10px 0;*/
+        border-bottom: 1px solid #cccccc;
+    }
+
+    .addressBox .addressBook .addressInfo:last-child {
+        border-bottom: none;
+    }
+
+    .addressBox .addressTip {
+        display: inline-block;
+        width: 39%;
+        padding: 10px;
+        position: absolute;
+        top: 0;
+    }
+
+    table, th, td {
+        border: 1px solid grey;
+        border-collapse: collapse;
+        padding: 10px;
+    }
+</style>

@@ -1,0 +1,124 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">产品发货</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="deliver_Goods_form" method="post"
+              enctype="multipart/form-data">
+            <label style="margin-left: 2%; color: #FF0000">注意:此功能只能用于不使用扫码工具入库/出库的设备</label>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">产品名称 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="productName" disabled ="disabled" class="form-control" type="text" size="8" ng-model="deliverGoodsInfo.productName"/>
+                            <div class="m-t-xs" ng-show="deliver_Goods_form.productName.$invalid && deliver_Goods_form.submitted">
+                                <small class="text-danger" ng-show="deliver_Goods_form.productName.$error.required">请输入产品名称</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label ">产品规格 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input  class="form-control" disabled ="disabled" type="text" ng-model="deliverGoodsInfo.productSpecification"/>
+                            <!--<div class="m-t-xs" ng-show="add_goodsManage_form.specification.$invalid && add_goodsManage_form.submitted">
+                                <small class="text-danger" ng-show="add_goodsManage_form.specification.$error.required">请输入配置规格</small>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+            <label class="col-lg-3 control-label ">产品类型 :</label>
+            <div class="control-content">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <input  disabled ="disabled" class="form-control" type="text" ng-model="deliverGoodsInfo.type"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label required">发货数量 :</label>
+            <div class="control-content">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <input name="total" ng-required="true" class="form-control" type="text" ng-model="deliverGoodsInfo.num"/>
+                        <div class="m-t-xs"
+                             ng-show="deliver_Goods_form.total.$invalid && deliver_Goods_form.submitted">
+                            <small class="text-danger" ng-show="deliver_Goods_form.total.$error.required">请填写发货数量</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!--<div class="form-group">
+                <label class="col-lg-3 control-label required">发货仓库 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="warehouse" ng-required="true" ng-model="deliverGoodsInfo.warehouse" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in warehouseArr">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="deliver_Goods_form.warehouse.$invalid && deliver_Goods_form.submitted">
+                                <small class="text-danger" ng-show="deliver_Goods_form.warehouse.$error.required">请选择发货仓库</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">物流公司 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="company" ng-required="true" class="form-control" type="text" ng-model="deliverGoodsInfo.company"/>
+                            <div class="m-t-xs"
+                                 ng-show="deliver_Goods_form.company.$invalid && deliver_Goods_form.submitted">
+                                <small class="text-danger" ng-show="deliver_Goods_form.company.$error.required">请填写物流公司</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">物流单号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="logisticsNumber" ng-required="true" class="form-control" type="text" maxlength="18"
+                                   onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" ng-model="deliverGoodsInfo.logisticsNumber"/>
+                            <div class="m-t-xs"
+                                 ng-show="deliver_Goods_form.logisticsNumber.$invalid && deliver_Goods_form.submitted">
+                                <small class="text-danger" ng-show="deliver_Goods_form.logisticsNumber.$error.required">请填写物流单号</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">确认</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

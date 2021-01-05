@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.am.ProductSplitDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.ProductSplitDetail">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="TINYINT"/>
+        <result column="PRICE" property="price" jdbcType="DOUBLE"/>
+        <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="TINYINT"/>
+        <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, PRODUCT_CODE, SERVICE_TYPE, PRICE, MATERIAL_CODE, TYPE, PRODUCT_TYPE, CREATED_BY, CREATED_DATE,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitDetail">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into am_product_split_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="productType != null">
+                #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitDetail">
+        update am_product_split_detail
+        <set>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

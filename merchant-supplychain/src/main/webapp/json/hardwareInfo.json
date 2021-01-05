@@ -1,0 +1,54 @@
+{
+  "returnCode": "0",
+  "message": null,
+  "errId": null,
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "startRow": 0,
+    "endRow": 10,
+    "total": 1,
+    "pages": 1,
+    "list": [
+      {
+        "deviceId": "1111",
+        "deviceName":"车载wifi",
+        "deviceTypeName": "车载wifi",
+        "merchantName":"深圳广联赛讯",
+        "deviceActiveMode":"入库激活",
+        "manufacturerCode":"234",
+        "statusDesc":"已上线",
+        "publishedDateTimeStr":"2018-03-08 10:34:45",
+        "lastOperatorName":"超级管理员"
+      },
+      {
+        "deviceId": "1111",
+        "deviceName":"车载wifi",
+        "deviceTypeName": "车载wifi",
+
+        "merchantName":"深圳广联赛讯",
+        "deviceActiveMode":"入库激活",
+        "manufacturerCode":"234",
+        "statusDesc":"已上线",
+
+        "publishedDateTimeStr":"2018-03-08 10:34:45",
+        "lastOperatorName":"超级管理员"
+      },
+      {
+        "deviceId": "1111",
+        "deviceName":"车载wifi",
+        "deviceTypeName": "车载wifi",
+
+        "merchantName":"深圳广联赛讯",
+        "deviceActiveMode":"入库激活",
+        "manufacturerCode":"234",
+        "statusDesc":"已上线",
+
+        "publishedDateTimeStr":"2018-03-08 10:34:45",
+        "lastOperatorName":"超级管理员"
+      }
+    ],
+    "condition": null
+  }
+}
+

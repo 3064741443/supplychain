@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.ProductHistoryPriceMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.ProductHistoryPrice" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="SERVICE_TYPE" property="serviceType" jdbcType="TINYINT" />
+    <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR" />
+    <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR" />
+    <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR" />
+    <result column="MATERIAL_NAME" property="materialName" jdbcType="VARCHAR" />
+    <result column="TIME" property="time" jdbcType="TIMESTAMP" />
+    <result column="PRICE" property="price" jdbcType="DOUBLE" />
+    <result column="TYPE" property="type" jdbcType="TINYINT"/>
+    <result column="TAX_RATE" property="taxRate" jdbcType="DOUBLE" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, SERVICE_TYPE, PRODUCT_TYPE, PRODUCT_CODE, MATERIAL_CODE, MATERIAL_NAME, TIME,TYPE, PRICE,
+    TAX_RATE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+  <select id="getProductHistoryPriceByCodeOrType" resultMap="BaseResultMap" parameterType="cn.com.glsx.supplychain.model.bs.ProductHistoryPrice">
+    select
+    <include refid="Base_Column_List"/>
+    from bs_product_history_price
+    where DELETED_FLAG = "N"
+    <if test="productCode != null">
+      AND PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null">
+      AND TYPE = #{type,jdbcType=TINYINT}
+    </if>
+  </select>
+
+  <select id="getProductHistoryPriceByCode" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from bs_product_history_price
+    where DELETED_FLAG = "N"
+    <if test="productCode != null">
+      AND PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <select id="getProductHistoryPrice" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from bs_product_history_price
+    where 1=1
+    <if test="productCode != null">
+      AND PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+    </if>
+    <if test="date != null">
+      AND TIME &lt;= #{date,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <update id="updateById" parameterType="cn.com.glsx.supplychain.model.bs.ProductHistoryPrice" >
+    update bs_product_history_price
+    <set >
+      <if test="serviceType != null" >
+        SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+      </if>
+      <if test="productType != null" >
+        PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null" >
+        MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        TIME = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+          TYPE = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="price != null" >
+        PRICE = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="taxRate != null" >
+        TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

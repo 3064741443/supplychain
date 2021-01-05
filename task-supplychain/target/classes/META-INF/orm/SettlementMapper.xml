@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.SettlementMapper" >
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.Settlement" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="id" property="consumerId" jdbcType="INTEGER" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR" />
+    <result column="SEETLEMENT_DATE" property="settlementDate" jdbcType="TIMESTAMP" />
+    <result column="SEETLEMENT_NUM" property="settlementNum" jdbcType="INTEGER" />
+    <result column="INCLUDE_TAX_PRICE" property="includeTaxPrice" jdbcType="DECIMAL" />
+    <result column="FREE_TAX_PRICE" property="freeTaxPrice" jdbcType="DECIMAL" />
+    <result column="TOTAL_PRICE_TAX" property="totalPriceTax" jdbcType="DECIMAL" />
+    <result column="EXCLUDE_TAX_AMOUNT" property="excludeTaxAmount" jdbcType="DECIMAL" />
+    <result column="TAX" property="tax" jdbcType="DECIMAL" />
+    <result column="CUSTOMER_ORDER_NUM" property="customerOrderNum" jdbcType="VARCHAR" />
+    <result column="DELIVERY_ORDER_NUM" property="deliveryOrderNum" jdbcType="VARCHAR" />
+    <result column="SENT_MERCHANT" property="sentMerchant" jdbcType="VARCHAR" />
+    <result column="SN" property="sn" jdbcType="VARCHAR" />
+    <result column="SENTDATE" property="sentDate" jdbcType="VARCHAR" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_NAME, MATERIAL_CODE, SEETLEMENT_DATE, SEETLEMENT_NUM, INCLUDE_TAX_PRICE, FREE_TAX_PRICE, TOTAL_PRICE_TAX,
+    EXCLUDE_TAX_AMOUNT,TAX, CUSTOMER_ORDER_NUM, DELIVERY_ORDER_NUM, SENT_MERCHANT,SN,SENTDATE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,
+    DELETED_FLAG
+  </sql>
+
+  <select id="settlementList" parameterType="glsx.com.cn.task.model.Settlement" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM temporay_settlement
+    where 1 = 1
+    and ID > #{id,jdbcType=INTEGER}
+    limit 2000
+  </select>
+</mapper>

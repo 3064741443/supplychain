@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.SyncLastIdRecordMapper">
+
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.SyncLastidRecord">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="LAST_FLOW_CARD_ID" jdbcType="INTEGER" property="lastFlowCardId"/>
+        <result column="LAST_PHYSICAL_DEVICE_ID" jdbcType="INTEGER" property="lastPhysicalDeviceId"/>
+        <result column="LAST_INFO_FILE_ID" jdbcType="INTEGER" property="lastInfoFileId"/>
+        <result column="SETTLEMENT_ID" jdbcType="INTEGER" property="settlementId"/>
+        <result column="LAST_SYNC_EXTER_SYSTEM_ID" jdbcType="INTEGER" property="lastSyncExterSystemId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		ID,LAST_FLOW_CARD_ID,LAST_PHYSICAL_DEVICE_ID,LAST_INFO_FILE_ID,SETTLEMENT_ID,LAST_SYNC_EXTER_SYSTEM_ID
+	</sql>
+
+    <select id="getSyncLastidRecord" parameterType="cn.com.glsx.supplychain.model.SyncLastidRecord" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sync_lastid_record where 1=1
+        <if test="lastFlowCardId != null">
+            and LAST_FLOW_CARD_ID = #{lastFlowCardId,jdbcType=INTEGER}
+        </if>
+        <if test="lastPhysicalDeviceId != null ">
+            and LAST_PHYSICAL_DEVICE_ID = #{lastPhysicalDeviceId,jdbcType=INTEGER}
+        </if>
+        <if test="lastInfoFileId != null ">
+            and LAST_INFO_FILE_ID = #{lastInfoFileId,jdbcType=INTEGER}
+        </if>
+        <if test="settlementId != null">
+            and SETTLEMENT_ID = #{settlementId,jdbcType=INTEGER}
+        </if>
+        <if test="lastSyncExterSystemId != null">
+        	and LAST_SYNC_EXTER_SYSTEM_ID = #{lastSyncExterSystemId,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <!-- 修改同步数据ID记录 -->
+    <update id="updateSyncLastidRecord" parameterType="cn.com.glsx.supplychain.model.SyncLastidRecord">
+        update sync_lastid_record
+        <set>
+            <if test="lastFlowCardId != null">
+                 LAST_FLOW_CARD_ID = #{lastFlowCardId,jdbcType=INTEGER},
+            </if>
+            <if test="lastPhysicalDeviceId != null ">
+                 LAST_PHYSICAL_DEVICE_ID = #{lastPhysicalDeviceId,jdbcType=INTEGER},
+            </if>
+            <if test="lastInfoFileId != null ">
+                 LAST_INFO_FILE_ID = #{lastInfoFileId,jdbcType=INTEGER},
+            </if>
+            <if test="settlementId != null">
+                 SETTLEMENT_ID = #{settlementId,jdbcType=INTEGER},
+            </if>
+            <if test="lastSyncExterSystemId != null">
+        		 LAST_SYNC_EXTER_SYSTEM_ID = #{lastSyncExterSystemId,jdbcType=INTEGER}
+        	</if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+
+</mapper>

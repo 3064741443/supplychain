@@ -1,0 +1,42 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">出货详情</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="ibox-title">
+        <label class="pull-left control-label">累计发货总数：{{paramData.shipmentNum}}</label></label>
+        <label style="margin-left: 100px;">欠发数量数量：{{paramData.underpaidNum}}</label>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="col-lg-12 control-content">
+                <table dt-options="dtOptions" class="table table-striped table-bordered table-hover">
+                    <colgroup>
+                        <col width="25%"/>
+                        <col width="25%"/>
+                        <col width="25%"/>
+                        <col width="25%"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>物流公司</th>
+                        <th>物流单号</th>
+                        <th>发货数量</th>
+                        <th>发货时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat='item in paramData.record.listLogistics'>
+                        <td>{{item.company}}</td>
+                        <td>{{item.orderNumber}}</td>
+                        <td>{{item.shipmentsQuantity}}</td>
+                        <td>{{item.createdDate | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

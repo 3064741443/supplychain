@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.com.glsx.framework</groupId>
+		<artifactId>framework-rpc</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>cn.com.glsx.supplychain</groupId>
+	<artifactId>rpc-supplychain</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>rpc-supplychain</name>
+	<packaging>war</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>cn.com.glsx.supplychain</groupId>
+			<artifactId>rpc-supplychain-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.oreframework.boot</groupId>
+			<artifactId>ore-boot-starter-redis</artifactId>
+			<version>1.1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.glsx.biz</groupId>
+			<artifactId>biz-merchant-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.glsx.biz</groupId>
+			<artifactId>biz-common-user</artifactId>
+			<version>4.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.glsx.biz</groupId>
+			<artifactId>oms-flowservice-api</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.glsx.biz</groupId>
+			<artifactId>biz-user-common</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.glsx.biz</groupId>
+			<artifactId>biz-user-service</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.glsx</groupId>
+			<artifactId>platform-goods-common</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.oreframework.boot</groupId>
+			<artifactId>ore-boot-starter-jms</artifactId>
+		</dependency>
+		
+		  
+		<dependency>
+			<groupId>com.glsx.biz</groupId> 
+  			<version>1.0.0-SNAPSHOT</version> 
+  			<artifactId>oms-fcservice-api</artifactId>
+  		</dependency>
+
+		<dependency>
+			<groupId>com.glsx.oms.bigdata</groupId>
+			<artifactId>gldb-service-fb-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+            <groupId>cn.com.glsx.merchant.facade</groupId>
+            <artifactId>rpc-merchant-facade-api</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+  		
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

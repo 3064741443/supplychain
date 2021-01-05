@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.rpc.supplychain.rdn.mapper.STKMerchantWarningWaresaleMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.STKMerchantWarningWaresale">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="warning_code" jdbcType="VARCHAR" property="warningCode"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName"/>
+        <result column="warning_month" jdbcType="VARCHAR" property="warningMonth"/>
+        <result column="device_type" jdbcType="INTEGER" property="deviceType"/>
+        <result column="waresale_rate" jdbcType="DOUBLE" property="waresaleRate"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, warning_code, merchant_code, merchant_name, warning_month, device_type, waresale_rate, 
+    created_by, created_date, updated_by, updated_date, deleted_flag
+  </sql>
+
+    <select id="exportWarningWaresale" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.STKMerchantWarningWaresale"
+            resultType="cn.com.glsx.supplychain.jxc.dto.STKWarningWaresaleDTO">
+        select
+        smww.merchant_code as merchantCode,
+        smww.merchant_name as merchantName,
+        smww.warning_month as warningMonth,
+        smww.device_type as deviceType,
+        smww.waresale_rate as stockSaleRatio,
+        bdui.channel as channelId,
+        dt.name as deviceTypeName
+        from stk_merchant_warning_waresale as smww
+        left join bs_dealer_user_info as bdui on(smww.merchant_code=bdui.merchant_code)
+        left join device_type as dt on(dt.id=smww.device_type)
+        <where>
+            <if test="merchantChannelId != null">
+                and bdui.channel = #{merchantChannelId,jdbcType=TINYINT}
+            </if>
+            <if test="merchantCode != null">
+                and (smww.merchant_code like concat('%',#{merchantCode,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="merchantName != null">
+                or smww.merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="deviceType != null">
+                and smww.device_type = #{deviceType,jdbcType=INTEGER}
+            </if>
+            <if test="warningMonth != null">
+                and smww.warning_month = #{warningMonth,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by smww.id desc
+    </select>
+</mapper>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.DeviceCodeMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.DeviceCode">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="DEVICE_CODE" jdbcType="INTEGER" property="deviceCode" />
+    <result column="DEVICE_NAME" jdbcType="VARCHAR" property="deviceName" />
+    <result column="MERCHANT_ID" jdbcType="INTEGER" property="merchantId" />
+    <result column="TYPE_ID" jdbcType="INTEGER" property="typeId" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="MANUFACTURER_CODE" jdbcType="VARCHAR" property="manufacturerCode" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="REMARK" jdbcType="LONGVARCHAR" property="remark" /> 
+    <association property="deviceType" javaType="glsx.com.cn.task.model.DeviceType">
+    	<id column="type_id" jdbcType="INTEGER" property="id" />
+    	<result column="NAME" jdbcType="VARCHAR" property="name" />
+    	<result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    	<result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    	<result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    	<result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    	<result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    </association>
+  </resultMap>
+  
+  <sql id="Code_Colum_List">
+  	c.ID,c.DEVICE_CODE,c.DEVICE_NAME,t.NAME,t.ID as TYPE_ID,c.MERCHANT_ID,c.DELETED_FLAG,c.CREATED_BY,c.CREATED_DATE,c.STATUS,c.REMARK
+  </sql>
+  
+  <sql id="Base_Column_List">
+    ID, DEVICE_CODE, DEVICE_NAME, MERCHANT_ID, TYPE_ID, STATUS, MANUFACTURER_CODE, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,REMARK
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_code
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="listDeviceCodeByIds" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select
+  	<include refid="Code_Colum_List"/>
+  	from device_code as c left join device_type as t on(c.TYPE_ID=t.ID)
+  	where 1=1
+  	<if test="list != null and list.size() &gt; 0">
+    	AND c.`ID` IN
+	    <foreach collection="list" item="id" open="(" close=")" separator=",">
+	    	#{id,jdbcType=INTEGER}
+	    </foreach>
+	</if>
+  </select>
+  <select id="selectByUniqueKey" parameterType="glsx.com.cn.task.model.DeviceCode" resultMap="BaseResultMap">
+  	select
+  	<include refid="Code_Colum_List" />
+  	from device_code as c left join device_type as t on(c.TYPE_ID=t.ID)
+  	<where>
+  		<if test="deviceName != null and deviceName !=''">
+  			AND c.DEVICE_NAME = #{deviceName,jdbcType=VARCHAR}	
+	  	</if>
+	  	<if test="deviceCode != null">
+	  		AND c.DEVICE_CODE = #{deviceCode,jdbcType=INTEGER}
+	  	</if>
+  	</where>
+  </select>
+  <select id="selectByManufacturerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select
+  	<include refid="Code_Colum_List" />
+  	from device_code as c left join device_type as t on(c.TYPE_ID=t.ID) where c.MANUFACTURER_CODE like concat(#{manufacturerCode,jdbcType=VARCHAR},'%') limit 1
+  </select>
+  <select id="pageDeviceCode" parameterType="glsx.com.cn.task.model.DeviceCode" resultMap="BaseResultMap">
+  	select
+  	<include refid="Code_Colum_List"/>
+  	from device_code as c left join device_type t ON (c.TYPE_ID=t.ID) 
+  	where c.DELETED_FLAG = 'N' 
+	<if test="typeId != null and typeId !=0">
+		AND c.TYPE_ID = #{typeId,jdbcType=INTEGER}
+	</if>
+	<if test="status != null and status !=0">
+		AND c.STATUS = #{status,jdbcType=VARCHAR}
+	</if>
+	<if test="deviceCode != null and deviceCode !=0">
+		AND c.DEVICE_CODE like concat('%',#{deviceCode,jdbcType=INTEGER},'%') 
+	</if>
+	ORDER BY c.ID DESC
+  </select>
+  <select id="listDeviceCode" parameterType="glsx.com.cn.task.model.DeviceCode" resultMap="BaseResultMap">
+  	select
+  	<include refid="Code_Colum_List"/>
+  	from device_code as c left join device_type t ON (c.TYPE_ID=t.ID) 
+  	where c.DELETED_FLAG = 'N' 
+	<if test="typeId != null and typeId !=0">
+		AND c.TYPE_ID = #{typeId,jdbcType=INTEGER}
+	</if>
+	<if test="status != null and status !=0">
+		AND c.STATUS = #{status,jdbcType=VARCHAR}
+	</if>
+	<if test="deviceCode != null and deviceCode !=0">
+		AND c.DEVICE_CODE like concat('%',#{deviceCode,jdbcType=INTEGER},'%') 
+	</if>
+	<if test="merchantId != null">
+		AND C.MERCHANT_ID like concat('%',#{merchantId,jdbcType=INTEGER},'%')
+	</if>
+	<if test="deviceName != null">
+		AND C.DEVICE_NAME like concat('%',#{deviceName,jdbcType=VARCHAR},'%')
+	</if>
+	ORDER BY c.ID DESC
+  </select>
+  <select id="exportDeviceCode" parameterType="glsx.com.cn.task.model.DeviceCode" resultMap="BaseResultMap">
+  	select
+  	<include refid="Code_Colum_List" />
+  	from device_code as c left join device_type t on(c.TYPE_ID=t.ID)
+  	<where>
+  		<if test="typeId != null and typeId != 0">
+			AND c.TYPE_ID = #{typeId,jdbcType=INTEGER}
+		</if>
+		<if test="status != null and status !=0">
+			AND c.STATUS = #{status,jdbcType=VARCHAR}
+		</if>
+  	</where>
+  	ORDER BY c.ID DESC
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_code
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.DeviceCode">
+  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      	SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_code (ID, DEVICE_CODE, DEVICE_NAME, 
+      MERCHANT_ID, TYPE_ID, STATUS, 
+      MANUFACTURER_CODE, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG, 
+      REMARK)
+    values (#{id,jdbcType=INTEGER}, #{deviceCode,jdbcType=INTEGER}, #{deviceName,jdbcType=VARCHAR}, 
+      #{merchantId,jdbcType=INTEGER}, #{typeId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
+      #{manufacturerCode,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.DeviceCode">
+  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      	SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_code
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="deviceCode != null">
+        DEVICE_CODE,
+      </if>
+      <if test="deviceName != null">
+        DEVICE_NAME,
+      </if>
+      <if test="merchantId != null">
+        MERCHANT_ID,
+      </if>
+      <if test="typeId != null">
+        TYPE_ID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="manufacturerCode != null">
+        MANUFACTURER_CODE,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="deviceCode != null">
+        #{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null">
+        #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerCode != null">
+        #{manufacturerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.DeviceCode">
+    update device_code
+    <set>
+      <if test="deviceCode != null">
+        DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="deviceName != null">
+        DEVICE_NAME = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        MERCHANT_ID = #{merchantId,jdbcType=INTEGER},
+      </if>
+      <if test="typeId != null">
+        TYPE_ID = #{typeId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerCode != null">
+        MANUFACTURER_CODE = #{manufacturerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="glsx.com.cn.task.model.DeviceCode">
+    update device_code
+    set DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      DEVICE_NAME = #{deviceName,jdbcType=VARCHAR},
+      MERCHANT_ID = #{merchantId,jdbcType=INTEGER},
+      TYPE_ID = #{typeId,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      MANUFACTURER_CODE = #{manufacturerCode,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.DeviceCode">
+    update device_code
+    set DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      DEVICE_NAME = #{deviceName,jdbcType=VARCHAR},
+      MERCHANT_ID = #{merchantId,jdbcType=INTEGER},
+      TYPE_ID = #{typeId,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      MANUFACTURER_CODE = #{manufacturerCode,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

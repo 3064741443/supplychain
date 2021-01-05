@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.DeviceInfoGpsPreimportMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.DeviceInfoGpsPreimport">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="SIM_CARD_NO" jdbcType="VARCHAR" property="simCardNo" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMSI" jdbcType="VARCHAR" property="imsi" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="MODEL" jdbcType="VARCHAR" property="model" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="VCODE" jdbcType="VARCHAR" property="vcode" />
+    <result column="LOGISTICS_NO" jdbcType="VARCHAR" property="logisticsNo" />
+    <result column="LOGISTICS_CPY" jdbcType="VARCHAR" property="logisticsCpy" />
+    <result column="FACTORY_NAME" jdbcType="VARCHAR" property="factoryName" />
+    <result column="RESULT" jdbcType="VARCHAR" property="result" />
+    <result column="RESULT_DESC" jdbcType="VARCHAR" property="resultDesc" />
+    <result column="SEED_TAG" jdbcType="VARCHAR" property="seedTag" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_CODE, SIM_CARD_NO, ICCID, IMSI, IMEI, SN, MODEL, BATCH, VCODE, LOGISTICS_NO, 
+    LOGISTICS_CPY, FACTORY_NAME, RESULT, RESULT_DESC, SEED_TAG, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <!--  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_info_gps_preimport
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  -->
+  <select id="pageDeviceInfoGpsPreImport" parameterType="cn.com.glsx.supplychain.model.DeviceInfoGpsPreimport" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from device_info_gps_preimport
+  	<where>
+  		<if test="orderCode != null">
+  			AND ORDER_CODE LIKE CONCAT('%',#{orderCode},'%')
+  		</if>
+  		<if test="imsi != null">
+  			AND IMSI LIKE CONCAT('%',#{imsi},'%')
+  		</if>
+  		<if test="iccid != null">
+  			AND ICCID LIKE CONCAT('%',#{iccid},'%')
+  		</if>
+  		<if test="imei != null">
+  			AND IMEI LIKE CONCAT('%',#{imei},'%')
+  		</if>
+  		<if test="sn != null">
+  			AND SN LIKE CONCAT('%',#{sn},'%')
+  		</if>
+  		<if test="seedTag != null">
+  			AND SEED_TAG LIKE CONCAT('%',#{seedTag},'%')
+  		</if>
+  		<if test="result != null">
+  			AND RESULT=#{result}
+  		</if>
+        <if test="startDate != null">
+            AND CREATED_DATE &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND CREATED_DATE &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+  	</where>
+  </select>
+  <!-- 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_info_gps_preimport
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  -->
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.DeviceInfoGpsPreimport">
+    insert into device_info_gps_preimport (ID, ORDER_CODE, SIM_CARD_NO, 
+      ICCID, IMSI, IMEI, 
+      SN, MODEL, BATCH, VCODE, 
+      LOGISTICS_NO, LOGISTICS_CPY, FACTORY_NAME, 
+      RESULT, RESULT_DESC, SEED_TAG, 
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{simCardNo,jdbcType=VARCHAR}, 
+      #{iccid,jdbcType=VARCHAR}, #{imsi,jdbcType=VARCHAR}, #{imei,jdbcType=VARCHAR}, 
+      #{sn,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{batch,jdbcType=VARCHAR}, #{vcode,jdbcType=VARCHAR}, 
+      #{logisticsNo,jdbcType=VARCHAR}, #{logisticsCpy,jdbcType=VARCHAR}, #{factoryName,jdbcType=VARCHAR}, 
+      #{result,jdbcType=VARCHAR}, #{resultDesc,jdbcType=VARCHAR}, #{seedTag,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="batchAddDeviceInfoGpsPerimport" parameterType="java.util.List">
+  	insert into device_info_gps_preimport (ORDER_CODE, SIM_CARD_NO, 
+      ICCID, IMSI, IMEI, 
+      SN, MODEL, BATCH, VCODE, 
+      LOGISTICS_NO, LOGISTICS_CPY, FACTORY_NAME, 
+      RESULT, RESULT_DESC, SEED_TAG, 
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG)  
+     values
+     <foreach collection="list" item="item" index="index" separator=",">
+     (
+     #{item.orderCode}
+	,#{item.simCardNo}
+	,#{item.iccid}
+	,#{item.imsi}
+	,#{item.imei}
+	,#{item.sn}
+	,#{item.model}
+	,#{item.batch}
+	,#{item.vcode}
+	,#{item.logisticsNo}
+	,#{item.logisticsCpy}
+	,#{item.factoryName}
+	,#{item.result}
+	,#{item.resultDesc}
+	,#{item.seedTag}
+	,#{item.createdBy}
+	,#{item.createdDate}
+	,#{item.updatedBy}
+	,#{item.updatedDate}
+	,#{item.deletedFlag}
+     )
+     </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.DeviceInfoGpsPreimport">
+    insert into device_info_gps_preimport
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE,
+      </if>
+      <if test="simCardNo != null">
+        SIM_CARD_NO,
+      </if>
+      <if test="iccid != null">
+        ICCID,
+      </if>
+      <if test="imsi != null">
+        IMSI,
+      </if>
+      <if test="imei != null">
+        IMEI,
+      </if>
+      <if test="sn != null">
+        SN,
+      </if>
+      <if test="model != null">
+        MODEL,
+      </if>
+      <if test="batch != null">
+        BATCH,
+      </if>
+      <if test="vcode != null">
+        VCODE,
+      </if>
+      <if test="logisticsNo != null">
+        LOGISTICS_NO,
+      </if>
+      <if test="logisticsCpy != null">
+        LOGISTICS_CPY,
+      </if>
+      <if test="factoryName != null">
+        FACTORY_NAME,
+      </if>
+      <if test="result != null">
+        RESULT,
+      </if>
+      <if test="resultDesc != null">
+        RESULT_DESC,
+      </if>
+      <if test="seedTag != null">
+        SEED_TAG,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="simCardNo != null">
+        #{simCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imsi != null">
+        #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null">
+        #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNo != null">
+        #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCpy != null">
+        #{logisticsCpy,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryName != null">
+        #{factoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="resultDesc != null">
+        #{resultDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="seedTag != null">
+        #{seedTag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateDeviceInfoGpsPreImportStatu" parameterType="cn.com.glsx.supplychain.model.DeviceInfoGpsPreimport">
+  	update device_info_gps_preimport set RESULT = #{result,jdbcType=VARCHAR},RESULT_DESC = #{resultDesc,jdbcType=VARCHAR}
+  	where ORDER_CODE = #{orderCode,jdbcType=VARCHAR} and SN = #{sn,jdbcType=VARCHAR} and DELETED_FLAG='N'
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.DeviceInfoGpsPreimport">
+    update device_info_gps_preimport
+    <set>
+      <if test="orderCode != null">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="simCardNo != null">
+        SIM_CARD_NO = #{simCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imsi != null">
+        IMSI = #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null">
+        SN = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        MODEL = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        BATCH = #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null">
+        VCODE = #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNo != null">
+        LOGISTICS_NO = #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCpy != null">
+        LOGISTICS_CPY = #{logisticsCpy,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryName != null">
+        FACTORY_NAME = #{factoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        RESULT = #{result,jdbcType=VARCHAR},
+      </if>
+      <if test="resultDesc != null">
+        RESULT_DESC = #{resultDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="seedTag != null">
+        SEED_TAG = #{seedTag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.DeviceInfoGpsPreimport">
+    update device_info_gps_preimport
+    set ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      SIM_CARD_NO = #{simCardNo,jdbcType=VARCHAR},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      IMSI = #{imsi,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      SN = #{sn,jdbcType=VARCHAR},
+      MODEL = #{model,jdbcType=VARCHAR},
+      BATCH = #{batch,jdbcType=VARCHAR},
+      VCODE = #{vcode,jdbcType=VARCHAR},
+      LOGISTICS_NO = #{logisticsNo,jdbcType=VARCHAR},
+      LOGISTICS_CPY = #{logisticsCpy,jdbcType=VARCHAR},
+      FACTORY_NAME = #{factoryName,jdbcType=VARCHAR},
+      RESULT = #{result,jdbcType=VARCHAR},
+      RESULT_DESC = #{resultDesc,jdbcType=VARCHAR},
+      SEED_TAG = #{seedTag,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

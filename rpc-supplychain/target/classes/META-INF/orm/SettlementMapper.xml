@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.SettlementMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.Settlement" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR" />
+    <result column="SEETLEMENT_DATE" property="settlementDate" jdbcType="TIMESTAMP" />
+    <result column="SEETLEMENT_NUM" property="settlementNum" jdbcType="INTEGER" />
+    <result column="INCLUDE_TAX_PRICE" property="includeTaxPrice" jdbcType="DECIMAL" />
+    <result column="FREE_TAX_PRICE" property="freeTaxPrice" jdbcType="DECIMAL" />
+    <result column="TOTAL_PRICE_TAX" property="totalPriceTax" jdbcType="DECIMAL" />
+    <result column="EXCLUDE_TAX_AMOUNT" property="excludeTaxAmount" jdbcType="DECIMAL" />
+    <result column="TAX" property="tax" jdbcType="DECIMAL" />
+    <result column="CUSTOMER_ORDER_NUM" property="customerOrderNum" jdbcType="VARCHAR" />
+    <result column="DELIVERY_ORDER_NUM" property="deliveryOrderNum" jdbcType="VARCHAR" />
+    <result column="SENT_MERCHANT" property="sentMerchant" jdbcType="VARCHAR" />
+    <result column="SN" property="sn" jdbcType="VARCHAR" />
+    <result column="SENTDATE" property="sentDate" jdbcType="VARCHAR" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_NAME, MATERIAL_CODE, SEETLEMENT_DATE, SEETLEMENT_NUM, INCLUDE_TAX_PRICE, FREE_TAX_PRICE, TOTAL_PRICE_TAX,
+    EXCLUDE_TAX_AMOUNT,TAX, CUSTOMER_ORDER_NUM, DELIVERY_ORDER_NUM, SENT_MERCHANT,SN,SENTDATE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,
+    DELETED_FLAG
+  </sql>
+  <!-- 查询最大的ID -->
+  <select id="MaxSettlementId" parameterType="java.lang.Integer" resultType="Integer">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM temporay_settlement  WHERE id=(SELECT MAX(id) FROM temporay_settlement)
+  </select>
+
+  <select id="SettlementList" parameterType="cn.com.glsx.supplychain.model.Settlement" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM temporay_settlement  WHERE id &gt;#{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insertSettlementList" parameterType="cn.com.glsx.supplychain.model.Settlement">
+  <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into temporay_settlement (MERCHANT_NAME, MATERIAL_CODE, SEETLEMENT_DATE, SEETLEMENT_NUM, INCLUDE_TAX_PRICE, FREE_TAX_PRICE, TOTAL_PRICE_TAX,
+    EXCLUDE_TAX_AMOUNT,TAX, CUSTOMER_ORDER_NUM, DELIVERY_ORDER_NUM, SENT_MERCHANT,SN,SENTDATE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,
+    DELETED_FLAG)
+  values
+  <foreach collection="list" item="item" index="index" separator=",">
+    (#{item.merchantName,jdbcType=VARCHAR}, #{item.materialCode,jdbcType=VARCHAR}, #{item.settlementDate,jdbcType=TIMESTAMP},
+    #{item.settlementNum,jdbcType=INTEGER},#{item.includeTaxPrice,jdbcType=DECIMAL},#{item.freeTaxPrice,jdbcType=DECIMAL},#{item.totalPriceTax,jdbcType=DECIMAL},#{item.excludeTaxAmount,jdbcType=DECIMAL},
+    #{item.tax,jdbcType=DECIMAL}, #{item.customerOrderNum,jdbcType=VARCHAR},#{item.deliveryOrderNum,jdbcType=VARCHAR},#{item.sentMerchant,jdbcType=VARCHAR},#{item.sn,jdbcType=VARCHAR},#{item.sentDate,jdbcType=VARCHAR},
+    #{item.createdBy,jdbcType=VARCHAR},#{item.createdDate,jdbcType=TIMESTAMP},#{item.updatedBy,jdbcType=VARCHAR}, #{item.updatedDate,jdbcType=TIMESTAMP},#{item.deletedFlag,jdbcType=VARCHAR})
+  </foreach>
+</insert>
+
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.BsMerchantOrderVehicleMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.BsMerchantOrderVehicle">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="merchant_order" jdbcType="VARCHAR" property="merchantOrder"/>
+        <result column="dispatch_order_code" jdbcType="VARCHAR" property="dispatchOrderCode"/>
+        <result column="bs_parent_brand_id" jdbcType="INTEGER" property="bsParentBrandId"/>
+        <result column="bs_parent_brand_name" jdbcType="VARCHAR" property="bsParentBrandName"/>
+        <result column="bs_sub_brand_id" jdbcType="INTEGER" property="bsSubBrandId"/>
+        <result column="bs_sub_brand_name" jdbcType="VARCHAR" property="bsSubBrandName"/>
+        <result column="bs_audi_id" jdbcType="INTEGER" property="bsAudiId"/>
+        <result column="bs_audi_name" jdbcType="VARCHAR" property="bsAudiName"/>
+        <result column="bs_motorcycle" jdbcType="VARCHAR" property="bsMotorcycle"/>
+        <result column="bs_remark" jdbcType="VARCHAR" property="bsRemark"/>
+        <result column="bs_total" jdbcType="INTEGER" property="bsTotal"/>
+        <result column="bs_check_quantity" jdbcType="INTEGER" property="bsCheckQuantity"/>
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, merchant_order, dispatch_order_code, bs_parent_brand_id, bs_parent_brand_name, 
+    bs_sub_brand_id, bs_sub_brand_name, bs_audi_id, bs_audi_name, bs_motorcycle, bs_remark, 
+    bs_total, bs_check_quantity, created_by, created_date, updated_by, updated_date, 
+    deleted_flag
+  </sql>
+
+    <select id="listVehicleInformation" resultType="cn.com.glsx.supplychain.model.bs.BsMerchantOrderVehicle">
+    select bs_parent_brand_name bsParentBrandName,bs_sub_brand_name bsSubBrandName,bs_audi_name bsAudiName,bs_motorcycle bsMotorcycle from bs_merchant_order_vehicle
+    </select>
+</mapper>

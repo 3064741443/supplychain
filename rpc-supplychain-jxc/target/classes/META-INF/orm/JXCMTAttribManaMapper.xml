@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTAttribManaMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTAttribMana">
+    <id column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="MODEL" jdbcType="INTEGER" property="model" />
+    <result column="CONFIGURE" jdbcType="INTEGER" property="configure" />
+    <result column="MSIZE" jdbcType="INTEGER" property="msize" />
+    <result column="BOARD_VERSION" jdbcType="VARCHAR" property="boardVersion" />
+    <result column="MCU_VERSION" jdbcType="VARCHAR" property="mcuVersion" />
+    <result column="FASTENER_VERSION" jdbcType="VARCHAR" property="fastenerVersion" />
+    <result column="SOFT_VERSION" jdbcType="VARCHAR" property="softVersion" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="DEV_TYPE_ID" jdbcType="INTEGER" property="devTypeId" />
+    <result column="DEV_MNUM_ID" jdbcType="INTEGER" property="devMnumId" />
+    <result column="OR_NET_ID" jdbcType="INTEGER" property="orNetId" />
+    <result column="CARD_SELF_ID" jdbcType="INTEGER" property="cardSelfId" />
+    <result column="SOURCE_ID" jdbcType="INTEGER" property="sourceId" />
+    <result column="SCREEN_ID" jdbcType="INTEGER" property="screenId" />
+    <result column="OR_OPEN_ID" jdbcType="INTEGER" property="orOpenId" />
+    <result column="verify_iccid" jdbcType="VARCHAR" property="verifyIccid" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ATTRIB_CODE, ID, TYPE, MODEL, CONFIGURE, MSIZE, BOARD_VERSION, MCU_VERSION, FASTENER_VERSION, 
+    SOFT_VERSION, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, DEV_TYPE_ID, 
+    DEV_MNUM_ID, OR_NET_ID, CARD_SELF_ID, SOURCE_ID, SCREEN_ID, OR_OPEN_ID, verify_iccid,material_name
+  </sql>
+  
+  <select id="pageAttribMana" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTAttribMana" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from attrib_mana
+  	<where>
+  		<if test="devTypeId != null">
+  			and DEV_TYPE_ID = #{devTypeId,jdbcType=INTEGER}
+  		</if>
+  		<if test="attribCode != null">
+  			and (ATTRIB_CODE like concat('%',#{attribCode,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="materialName != null">
+  			or material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+  		</if>
+  	</where>
+  	order by id desc
+  </select>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTOrderInfoDetailMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTOrderInfoDetail">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+    <result column="WAREHOUSE_ID_UP" jdbcType="INTEGER" property="warehouseIdUp" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="LOGISTICS_ID" jdbcType="INTEGER" property="logisticsId" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_CODE, ICCID, IMEI, ATTRIB_CODE, BATCH, WAREHOUSE_ID, WAREHOUSE_ID_UP, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, LOGISTICS_ID, SN
+  </sql>
+  
+  <select id="selectOrderDetailCount" parameterType="java.util.List" resultType="cn.com.glsx.supplychain.jxc.model.JXCMTDispatchOrderNumCount">
+  	select order_code as dispatchOrderCode,count(order_code) as sendNums,updated_date as sendTime from order_info_detail where order_code in
+  	<foreach collection="list" item="code" index="index" open="(" close=")" separator=",">
+  		#{code}
+  	</foreach>
+  	group by order_code
+  </select>
+  
+   <select id="pageDispatchOrderDetail" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTOrderInfoDetail"
+  									resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTOrderInfoDetailDTO">
+  	select 
+  	odid.iccid as iccid,
+  	odid.sn as sn,
+  	odid.imei as imei,
+  	odid.attrib_code as attribCode,
+  	odid.order_code as dispatchOrderCode,
+  	odid.updated_date as updatedDate,
+  	bl.order_number as logisticsNum,
+  	bl.company as logisticsCompany
+  	from order_info_detail as odid 
+  	left join bs_logistics as bl on(odid.logistics_id = bl.id)
+  	where odid.order_code = #{orderCode}
+  	<if test="iccid != null">
+  		and iccid like concat('%',#{iccid},'%')
+  	</if>	
+  	<if test="imei != null">
+  		and imei like concat('%',#{imei},'%')
+  	</if>
+  	<if test="sn != null">
+  		and sn like concat('%',#{sn},'%')
+  	</if>
+  	<if test="attribCode != null">
+  		and attrib_code like concat('%',#{attribCode},'%')
+  	</if>
+  	order by odid.id desc					
+   </select>
+</mapper>

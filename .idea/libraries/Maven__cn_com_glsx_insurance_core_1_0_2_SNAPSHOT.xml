@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: cn.com.glsx:insurance-core:1.0.2-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/insurance-core/1.0.2-SNAPSHOT/insurance-core-1.0.2-20170913.085931-16.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/insurance-core/1.0.2-SNAPSHOT/insurance-core-1.0.2-20170913.085931-16-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/insurance-core/1.0.2-SNAPSHOT/insurance-core-1.0.2-20170913.085931-16-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.AttribInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.AttribInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="COMMENT" jdbcType="VARCHAR" property="comment" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, `TYPE`, `NAME`, `COMMENT`, CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, DELETED_FLAG
+  </sql>
+  
+  <sql id="Base_Column_Lists">
+    a.ID, a.TYPE, a.NAME, a.COMMENT
+  </sql>
+  
+  <select id="pageAttribInfo" parameterType="cn.com.glsx.supplychain.model.AttribInfo" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from attrib_info
+  	<where>
+  		<if test="type != null">
+  			TYPE = #{type,jdbcType=INTEGER}
+  		</if>
+  		<if test="comment != null">
+  			COMMENT = #{comment,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  </select>
+  
+   <!-- 查询配置信息 -->
+  <select id="getAttribInfoByList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select  
+    	<include refid="Base_Column_List" />
+    from attrib_info
+    <where>
+      <if test="_parameter != null and _parameter != '' ">
+        AND `TYPE` = #{type,jdbcType=INTEGER}
+      </if>
+	</where>
+  </select>
+  
+  <!-- 所有配置map表 -->
+  <!-- ???????? -->
+  <select id="getAttribInfoByMap" resultType="java.util.Map">
+  	select
+  		<include refid="Base_Column_List" />
+  	from attrib_info as a
+  </select>
+  
+  <!-- 查询设备属性配置信息 -->
+  <select id="getAttribInfoListByCondition" parameterType="cn.com.glsx.supplychain.model.AttribInfo" resultMap="BaseResultMap"> 
+  	select  
+    	<include refid="Base_Column_List" />
+    from attrib_info
+    <where>
+      <if test="type != null and type != '' ">
+        AND TYPE = #{type,jdbcType=INTEGER}
+      </if>
+	</where>
+  </select>
+  
+  <!-- 查询设备属性配置信息 -->
+  <select id="getAttribInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap"> 
+  	select  
+    	<include refid="Base_Column_List" />
+    from attrib_info
+    <where>
+      <if test="_parameter != null and _parameter != '' ">
+        AND ID = #{ID,jdbcType=INTEGER}
+      </if>
+	</where>
+  </select>
+</mapper>

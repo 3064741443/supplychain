@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTDeviceInfoGpsPreimportMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTDeviceInfoGpsPreimport">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="SIM_CARD_NO" jdbcType="VARCHAR" property="simCardNo" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMSI" jdbcType="VARCHAR" property="imsi" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="MODEL" jdbcType="VARCHAR" property="model" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="VCODE" jdbcType="VARCHAR" property="vcode" />
+    <result column="LOGISTICS_NO" jdbcType="VARCHAR" property="logisticsNo" />
+    <result column="LOGISTICS_CPY" jdbcType="VARCHAR" property="logisticsCpy" />
+    <result column="FACTORY_NAME" jdbcType="VARCHAR" property="factoryName" />
+    <result column="RESULT" jdbcType="VARCHAR" property="result" />
+    <result column="RESULT_DESC" jdbcType="VARCHAR" property="resultDesc" />
+    <result column="SEED_TAG" jdbcType="VARCHAR" property="seedTag" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_CODE, SIM_CARD_NO, ICCID, IMSI, IMEI, SN, MODEL, BATCH, VCODE, LOGISTICS_NO, 
+    LOGISTICS_CPY, FACTORY_NAME, RESULT, RESULT_DESC, SEED_TAG, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+</mapper>

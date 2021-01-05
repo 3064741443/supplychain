@@ -1,0 +1,81 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">{{isEdit?'修改':'创建'}}工厂/仓库</h4>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_warehouseInfo_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="col-lg-10">
+                <div class="form-group">
+                <label class="col-lg-3 control-label required">工厂/仓库名 :</label>
+                <div class="control-content">
+                    <input name="name" class="form-control" type="text" ng-required="true"
+                           maxlength="50" ng-model="warehouseInfo.name"/>
+                    <div class="m-t-xs"
+                         ng-show="add_warehouseInfo_form.name.$invalid && add_warehouseInfo_form.submitted">
+                        <small class="text-danger"
+                               ng-show="add_warehouseInfo_form.name.$error.required">请输入仓库名</small>
+                    </div>
+                </div>
+            </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">属性 :</label>
+                    <div class="control-content">
+                        <ui-select name="belong" ng-required="true" ng-model="warehouseInfo.belong" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in belongList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                        <div class="m-t-xs"
+                             ng-show="add_orderInfo_form.belong.$invalid && add_orderInfo_form.submitted">
+                            <small class="text-danger" ng-show="add_orderInfo_form.belong.$error.required">请选择属性</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">联系电话 :</label>
+                    <div class="control-content">
+                        <input name="mobile" ng-pattern="/^(((0\d{2,3}-?)?\d{7,8})|(1[0-9]{10}))$/" class="form-control" type="text" required maxlength="50" ng-model="warehouseInfo.mobile"/>
+                        <div class="m-t-xs" ng-show="add_warehouseInfo_form.mobile.$invalid && add_warehouseInfo_form.submitted">
+                            <small class="text-danger" ng-show="add_warehouseInfo_form.mobile.$error.required">请输入联系电话</small>
+                            <small class="text-danger" ng-show="add_warehouseInfo_form.mobile.$error.pattern">请输入正确的联系电话</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">联系人 :</label>
+                    <div class="control-content">
+                        <input name="contacts" class="form-control" type="text" ng-required="true"
+                               maxlength="50" ng-model="warehouseInfo.contacts"/>
+                        <div class="m-t-xs"
+                             ng-show="add_warehouseInfo_form.contacts.$invalid && add_warehouseInfo_form.submitted">
+                            <small class="text-danger"
+                                   ng-show="add_warehouseInfo_form.contacts.$error.required">请输入联系人</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">地址 :</label>
+                    <div class="control-content">
+                        <input name="address" class="form-control" type="text" ng-required="true"
+                               maxlength="50" ng-model="warehouseInfo.address"/>
+                        <div class="m-t-xs"
+                             ng-show="add_warehouseInfo_form.address.$invalid && add_warehouseInfo_form.submitted">
+                            <small class="text-danger"
+                                   ng-show="add_warehouseInfo_form.address.$error.required">请输入地址</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="state==undefined" type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

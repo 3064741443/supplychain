@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.oreframework.common:ore-common-lang:2.0.9-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/oreframework/common/ore-common-lang/2.0.9-SNAPSHOT/ore-common-lang-2.0.9-20200919.153715-27.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/oreframework/common/ore-common-lang/2.0.9-SNAPSHOT/ore-common-lang-2.0.9-20200919.153715-27-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/oreframework/common/ore-common-lang/2.0.9-SNAPSHOT/ore-common-lang-2.0.9-20200919.153715-27-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

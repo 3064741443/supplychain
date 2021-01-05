@@ -1,0 +1,64 @@
+{
+  "returnCode": "0",
+  "message": null,
+  "errId": null,
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "startRow": 0,
+    "endRow": 10,
+    "total": 1,
+    "pages": 1,
+    "list": [
+      {
+        "deviceIdShow": "1111/车载wifi",
+        "deviceTypeName": "车载wifi",
+        "relaDevice": "23423",
+        "deviceCodeSn": "97854234254",
+        "relaSum": "4",
+        "packageIdShow": "23434/升级套餐",
+        "salesMerchantName": "深圳广联赛讯",
+        "terminalCode": "346546",
+        "activeTime": "2018-03-08 10:34:45",
+        "reportSn": "546234523635354",
+        "moduleType": "NO1",
+        "moduleVersion": "v1.0",
+        "userId": "54643343",
+        "salesMerchantName": "激活"
+      },
+      {
+        "deviceIdShow": "1111/车载wifi",
+        "deviceTypeName": "车载wifi",
+        "relaDevice": "23423",
+        "deviceCodeSn": "97854234254",
+        "relaSum": "4",
+        "packageIdShow": "23434/升级套餐",
+        "salesMerchantName": "深圳广联赛讯",
+        "terminalCode": "346546",
+        "activeTime": "2018-03-08 10:34:45",
+        "reportSn": "546234523635354",
+        "moduleType": "NO1",
+        "moduleVersion": "v1.0",
+        "userId": "54643343",
+        "salesMerchantName": "激活"
+      },
+      {
+        "deviceIdShow": "1111/车载wifi",
+        "deviceTypeName": "车载wifi",
+        "relaDevice": "23423",
+        "deviceCodeSn": "97854234254",
+        "relaSum": "4",
+        "packageIdShow": "23434/升级套餐",
+        "salesMerchantName": "深圳广联赛讯",
+        "terminalCode": "346546",
+        "activeTime": "2018-03-08 10:34:45",
+        "reportSn": "546234523635354",
+        "moduleType": "NO1",
+        "moduleVersion": "v1.0",
+        "userId": "54643343",
+        "salesMerchantName": "激活"
+      }
+    ],
+    "condition": null
+  }
+}

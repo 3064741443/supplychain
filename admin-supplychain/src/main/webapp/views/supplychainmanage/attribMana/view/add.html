@@ -1,0 +1,279 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">{{isEdit?'修改':'创建'}}设备配置</h4>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-7" novalidate name="add_attribMana_form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">设备类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="devTypeId"  ng-required="true" ng-change="typeIdChange(attribMana.devTypeId)" ng-model="attribMana.devTypeId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in typeIdList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.devTypeId.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.devTypeId.$error.required">请选择设备类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">设备配置编号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <input name="attrib_code" ng-required="true" class="form-control" type="text"  check-length="30" maxlength="30" ng-pattern="/^[^\u4e00-\u9fa5]+$/" ng-model="attribMana.attribCode"/>
+                            <div class="m-t-xs" ng-show="add_attribMana_form.attrib_code.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.attrib_code.$error.required">请输入设备配置编号</small>
+                                <small class="text-danger" ng-show="add_attribMana_form.attrib_code.$error.pattern">设备配置编号不能为中文
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="show_hiden1">
+                <label class="col-lg-3 control-label required">设备型号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="devMnumId"  ng-required="true" ng-model="attribMana.devMnumId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="item in devMnumArr">
+                                    <div ng-bind="item.name"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.devMnumId.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.devMnumId.$error.required">请选择设备型号</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">是否联网:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="orNetId"  ng-required="true" ng-change="orNetCheck(attribMana.orNetId)" ng-model="attribMana.orNetId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in orNetList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.orNetId.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.orNetId.$error.required">请选择是否联网</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="orNetShow">
+                <label class="col-lg-3 control-label required">自有卡/外部卡:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="cardType"  ng-required="true" ng-model="attribMana.cardSelfId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in cardTypeList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.cardType.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.cardType.$error.required">请选择自有卡/外部卡</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="show_hiden2">
+                <label class="col-lg-3 control-label required">是否带屏:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="screenId"  ng-required="true" ng-model="attribMana.screenId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in screenList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.screenId.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.screenId.$error.required">请选择是否带屏</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="show_hiden3">
+                <label class="col-lg-3 control-label required">专用/通用:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="orOpenId"  ng-required="true" ng-model="attribMana.orOpenId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in orOpenList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.orOpenId.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.orOpenId.$error.required">请选择专用/通用</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="show_hiden4">
+                <label class="col-lg-3 control-label required">有源/无源:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="sourceId"  ng-required="true" ng-model="attribMana.sourceId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in sourceList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.sourceId.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.sourceId.$error.required">请选择有源/无源</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="show_hiden5">
+                <label class="col-lg-3 control-label required">尺寸 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="m_size"  ng-required="true" ng-model="attribMana.msize" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in m_sizes">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-if="add_attribMana_form.m_size.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.m_size.$error.required">请选择尺寸</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="show_hiden6">
+                <label class="col-lg-3 control-label required">机型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="device_model"  ng-required="true" ng-model="attribMana.model" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in device_models">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.device_model.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.device_model.$error.required">请选择机型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="show_hiden7">
+                <label class="col-lg-3 control-label required">配置 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="configure_type" ng-required="true" ng-model="attribMana.configure" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in configure_types">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs" ng-show="add_attribMana_form.configure_type.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.configure_type.$error.required">请选择配置</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-if="show_hiden8">
+                <label class="col-lg-3 control-label required">裸机/套机 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="machine_type" ng-required="true" ng-model="attribMana.type" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in machine_types">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs" ng-show="add_attribMana_form.machine_type.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.machine_type.$error.required">请选择机器类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required" >主板版本号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <input name="board_version" ng-required="true" class="form-control" type="text" ng-model="attribMana.boardVersion"/>
+                            <div class="m-t-xs" ng-show="add_attribMana_form.board_version.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.board_version.$error.required">请选择主板版本号</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">软件版本号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <input name="soft_version" ng-required="true" class="form-control" type="text" ng-model="attribMana.softVersion"/>
+                            <div class="m-t-xs"
+                                 ng-show="add_attribMana_form.soft_version.$invalid && add_attribMana_form.submitted">
+                                <small class="text-danger" ng-show="add_attribMana_form.soft_version.$error.required">
+                                    请选择软件版本号
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="state==undefined" type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

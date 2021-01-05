@@ -1,0 +1,166 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">设备详情</h4>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_inventorymanage_form" method="post"
+              enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">模块手机号 :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.mobile}}</div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label ">ICCID :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.iccid}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">IMSI :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.imsi}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">验证码 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.verificationCode}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">MAC地址 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.macAddress}}</div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">批次号 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.batch}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">运营商商户号 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.operatorMerchantNo}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">品牌定制商 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.merchantName}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">发往商户 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.sendMerchantNo}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">销售类型 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-control-static">{{inventorymanage.saleType}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">车牌号 :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.carNum}}</div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">导入时间 :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.activeTime}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">入库套餐一编号/名称 :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.packageOne}}</div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">入库套餐二编号/名称 :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.packageTwo}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">IMEI :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.reportSn}}</div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">模块类型 :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.moduleType}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">模块版本 :</label>
+                    <div class="col-lg-10 control-content">
+                        <div class="form-control-static">{{inventorymanage.moduleVersion}}</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

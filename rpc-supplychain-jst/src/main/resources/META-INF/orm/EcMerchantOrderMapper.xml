@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.EcMerchantOrderMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.EcMerchantOrder" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="CHANNEL" property="channel" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR" />
+    <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR" />
+    <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR" />
+    <result column="DEVICE_TYPE" property="deviceType" jdbcType="VARCHAR" />
+    <result column="PRICE" property="price" jdbcType="DOUBLE" />
+    <result column="ORDER_QUANTITY" property="orderQuantity" jdbcType="INTEGER" />
+    <result column="CHECK_QUANTITY" property="checkQuantity" jdbcType="INTEGER" />
+    <result column="DISPATCH_ORDER_NUMBER" property="dispatchOrderNumber" jdbcType="VARCHAR" />
+    <result column="ALREADY_SHIPMENT_QUANTITY" property="alreadyShipmentQuantity" jdbcType="INTEGER" />
+    <result column="SHIPMENT_TIME" property="shipmentTime" jdbcType="VARCHAR" />
+    <result column="SHIPMENT_QUANTITY" property="shipmentQuantity" jdbcType="INTEGER" />
+    <result column="SIGN_QUANTITY" property="signQuantity" jdbcType="INTEGER" />
+    <result column="OWE_QUANTITY" property="oweQuantity" jdbcType="INTEGER" />
+    <result column="TOTAL_AMOUNT" property="totalAmount" jdbcType="DOUBLE" />
+    <result column="ORDER_TIME" property="orderTime" jdbcType="VARCHAR" />
+    <result column="PRODUCT_REMARKS" property="productRemarks" jdbcType="VARCHAR" />
+    <result column="CHECK_BY" property="checkBy" jdbcType="VARCHAR" />
+    <result column="CHECK_TIME" property="checkTime" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="ADDRESSEE" property="addressee" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="ADDRESS_DETAIL" property="addressDetail" jdbcType="VARCHAR" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    <result column="material_code" property="materialCode" jdbcType="VARCHAR" />
+    <result column="material_name" property="materialName" jdbcType="VARCHAR" />
+    <result column="logistics_desc" property="logisticsDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CHANNEL, MERCHANT_CODE, MERCHANT_NAME, ORDER_NUMBER, PRODUCT_NAME, PRODUCT_CODE, DEVICE_TYPE,
+    PRICE, ORDER_QUANTITY, CHECK_QUANTITY, DISPATCH_ORDER_NUMBER, ALREADY_SHIPMENT_QUANTITY, 
+    SHIPMENT_TIME, SHIPMENT_QUANTITY, SIGN_QUANTITY, OWE_QUANTITY, TOTAL_AMOUNT, ORDER_TIME, 
+    PRODUCT_REMARKS, CHECK_BY, CHECK_TIME, STATUS, ADDRESSEE, MOBILE, ADDRESS_DETAIL, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,material_code,material_name,logistics_desc
+  </sql>
+
+  <select id="exportEcMerchantOrderExit" parameterType="cn.com.glsx.supplychain.jst.model.EcMerchantOrder" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from ec_merchant_order
+    where DELETED_FLAG="N"
+    <if test="orderNumber != null">
+      AND ORDER_NUMBER like "%"#{orderNumber,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="materialCode != null">
+    	AND material_code like "%"#{materialCode,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="materialName != null">
+    	AND material_name like "%"#{materialName,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="productCode != null and productCode != ''">
+      AND PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+    </if>
+    <if test="deviceType != null and deviceType !=''">
+      AND DEVICE_TYPE =#{deviceType,jdbcType=VARCHAR}
+    </if>
+    <if test="channel != null">
+      AND CHANNEL =#{channel,jdbcType=VARCHAR}
+    </if>
+    <if test="merchantCode != null and merchantCode !=''">
+      AND MERCHANT_CODE =#{merchantCode,jdbcType=VARCHAR}
+    </if>
+    <if test="merchantName != null">
+      AND MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="status != null">
+      AND STATUS = #{status,jdbcType=VARCHAR}
+    </if>
+    <if test="startDate != null">
+      AND CONVERT(DATE_FORMAT(ORDER_TIME,'%Y%m%d%H%i%s'),SIGNED) &gt;=
+      CONVERT(DATE_FORMAT(#{startDate},'%Y%m%d%H%i%s'),SIGNED)
+    </if>
+    <if test="endDate != null">
+      AND CONVERT(DATE_FORMAT(ORDER_TIME,'%Y%m%d%H%i%s'),SIGNED) &lt;=
+      CONVERT(DATE_FORMAT(#{endDate},'%Y%m%d%H%i%s'),SIGNED)
+    </if>
+    <if test="checkStartDate != null">
+      AND CONVERT(DATE_FORMAT(CHECK_TIME,'%Y%m%d%H%i%s'),SIGNED) &gt;=
+      CONVERT(DATE_FORMAT(#{checkStartDate},'%Y%m%d%H%i%s'),SIGNED)
+    </if>
+    <if test="checkEndDate != null">
+      AND CONVERT(DATE_FORMAT(CHECK_TIME,'%Y%m%d%H%i%s'),SIGNED) &lt;=
+      CONVERT(DATE_FORMAT(#{checkEndDate},'%Y%m%d%H%i%s'),SIGNED)
+    </if>
+    ORDER BY CREATED_DATE desc
+  </select>
+</mapper>

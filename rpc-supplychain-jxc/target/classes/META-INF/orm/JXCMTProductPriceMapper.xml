@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTProductPriceMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTProductPrice">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="SERVICE_TYPE" jdbcType="TINYINT" property="serviceType" />
+    <result column="PRODUCT_TYPE" jdbcType="VARCHAR" property="productType" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="TIME" jdbcType="TIMESTAMP" property="time" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+    <result column="PRICE" jdbcType="DOUBLE" property="price" />
+    <result column="TAX_RATE" jdbcType="DOUBLE" property="taxRate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SERVICE_TYPE, PRODUCT_TYPE, PRODUCT_CODE, MATERIAL_CODE, MATERIAL_NAME, TIME, 
+    TYPE, PRICE, TAX_RATE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+</mapper>

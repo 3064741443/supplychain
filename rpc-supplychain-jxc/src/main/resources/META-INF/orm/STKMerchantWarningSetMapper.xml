@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.STKMerchantWarningSetMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.STKMerchantWarningSet">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="warning_code" jdbcType="VARCHAR" property="warningCode" />
+    <result column="warning_type" jdbcType="VARCHAR" property="warningType" />
+    <result column="channel_type" jdbcType="VARCHAR" property="channelType" />
+    <result column="merchant_channel_id" jdbcType="VARCHAR" property="merchantChannelId" />
+    <result column="merchant_channel_name" jdbcType="VARCHAR" property="merchantChannelName" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="threshold_low" jdbcType="DOUBLE" property="thresholdLow" />
+    <result column="threshold_high" jdbcType="DOUBLE" property="thresholdHigh" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, warning_code, warning_type, channel_type, merchant_channel_id, merchant_channel_name,merchant_code,merchant_name, device_type, 
+    threshold_low, threshold_high, created_by, created_date, updated_by, updated_date, 
+    deleted_flag
+  </sql>
+  
+  <select id="pageWarningSet" parameterType="cn.com.glsx.supplychain.jxc.model.STKMerchantWarningSet"
+  				resultType="cn.com.glsx.supplychain.jxc.dto.STKWarningSetDTO">
+  	select
+  	smws.warning_code as warningCode,
+  	smws.warning_type as warningType,
+  	smws.channel_type as channelType,
+  	smws.merchant_channel_id as merchantChannelId,
+  	smws.merchant_channel_name as merchantChannelName,
+  	smws.merchant_code as merchantCode,
+  	smws.merchant_name as merchantName,
+  	smws.device_type as deviceType,
+  	smws.threshold_low as thresholdLow,
+  	smws.threshold_high as thresholdHigh,
+  	smws.deleted_flag as deletedFlag,
+  	dt.name as deviceTypeName
+  	from stk_merchant_warning_set as smws
+  	left join device_type as dt on(smws.device_type = dt.id)
+  	<where>
+  		<if test="warningType != null and warningType !=''">
+  			and smws.warning_type = #{warningType,jdbcType=VARCHAR}
+  		</if>
+  		<if test="merchantChannelId != null">
+  			and smws.merchant_channel_id = #{merchantChannelId,jdbcType=VARCHAR}
+  		</if>
+  		<if test="merchantCode != null and merchantCode !=''">
+  			and (smws.merchant_code like concat('%',#{merchantCode,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="merchantName != null and merchantName != ''">
+  			or smws.merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+  		</if>
+  		<if test="deviceType != null">
+  			and smws.device_type=#{deviceType,jdbcType=INTEGER}
+  		</if>
+  		<if test="deletedFlag != null and deletedFlag !=''">
+  			and smws.deleted_flag = #{deletedFlag,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  	order by smws.id desc			
+  </select>
+  
+</mapper>

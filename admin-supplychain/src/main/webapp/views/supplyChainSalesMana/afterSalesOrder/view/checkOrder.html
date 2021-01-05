@@ -1,0 +1,65 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">售后审核</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <tr>
+            <td class="text-right">产品类型 :</td>
+            <td class="text-left">{{productName}}</td>
+        </tr>
+        <tr>
+            <td class="text-right">产品名称 :</td>
+            <td class="text-left">{{ ProductInfo.name}}</td>
+        </tr>
+        <tr>
+            <td class="text-right">产品规格 :</td>
+            <td class="text-left">{{ ProductInfo.specification}}</td>
+        </tr>
+        <tr>
+            <td class="text-right">产品数量 :</td>
+            <td class="text-left">{{productNumber}}</td>
+        </tr>
+        <tr ng-repeat="sn in checkAfterOrderData.snList">
+            <td class="text-right">{{sn.name}}</td>
+            <td class="text-left">{{sn.sn}} {{sn.deviceAfterReason}}</td>
+        </tr>
+        <tr>
+            <td class="text-right">售后类型 :</td>
+            <td class="text-left">{{ checkAfterOrderData.type }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">售后原因 :</td>
+            <td class="text-left">{{ checkAfterOrderData.reason }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">联系人 :</td>
+            <td class="text-left">{{ checkAfterOrderData.logistics.receiveAddress.name }}/{{
+                checkAfterOrderData.logistics.receiveAddress.mobile }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">收货地址 :</td>
+            <td class="text-left">{{ checkAfterOrderData.logistics.receiveAddress.provinceName }}{{
+                checkAfterOrderData.logistics.receiveAddress.cityName }}{{ checkAfterOrderData.logistics.receiveAddress.areaName
+                }}{{ checkAfterOrderData.logistics.receiveAddress.address }}</td>
+        </tr>
+
+        </tbody>
+    </table>
+    </div>
+    <div class="modal-footer" align="center">
+        <button  type="submit" class="btn btn-primary" ng-click="ok()">同意</button>
+        <button type="button" class="btn btn-white" ng-click="turndown()">驳回</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

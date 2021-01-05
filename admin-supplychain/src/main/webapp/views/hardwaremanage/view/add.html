@@ -1,0 +1,140 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">新建设备</h4>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="add_hardwaremanage_form"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label required">设备名称 :</label>
+                <div class="control-content">
+                    <input name="deviceName" class="form-control" type="text" ng-required="true"
+                           maxlength="50" ng-model="hardwaremanage.deviceName"/>
+                    <div class="m-t-xs"
+                         ng-show="add_hardwaremanage_form.deviceName.$invalid && add_hardwaremanage_form.submitted">
+                        <small class="text-danger"
+                               ng-show="add_hardwaremanage_form.deviceName.$error.required">请输入设备名称
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label required">品牌定制商 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ui-select name="merchantName" ng-required="true" ng-model="hardwaremanage.merchantName"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in merchantNameList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_hardwaremanage_form.merchantName.$invalid && add_hardwaremanage_form.submitted">
+                                <small class="text-danger"
+                                       ng-show="add_hardwaremanage_form.merchantName.$error.required">请选择角色
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label required">设备类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ui-select name="deviceTypeName" ng-required="true" ng-model="hardwaremanage.deviceTypeName"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in deviceTypeNameList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_hardwaremanage_form.deviceTypeName.$invalid && add_hardwaremanage_form.submitted">
+                                <small class="text-danger"
+                                       ng-show="add_hardwaremanage_form.deviceTypeName.$error.required">请选择仓库
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label required">入库激活模式 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <ui-select name="deviceActiveMode" ng-required="true"
+                                       ng-model="hardwaremanage.deviceActiveMode" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in deviceActiveModeList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_hardwaremanage_form.deviceActiveMode.$invalid && add_hardwaremanage_form.submitted">
+                                <small class="text-danger"
+                                       ng-show="add_hardwaremanage_form.deviceActiveMode.$error.required">请选择仓库
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label">提报方式 :</label>
+                <label class="checkbox-inline p-l-none" style="margin-left: 10px">
+                    <input icheck name="reportWay" type="checkbox" required ng-model="basicFormInputData.reportWay">
+                    车云宝提报
+                </label>
+                <!--<div class="m-t-xs" ng-show="basicFormInput.checkbox.$invalid && submitted">-->
+                <!--<small class="text-danger" ng-show="basicFormInput.checkbox.$error.required">请至少选择一项</small>-->
+                <!--</div>-->
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label required">支持的营销方式 :</label>
+                <label class="checkbox-inline p-l-none" style="margin-left: 10px">
+                    <input icheck name="bootScreen" type="checkbox" required ng-model="basicFormInputData.bootScreen">
+                    开机画面
+                </label>
+                <label class="checkbox-inline p-l-none">
+                    <input icheck name="marketingBar" type="checkbox" required
+                           ng-model="basicFormInputData.marketingBar"> 营销条
+                </label>
+                <label class="checkbox-inline p-l-none">
+                    <input icheck name="navigatorNews" type="checkbox" required
+                           ng-model="basicFormInputData.navigatorNews"> 导航仪消息
+                </label>
+                <label class="checkbox-inline p-l-none">
+                    <input icheck name="message" type="checkbox" required ng-model="basicFormInputData.message"> 短信
+                </label>
+                <div class="m-t-xs" ng-show="basicFormInput.checkbox.$invalid && submitted">
+                    <small class="text-danger" ng-show="basicFormInput.checkbox.$error.required">请至少选择一项</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label">设备介绍 :</label>
+                <div class="col-lg-8 control-content">
+                    <textarea class="form-control" ng-model="orderInfo.remark" name="remark" maxlength="255"
+                              style="height: 100px;width: 400px"></textarea>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="state==undefined" type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

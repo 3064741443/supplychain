@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.glsx.biz:biz-common-user:4.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-common-user/4.0.0-SNAPSHOT/biz-common-user-4.0.0-20200723.085452-47.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-common-user/4.0.0-SNAPSHOT/biz-common-user-4.0.0-20200723.085452-47-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-common-user/4.0.0-SNAPSHOT/biz-common-user-4.0.0-20200723.085452-47-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

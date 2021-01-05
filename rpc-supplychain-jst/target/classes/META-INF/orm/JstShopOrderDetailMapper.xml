@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.JstShopOrderDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="SHOP_ORDER_CODE" jdbcType="VARCHAR" property="shopOrderCode"/>
+        <result column="SN" jdbcType="VARCHAR" property="sn"/>
+        <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode"/>
+        <result column="LOGISTICS_ID" jdbcType="INTEGER" property="logisticsId"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+        <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="logisticsOrderNumber"/>
+        <result column="COMPANY" jdbcType="VARCHAR" property="logisticsCompany"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, SHOP_ORDER_CODE, SN, ATTRIB_CODE, LOGISTICS_ID, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <sql id="Jsod_Base_Column_List">
+    jsod.ID, jsod.SHOP_ORDER_CODE, jsod.SN, jsod.ATTRIB_CODE, jsod.LOGISTICS_ID, jsod.CREATED_BY, jsod.CREATED_DATE, jsod.UPDATED_BY,
+    jsod.UPDATED_DATE, jsod.DELETED_FLAG
+  </sql>
+
+    <select id="getListByshopOrderCode" resultMap="BaseResultMap"
+            parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail">
+        select
+        bl.ORDER_NUMBER,
+        bl.COMPANY,
+        <include refid="Jsod_Base_Column_List"/>
+        from jst_shop_order_detail jsod
+        left join bs_logistics bl on jsod.LOGISTICS_ID = bl.ID
+        <where>
+            jsod.DELETED_FLAG = 'N'
+            and bl.DELETED_FLAG = 'N'
+            <if test="shopOrderCode != null">
+                and SHOP_ORDER_CODE = #{shopOrderCode,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+  <select id="pageOrderDetail" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from jst_shop_order_detail
+  	<where>
+  		<if test="shopOrderCode != null">
+  			SHOP_ORDER_CODE = #{shopOrderCode,jdbcType=VARCHAR}
+  		</if>
+  		<if test="deletedFlag != null">
+  			DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  	limit #{pageStart,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+
+   <select id="countShopOrderDetail" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail" resultType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail">
+  	select SHOP_ORDER_CODE as shopOrderCode,count(SHOP_ORDER_CODE) as sendCount from jst_shop_order_detail where DELETED_FLAG='N' and SHOP_ORDER_CODE in
+  	<foreach collection="list" item="orderCode" index="index" open=" (" close=")" separator=",">
+          #{orderCode}
+    </foreach>
+    group by SHOP_ORDER_CODE
+  </select>
+
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail">
+    insert into jst_shop_order_detail (ID, SHOP_ORDER_CODE, SN,
+      ATTRIB_CODE, LOGISTICS_ID, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{shopOrderCode,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, 
+      #{attribCode,jdbcType=VARCHAR}, #{logisticsId,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail">
+        insert into jst_shop_order_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="shopOrderCode != null">
+                SHOP_ORDER_CODE,
+            </if>
+            <if test="sn != null">
+                SN,
+            </if>
+            <if test="attribCode != null">
+                ATTRIB_CODE,
+            </if>
+            <if test="logisticsId != null">
+                LOGISTICS_ID,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="shopOrderCode != null">
+                #{shopOrderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="attribCode != null">
+                #{attribCode,jdbcType=VARCHAR},
+            </if>
+            <if test="logisticsId != null">
+                #{logisticsId,jdbcType=INTEGER},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail">
+        update jst_shop_order_detail
+        <set>
+            <if test="shopOrderCode != null">
+                SHOP_ORDER_CODE = #{shopOrderCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                SN = #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="attribCode != null">
+                ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+            </if>
+            <if test="logisticsId != null">
+                LOGISTICS_ID = #{logisticsId,jdbcType=INTEGER},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.JstShopOrderDetail">
+    update jst_shop_order_detail
+    set SHOP_ORDER_CODE = #{shopOrderCode,jdbcType=VARCHAR},
+      SN = #{sn,jdbcType=VARCHAR},
+      ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      LOGISTICS_ID = #{logisticsId,jdbcType=INTEGER},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

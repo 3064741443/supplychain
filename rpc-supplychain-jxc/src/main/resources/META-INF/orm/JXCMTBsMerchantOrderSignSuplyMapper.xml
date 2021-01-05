@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTBsMerchantOrderSignSuplyMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTBsMerchantOrderSignSuply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dispatch_order_code" jdbcType="VARCHAR" property="dispatchOrderCode" />
+    <result column="logistics_no" jdbcType="VARCHAR" property="logisticsNo" />
+    <result column="bill_sign_number" jdbcType="VARCHAR" property="billSignNumber" />
+    <result column="sign_url" jdbcType="VARCHAR" property="signUrl" />
+    <result column="bill_type" jdbcType="VARCHAR" property="billType" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, dispatch_order_code, logistics_no, bill_sign_number, sign_url,bill_type, created_by, created_date, 
+    updated_by, updated_date, deleted_flag
+  </sql>
+  
+  <select id="pageSignBillNumber" parameterType="cn.com.glsx.supplychain.jxc.dto.JXCMTBsBillDTO" resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTBsBillDTO">
+  	SELECT 
+	DISTINCT bmoss.bill_sign_number AS billSignNumber,
+	bmoss.sign_url AS signUrl,
+	oi.send_merchant_no AS sendMerchantNo,
+	oi.send_merchant_name AS sendMerchantName,
+	oi.contacts AS contacts,
+	oi.mobile AS mobile,
+	oi.address AS address,
+	bmoss.created_date as createdDate
+	FROM bs_merchant_order_sign_suply AS bmoss
+	LEFT JOIN order_info AS oi ON(bmoss.dispatch_order_code=oi.order_code)
+	LEFT JOIN bs_logistics AS bl ON(bl.service_code=bmoss.dispatch_order_code AND bl.order_number=bmoss.logistics_no)
+	LEFT JOIN bs_address AS ba ON(bl.receive_id=ba.id)
+	<where>
+		<if test="warehouseId != null">
+			and oi.warehouse_id = #{warehouseId}
+		</if>
+		<if test="billSignNumber != null">
+			and bmoss.bill_sign_number like concat('%',#{billSignNumber,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="billType != null">
+			and bmoss.bill_type = #{billType,jdbcType=VARCHAR}
+		</if>
+	</where>
+	order by bmoss.id desc								
+  </select>
+</mapper>

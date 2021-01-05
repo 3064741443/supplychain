@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.GhMerchantOrderConfigMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.GhMerchantOrderConfig">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="gh_merchant_order_code" jdbcType="VARCHAR" property="ghMerchantOrderCode" />
+    <result column="attrib_info_id" jdbcType="INTEGER" property="attribInfoId" />
+    <result column="option" jdbcType="VARCHAR" property="option" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, gh_merchant_order_code, attrib_info_id, `option`, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <insert id="insertMerchantOrderConfigList" parameterType="java.util.List">
+  	insert into gh_merchant_order_config(gh_merchant_order_code, attrib_info_id, `option`, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG)values
+    <foreach collection="list" item="item" index="index" separator=",">
+    	(
+    		#{item.ghMerchantOrderCode}, 
+    		#{item.attribInfoId}, 
+    		#{item.option},
+    		#{item.createdBy},
+    		#{item.createdDate},
+    		#{item.updatedBy},
+    		#{item.updatedDate},
+    		#{item.deletedFlag}
+    	)
+    </foreach>
+  </insert>
+  
+  <select id="selectMerchantOrderConfig" parameterType="cn.com.glsx.supplychain.jst.model.GhMerchantOrderConfig" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from gh_merchant_order_config
+  	<where>
+  		<if test="ghMerchantOrderCode != null">
+  			and gh_merchant_order_code = #{ghMerchantOrderCode}
+  		</if>
+  		<if test="listGhMerchantCodes != null">
+  			and gh_merchant_order_code in
+  			<foreach collection="listGhMerchantCodes" item="configCode" open="(" close=")" separator=",">
+  				#{configCode}
+  			</foreach>
+  		</if>
+  	</where>
+  </select>
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTDeviceFileMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTDeviceFile">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="DEVICE_CODE" jdbcType="INTEGER" property="deviceCode" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="VERIF_CODE" jdbcType="VARCHAR" property="verifCode" />
+    <result column="BATCH_NO" jdbcType="VARCHAR" property="batchNo" />
+    <result column="PACKAGE_ID" jdbcType="INTEGER" property="packageId" />
+    <result column="ANDROID_PACKAGE_ID" jdbcType="INTEGER" property="androidPackageId" />
+    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+    <result column="ORDER_MERCHANT_NO" jdbcType="VARCHAR" property="orderMerchantNo" />
+    <result column="IN_STORAGE_TIME" jdbcType="VARCHAR" property="inStorageTime" />
+    <result column="OUT_STORAGE_TIME" jdbcType="VARCHAR" property="outStorageTime" />
+    <result column="OUT_STORAGE_TYPE" jdbcType="VARCHAR" property="outStorageType" />
+    <result column="TERMINAL_DISCODE" jdbcType="VARCHAR" property="terminalDiscode" />
+    <result column="EXTERNAL_FLAG" jdbcType="VARCHAR" property="externalFlag" />
+    <result column="MANUFACTURER_CODE" jdbcType="VARCHAR" property="manufacturerCode" />
+    <result column="FIRMWARE_ID" jdbcType="INTEGER" property="firmwareId" />
+    <result column="CARD_ID" jdbcType="INTEGER" property="cardId" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.com.glsx.supplychain.jxc.model.JXCMTDeviceFile">
+    <result column="REMARK" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SN, DEVICE_CODE, ORDER_CODE, VERIF_CODE, BATCH_NO, PACKAGE_ID, ANDROID_PACKAGE_ID, 
+    OPERATOR_MERCHANT_NO, SEND_MERCHANT_NO, ORDER_MERCHANT_NO, IN_STORAGE_TIME, OUT_STORAGE_TIME, 
+    OUT_STORAGE_TYPE, TERMINAL_DISCODE, EXTERNAL_FLAG, MANUFACTURER_CODE, FIRMWARE_ID, 
+    CARD_ID, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, IMEI
+  </sql>
+  <sql id="Blob_Column_List">
+    REMARK
+  </sql>
+
+
+  <sql id="return_Column_List">
+   		dfs.sn sn ,df.imei imei,dcmc.iccid iccid,dcmc.imsi imsi,dfs.user_id userId,dt.name deviceTypeName,dc.device_code deviceCode ,dc.device_name deviceName,
+   		df.package_id packageId,dfs.package_statu packageStatu,df.send_merchant_no sendMerchantNo,df.in_storage_time inStorageTime,df.out_storage_time outStorageTime
+   </sql>
+
+  <select id="exportDeviceFile" parameterType="cn.com.glsx.supplychain.jxc.dto.JXCMTDeviceFileDTO" resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTDeviceFileDTO">
+    select
+    <include refid="return_Column_List"/>
+    from device_file_snapshot AS dfs
+    LEFT JOIN device_file AS df ON(dfs.sn = df.sn)
+    LEFT JOIN device_card_manager AS dcmc ON(dcmc.id = dfs.card_id)
+    LEFT JOIN device_code AS dc ON(dc.id = df.device_code)
+    LEFT JOIN device_type AS dt ON(dt.id = dc.type_id)
+    LEFT JOIN device_user_manager dum ON(dfs.user_id=dum.id)
+    <where>
+      <if test="devTypeId != null">
+        and dt.id = #{devTypeId,jdbcType=INTEGER}
+      </if>
+      <if test="packageStatu != null and packageStatu !=''">
+        and dfs.package_statu = #{packageStatu,jdbcType=VARCHAR}
+      </if>
+      <if test="sn != null and sn != ''">
+        and df.sn = #{sn,jdbcType=VARCHAR}
+      </if>
+      <if test="iccid != null and iccid != ''">
+        and dcmc.iccid = #{iccid,jdbcType=VARCHAR}
+      </if>
+      <if test="imsi != null and imsi != ''">
+        and dcmc.imsi = #{imsi,jdbcType=VARCHAR}
+      </if>
+      <if test="userFlag != null and userFlag != ''">
+        and dum.user_flag = #{userFlag,jdbcType=VARCHAR}
+      </if>
+      <if test="deviceCode != null and deviceCode != ''">
+        and df.device_code = #{deviceCode,jdbcType=VARCHAR}
+      </if>
+      <if test="packageId != null and packageId !=0">
+        and df.package_id = #{packageId,jdbcType=INTEGER}
+      </if>
+      <if test="sendMerchantNo != null and sendMerchantNo !=0">
+        AND df.send_merchant_no = #{sendMerchantNo,jdbcType=INTEGER}
+      </if>
+      <if test="outStorageStartDate != null">
+        and CONVERT(DATE_FORMAT(df.OUT_STORAGE_TIME,'%Y%m%d%'),SIGNED) &gt;=
+        CONVERT(DATE_FORMAT(#{outStorageStartDate},'%Y%m%d'),SIGNED)
+      </if>
+      <if test="outStorageEndDate != null">
+        and CONVERT(DATE_FORMAT(df.OUT_STORAGE_TIME,'%Y%m%d'),SIGNED) &lt;=
+        CONVERT(DATE_FORMAT(#{outStorageEndDate},'%Y%m%d'),SIGNED)
+      </if>
+      <if test="packageUserStartDate != null">
+        and CONVERT(DATE_FORMAT(dfs.PACKAGE_USER_TIME,'%Y%m%d%'),SIGNED) &gt;=
+        CONVERT(DATE_FORMAT(#{packageUserStartDate},'%Y%m%d'),SIGNED)
+      </if>
+      <if test="packageUserEndDate != null">
+        and CONVERT(DATE_FORMAT(dfs.PACKAGE_USER_TIME,'%Y%m%d'),SIGNED) &lt;=
+        CONVERT(DATE_FORMAT(#{packageUserEndDate},'%Y%m%d'),SIGNED)
+      </if>
+    </where>
+    ORDER BY df.ID desc
+  </select>
+  
+</mapper>

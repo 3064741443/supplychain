@@ -1,0 +1,91 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="supplychain_form">
+        <div class="row col-lg-10 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">发布时间</label>
+                    <div class="col-lg-8">
+                        <input name="startSTime" option="{range: true}" date-range-picker class="form-control date-picker"
+                               type="text"  ng-model="form.startSTime"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">设备类型</label>
+                    <div class="col-lg-8">
+                        <ui-select name="deviceTypeName" ng-model="form.deviceTypeName" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in typeList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">状态</label>
+                    <div class="col-lg-8">
+                        <ui-select name="status" ng-model="form.status" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in statusList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">入库激活模式</label>
+                    <div class="col-lg-8">
+                        <ui-select name="pattern" ng-model="form.pattern" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in patternList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-sm-8">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">查询条件</label>
+                    <div class="col-lg-4">
+                        <ui-select name="condition" ng-model="form.condition" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in conditionList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" placeholder="请输入" name="condition" ng-model="form.condition" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " type="button" style="margin-right: 15px" ng-click="search()">搜索</button>
+        </div>
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>设备硬件列表</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.SysncMonitorRecordMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.SysncMonitorRecord">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="flag_desc" jdbcType="VARCHAR" property="flagDesc" />
+    <result column="monitor_flag" jdbcType="INTEGER" property="monitorFlag" />
+  </resultMap> 
+</mapper>

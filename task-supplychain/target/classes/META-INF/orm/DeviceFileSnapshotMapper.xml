@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.DeviceFileSnapshotMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.DeviceFileSnapshot">
+    <id column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PACKAGE_STATU" jdbcType="VARCHAR" property="packageStatu" />
+    <result column="PACKAGE_ID" jdbcType="INTEGER" property="packageId" />
+    <result column="ANDROID_PACKAGE_ID" jdbcType="INTEGER" property="androidPackageId" />
+    <result column="PACKAGE_USER_ID" jdbcType="INTEGER" property="packageUserId" />
+    <result column="PACKAGE_USER_TIME" jdbcType="VARCHAR" property="packageUserTime" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="USER_TIME" jdbcType="VARCHAR" property="userTime" />
+    <result column="CARD_ID" jdbcType="INTEGER" property="cardId" />
+    <result column="CARD_TIME" jdbcType="VARCHAR" property="cardTime" />
+    <result column="FIRMWARE_ID" jdbcType="INTEGER" property="firmwareId" />
+    <result column="VEHICLE_ID" jdbcType="INTEGER" property="vehicleId" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SN, ID, PACKAGE_STATU, PACKAGE_ID, ANDROID_PACKAGE_ID, PACKAGE_USER_ID, PACKAGE_USER_TIME, 
+    USER_ID, USER_TIME, CARD_ID, CARD_TIME, FIRMWARE_ID, VEHICLE_ID, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <select id="selectByCardId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from device_file_snapshot
+  	where CARD_ID=#{cardId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_file_snapshot
+    where SN = #{sn,jdbcType=VARCHAR}
+  </select>
+  <select id="countByPackageStatus" parameterType="glsx.com.cn.task.model.DeviceFileSnapshot" resultType="glsx.com.cn.task.model.DeviceFileSnapshot">
+  	select count(1) as statisCount from device_file_snapshot where PACKAGE_STATU=#{packageStatu,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from device_file_snapshot
+    where SN = #{sn,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.DeviceFileSnapshot">
+    insert into device_file_snapshot (SN, ID, PACKAGE_STATU, 
+      PACKAGE_ID, ANDROID_PACKAGE_ID, PACKAGE_USER_ID, 
+      PACKAGE_USER_TIME, USER_ID, USER_TIME, 
+      CARD_ID, CARD_TIME, FIRMWARE_ID, 
+      VEHICLE_ID, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{sn,jdbcType=VARCHAR}, #{id,jdbcType=INTEGER}, #{packageStatu,jdbcType=VARCHAR}, 
+      #{packageId,jdbcType=INTEGER}, #{androidPackageId,jdbcType=INTEGER}, #{packageUserId,jdbcType=INTEGER}, 
+      #{packageUserTime,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{userTime,jdbcType=VARCHAR}, 
+      #{cardId,jdbcType=INTEGER}, #{cardTime,jdbcType=VARCHAR}, #{firmwareId,jdbcType=INTEGER}, 
+      #{vehicleId,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.DeviceFileSnapshot">
+    insert into device_file_snapshot
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sn != null">
+        SN,
+      </if>
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="packageStatu != null">
+        PACKAGE_STATU,
+      </if>
+      <if test="packageId != null">
+        PACKAGE_ID,
+      </if>
+      <if test="androidPackageId != null">
+        ANDROID_PACKAGE_ID,
+      </if>
+      <if test="packageUserId != null">
+        PACKAGE_USER_ID,
+      </if>
+      <if test="packageUserTime != null">
+        PACKAGE_USER_TIME,
+      </if>
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="userTime != null">
+        USER_TIME,
+      </if>
+      <if test="cardId != null">
+        CARD_ID,
+      </if>
+      <if test="cardTime != null">
+        CARD_TIME,
+      </if>
+      <if test="firmwareId != null">
+        FIRMWARE_ID,
+      </if>
+      <if test="vehicleId != null">
+        VEHICLE_ID,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="packageStatu != null">
+        #{packageStatu,jdbcType=VARCHAR},
+      </if>
+      <if test="packageId != null">
+        #{packageId,jdbcType=INTEGER},
+      </if>
+      <if test="androidPackageId != null">
+        #{androidPackageId,jdbcType=INTEGER},
+      </if>
+      <if test="packageUserId != null">
+        #{packageUserId,jdbcType=INTEGER},
+      </if>
+      <if test="packageUserTime != null">
+        #{packageUserTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userTime != null">
+        #{userTime,jdbcType=VARCHAR},
+      </if>
+      <if test="cardId != null">
+        #{cardId,jdbcType=INTEGER},
+      </if>
+      <if test="cardTime != null">
+        #{cardTime,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareId != null">
+        #{firmwareId,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleId != null">
+        #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.DeviceFileSnapshot">
+    update device_file_snapshot
+    <set>
+      <if test="id != null">
+        ID = #{id,jdbcType=INTEGER},
+      </if>
+      <if test="packageStatu != null">
+        PACKAGE_STATU = #{packageStatu,jdbcType=VARCHAR},
+      </if>
+      <if test="packageId != null">
+        PACKAGE_ID = #{packageId,jdbcType=INTEGER},
+      </if>
+      <if test="androidPackageId != null">
+        ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER},
+      </if>
+      <if test="packageUserId != null">
+        PACKAGE_USER_ID = #{packageUserId,jdbcType=INTEGER},
+      </if>
+      <if test="packageUserTime != null">
+        PACKAGE_USER_TIME = #{packageUserTime,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userTime != null">
+        USER_TIME = #{userTime,jdbcType=VARCHAR},
+      </if>
+      <if test="cardId != null">
+        CARD_ID = #{cardId,jdbcType=INTEGER},
+      </if>
+      <if test="cardTime != null">
+        CARD_TIME = #{cardTime,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareId != null">
+        FIRMWARE_ID = #{firmwareId,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleId != null">
+        VEHICLE_ID = #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SN = #{sn,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.DeviceFileSnapshot">
+    update device_file_snapshot
+    set ID = #{id,jdbcType=INTEGER},
+      PACKAGE_STATU = #{packageStatu,jdbcType=VARCHAR},
+      PACKAGE_ID = #{packageId,jdbcType=INTEGER},
+      ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER},
+      PACKAGE_USER_ID = #{packageUserId,jdbcType=INTEGER},
+      PACKAGE_USER_TIME = #{packageUserTime,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=INTEGER},
+      USER_TIME = #{userTime,jdbcType=VARCHAR},
+      CARD_ID = #{cardId,jdbcType=INTEGER},
+      CARD_TIME = #{cardTime,jdbcType=VARCHAR},
+      FIRMWARE_ID = #{firmwareId,jdbcType=INTEGER},
+      VEHICLE_ID = #{vehicleId,jdbcType=INTEGER},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where SN = #{sn,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.BsMerchantStockDeviceMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="SN" jdbcType="VARCHAR" property="sn"/>
+        <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode"/>
+        <result column="ICCID" jdbcType="VARCHAR" property="iccid"/>
+        <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName"/>
+        <result column="IN_TIME" jdbcType="TIMESTAMP" property="inTime"/>
+        <result column="IN_LOGISTICS_ID" jdbcType="INTEGER" property="inLogisticsId"/>
+        <result column="OUT_TIME" jdbcType="TIMESTAMP" property="outTime"/>
+        <result column="OUT_LOGISTICS_ID" jdbcType="INTEGER" property="outLogisticsId"/>
+        <result column="TO_MERCHANT_CODE" jdbcType="VARCHAR" property="toMerchantCode"/>
+        <result column="TO_MERCHANT_NAME" jdbcType="VARCHAR" property="toMerchantName"/>
+        <result column="STATU" jdbcType="VARCHAR" property="statu"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+        <result column="IN_LOGISTICS_COMPANY" jdbcType="VARCHAR" property="inLogisticsCompany"/>
+        <result column="IN_LOGISTICS_ORDER_NUMBER" jdbcType="VARCHAR" property="inLogisticsOrderNumber"/>
+        <result column="OUT_LOGISTICS_COMPANY" jdbcType="VARCHAR" property="outLogisticsCompany"/>
+        <result column="OUT_LOGISTICS_ORDER_NUMBER" jdbcType="VARCHAR" property="outLogisticsOrderNumber"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, SN, ATTRIB_CODE, ICCID, MERCHANT_CODE, MERCHANT_NAME, IN_TIME, IN_LOGISTICS_ID, 
+    OUT_TIME, OUT_LOGISTICS_ID, TO_MERCHANT_CODE, TO_MERCHANT_NAME, STATU, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <update id="batchUpdateFinshStatu" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice">
+        update bs_merchant_stock_device set `status`= `PS` where status and Sn
+        <foreach collection="list" item="orderCode" index="index" open="in (" close=")" separator=",">
+            #{orderCode}
+        </foreach>
+    </update>
+
+    <sql id="Bmsd_Base_Column_List">
+    bmsd.ID, bmsd.SN, bmsd.ATTRIB_CODE, bmsd.ICCID, bmsd.MERCHANT_CODE, bmsd.MERCHANT_NAME, bmsd.IN_TIME, bmsd.IN_LOGISTICS_ID,
+    bmsd.OUT_TIME, bmsd.OUT_LOGISTICS_ID, bmsd.TO_MERCHANT_CODE, bmsd.TO_MERCHANT_NAME, bmsd.STATU, bmsd.CREATED_BY,
+    bmsd.CREATED_DATE, bmsd.UPDATED_BY, bmsd.UPDATED_DATE, bmsd.DELETED_FLAG
+  </sql>
+
+    <select id="getSum" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice"
+            resultType="java.lang.Integer">
+        select count(1)
+        from bs_merchant_stock_device
+        where MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        and DELETED_FLAG = "N"
+        <if test="statu != null">
+            and STATU = #{statu,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="pageBsMerchantStockDevice" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice"
+            resultMap="BaseResultMap">
+        select
+        bli.ORDER_NUMBER as IN_LOGISTICS_ORDER_NUMBER,
+        bli.COMPANY as IN_LOGISTICS_COMPANY,
+        blo.ORDER_NUMBER as OUT_LOGISTICS_ORDER_NUMBER,
+        blo.COMPANY as OUT_LOGISTICS_COMPANY,
+        <include refid="Bmsd_Base_Column_List"/>
+        from bs_merchant_stock_device bmsd
+        left join bs_logistics bli on bmsd.IN_LOGISTICS_ID = bli.ID
+        left join bs_logistics blo on bmsd.OUT_LOGISTICS_ID = blo.ID
+        <where>
+            bmsd.DELETED_FLAG = 'N'
+            <if test="merchantCode != null">
+                and bmsd.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="sn != null">
+                and bmsd.SN = #{sn,jdbcType=VARCHAR}
+            </if>
+            <if test="toMerchantCode != null">
+                and bmsd.TO_MERCHANT_CODE = #{toMerchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="toMerchantName != null">
+                and bmsd.TO_MERCHANT_NAME  LIKE "%"#{toMerchantName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="statu != null">
+                and bmsd.STATU = #{statu,jdbcType=VARCHAR}
+            </if>
+            <if test="inTimeStart != null">
+                and CONVERT(DATE_FORMAT(bmsd.IN_TIME,'%Y%m%d%'),SIGNED) &gt;=
+                CONVERT(DATE_FORMAT(#{inTimeStart},'%Y%m%d'),SIGNED)
+            </if>
+            <if test="inTimeEnd != null">
+                and CONVERT(DATE_FORMAT(bmsd.IN_TIME,'%Y%m%d'),SIGNED) &lt;=
+                CONVERT(DATE_FORMAT(#{inTimeEnd},'%Y%m%d'),SIGNED)
+            </if>
+            <if test="outTimeStart != null">
+                and CONVERT(DATE_FORMAT(bmsd.OUT_TIME,'%Y%m%d%'),SIGNED) &gt;=
+                CONVERT(DATE_FORMAT(#{outTimeStart},'%Y%m%d'),SIGNED)
+            </if>
+            <if test="outTimeEnd != null">
+                and CONVERT(DATE_FORMAT(bmsd.OUT_TIME,'%Y%m%d'),SIGNED) &lt;=
+                CONVERT(DATE_FORMAT(#{outTimeEnd},'%Y%m%d'),SIGNED)
+            </if>
+        </where>
+    </select>
+    
+    <insert id="batchBatchInsertReplace" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice">
+    	insert into bs_merchant_stock_device (
+    	ID, SN, ATTRIB_CODE, ICCID, MERCHANT_CODE, MERCHANT_NAME, 
+      	IN_TIME, IN_LOGISTICS_ID, OUT_TIME, 
+      	OUT_LOGISTICS_ID, TO_MERCHANT_CODE, TO_MERCHANT_NAME, 
+     	STATU, CREATED_BY, CREATED_DATE, 
+     	UPDATED_BY, UPDATED_DATE, DELETED_FLAG,VT_SN)
+     	values 
+	   	<foreach collection="list" item="item" index="index" separator=",">
+	   		(#{item.id,jdbcType=INTEGER},
+	   		 #{item.sn,jdbcType=VARCHAR}, 
+	   		 #{item.attribCode,jdbcType=VARCHAR}, 
+	   		 #{item.iccid,jdbcType=VARCHAR}, 
+	   		 #{item.merchantCode,jdbcType=VARCHAR}, 
+	   		 #{item.merchantName,jdbcType=VARCHAR}, 
+	   		 #{item.inTime,jdbcType=TIMESTAMP}, 
+	   		 #{item.inLogisticsId,jdbcType=INTEGER}, 
+	   		 #{item.outTime,jdbcType=TIMESTAMP}, 
+	   		 #{item.outLogisticsId,jdbcType=INTEGER}, 
+	   		 #{item.toMerchantCode,jdbcType=VARCHAR}, 
+	   		 #{item.toMerchantName,jdbcType=VARCHAR}, 
+	   		 #{item.statu,jdbcType=VARCHAR}, 
+	   		 #{item.createdBy,jdbcType=VARCHAR}, 
+	   		 #{item.createdDate,jdbcType=TIMESTAMP}, 
+	   		 #{item.updatedBy,jdbcType=VARCHAR}, 
+	   		 #{item.updatedDate,jdbcType=TIMESTAMP}, 
+	   		 #{item.deletedFlag,jdbcType=VARCHAR},
+             #{item.vtSn,jdbcType=VARCHAR})
+	   	</foreach>
+      	on duplicate key update
+      	ID=values(ID), 
+      	SN=values(SN), 
+      	ATTRIB_CODE=values(ATTRIB_CODE), 
+      	ICCID=values(ICCID), 
+      	MERCHANT_CODE=values(MERCHANT_CODE), 
+      	MERCHANT_NAME=values(MERCHANT_NAME), 
+      	IN_TIME=values(IN_TIME), 
+      	IN_LOGISTICS_ID=values(IN_LOGISTICS_ID), 
+      	OUT_TIME=values(OUT_TIME), 
+      	OUT_LOGISTICS_ID=values(OUT_LOGISTICS_ID), 
+      	TO_MERCHANT_CODE=values(TO_MERCHANT_CODE), 
+      	TO_MERCHANT_NAME=values(TO_MERCHANT_NAME), 
+     	STATU=values(STATU), 
+     	CREATED_BY=values(CREATED_BY), 
+     	CREATED_DATE=values(CREATED_DATE), 
+     	UPDATED_BY=values(UPDATED_BY), 
+     	UPDATED_DATE=values(UPDATED_DATE), 
+     	DELETED_FLAG=values(DELETED_FLAG),
+        VT_SN=values(VT_SN)
+    </insert>
+
+    <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice">
+    insert into bs_merchant_stock_device (ID, SN, ATTRIB_CODE, 
+      ICCID, MERCHANT_CODE, MERCHANT_NAME, 
+      IN_TIME, IN_LOGISTICS_ID, OUT_TIME, 
+      OUT_LOGISTICS_ID, TO_MERCHANT_CODE, TO_MERCHANT_NAME, 
+      STATU, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}, #{attribCode,jdbcType=VARCHAR}, 
+      #{iccid,jdbcType=VARCHAR}, #{merchantCode,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
+      #{inTime,jdbcType=TIMESTAMP}, #{inLogisticsId,jdbcType=INTEGER}, #{outTime,jdbcType=TIMESTAMP}, 
+      #{outLogisticsId,jdbcType=INTEGER}, #{toMerchantCode,jdbcType=VARCHAR}, #{toMerchantName,jdbcType=VARCHAR}, 
+      #{statu,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice">
+        insert into bs_merchant_stock_device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="sn != null">
+                SN,
+            </if>
+            <if test="attribCode != null">
+                ATTRIB_CODE,
+            </if>
+            <if test="iccid != null">
+                ICCID,
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE,
+            </if>
+            <if test="merchantName != null">
+                MERCHANT_NAME,
+            </if>
+            <if test="inTime != null">
+                IN_TIME,
+            </if>
+            <if test="inLogisticsId != null">
+                IN_LOGISTICS_ID,
+            </if>
+            <if test="outTime != null">
+                OUT_TIME,
+            </if>
+            <if test="outLogisticsId != null">
+                OUT_LOGISTICS_ID,
+            </if>
+            <if test="toMerchantCode != null">
+                TO_MERCHANT_CODE,
+            </if>
+            <if test="toMerchantName != null">
+                TO_MERCHANT_NAME,
+            </if>
+            <if test="statu != null">
+                STATU,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="sn != null">
+                #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="attribCode != null">
+                #{attribCode,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantName != null">
+                #{merchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="inTime != null">
+                #{inTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inLogisticsId != null">
+                #{inLogisticsId,jdbcType=INTEGER},
+            </if>
+            <if test="outTime != null">
+                #{outTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="outLogisticsId != null">
+                #{outLogisticsId,jdbcType=INTEGER},
+            </if>
+            <if test="toMerchantCode != null">
+                #{toMerchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="toMerchantName != null">
+                #{toMerchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="statu != null">
+                #{statu,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice">
+        update bs_merchant_stock_device
+        <set>
+            <if test="sn != null">
+                SN = #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="attribCode != null">
+                ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                ICCID = #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantName != null">
+                MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="inTime != null">
+                IN_TIME = #{inTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="inLogisticsId != null">
+                IN_LOGISTICS_ID = #{inLogisticsId,jdbcType=INTEGER},
+            </if>
+            <if test="outTime != null">
+                OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="outLogisticsId != null">
+                OUT_LOGISTICS_ID = #{outLogisticsId,jdbcType=INTEGER},
+            </if>
+            <if test="toMerchantCode != null">
+                TO_MERCHANT_CODE = #{toMerchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="toMerchantName != null">
+                TO_MERCHANT_NAME = #{toMerchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="statu != null">
+                STATU = #{statu,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantStockDevice">
+    update bs_merchant_stock_device
+    set SN = #{sn,jdbcType=VARCHAR},
+      ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      IN_TIME = #{inTime,jdbcType=TIMESTAMP},
+      IN_LOGISTICS_ID = #{inLogisticsId,jdbcType=INTEGER},
+      OUT_TIME = #{outTime,jdbcType=TIMESTAMP},
+      OUT_LOGISTICS_ID = #{outLogisticsId,jdbcType=INTEGER},
+      TO_MERCHANT_CODE = #{toMerchantCode,jdbcType=VARCHAR},
+      TO_MERCHANT_NAME = #{toMerchantName,jdbcType=VARCHAR},
+      STATU = #{statu,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

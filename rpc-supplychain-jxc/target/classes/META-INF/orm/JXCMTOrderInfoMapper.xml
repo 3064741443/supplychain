@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTOrderInfoMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTOrderInfo">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode"/>
+        <result column="TOTAL" jdbcType="INTEGER" property="total"/>
+        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+        <result column="DEVICE_ID" jdbcType="INTEGER" property="deviceId"/>
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="deviceName"/>
+        <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne"/>
+        <result column="PACKAGE_TWO" jdbcType="VARCHAR" property="packageTwo"/>
+        <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode"/>
+        <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo"/>
+        <result column="BATCH" jdbcType="VARCHAR" property="batch"/>
+        <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId"/>
+        <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo"/>
+        <result column="SEND_MERCHANT_NAME" jdbcType="VARCHAR" property="sendMerchantName"/>
+        <result column="ADDRESS" jdbcType="VARCHAR" property="address"/>
+        <result column="CONTACTS" jdbcType="VARCHAR" property="contacts"/>
+        <result column="MOBILE" jdbcType="VARCHAR" property="mobile"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+        <result column="ND_SCAN" jdbcType="VARCHAR" property="ndScan"/>
+        <result column="material_code" jdbcType="VARCHAR" property="materialCode"/>
+        <result column="material_name" jdbcType="VARCHAR" property="materialName"/>
+        <result column="send_quanlity" jdbcType="INTEGER" property="sendQuanlity"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.com.glsx.supplychain.jxc.model.JXCMTOrderInfo">
+        <result column="REMARK" jdbcType="LONGVARCHAR" property="remark"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, ORDER_CODE, TOTAL, STATUS, DEVICE_ID, DEVICE_NAME, PACKAGE_ONE, PACKAGE_TWO, 
+    ATTRIB_CODE, OPERATOR_MERCHANT_NO, BATCH, WAREHOUSE_ID, SEND_MERCHANT_NO, SEND_MERCHANT_NAME, 
+    ADDRESS, CONTACTS, MOBILE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, 
+    ND_SCAN, material_code, material_name,send_quanlity
+  </sql>
+    <sql id="Blob_Column_List">
+    REMARK
+  </sql>
+
+    <select id="pageSignOrders" parameterType="cn.com.glsx.supplychain.jxc.dto.JXCMTOrderInfoSignDTO"
+            resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTOrderInfoSignDTO">
+        SELECT
+        oi.order_code AS dispatchOrderCode,
+        oi.address AS address,
+        oi.contacts AS contacts,
+        oi.mobile AS mobile,
+        oi.material_code AS materialCode,
+        ami.material_name AS materialName,
+        bmov.merchant_order AS merchantOrder,
+        bmo.merchant_code AS sendMerchantNo,
+        bdui.merchant_name AS sendMerchantName,
+        bl.order_number AS logisticsNo,
+        bl.company AS logisticsCpy,
+        bl.shipments_quantity AS logisticsShipmentsQuantity,
+        bl.send_time AS logisticsSendTime,
+        bmoss.bill_sign_number AS billSignNumber
+        FROM
+        order_info AS oi
+        LEFT JOIN bs_merchant_order_vehicle AS bmov ON(oi.ORDER_CODE=bmov.dispatch_order_code)
+        LEFT JOIN bs_merchant_order AS bmo ON(bmo.ORDER_NUMBER=bmov.merchant_order)
+        LEFT JOIN bs_dealer_user_info AS bdui ON(bdui.MERCHANT_CODE=bmo.MERCHANT_CODE)
+        LEFT JOIN bs_logistics AS bl ON(bl.SERVICE_CODE=oi.ORDER_CODE)
+        LEFT JOIN am_material_info AS ami on(ami.material_code=oi.material_code)
+        LEFT JOIN bs_merchant_order_sign_suply AS bmoss ON(bmoss.logistics_no=bl.order_number AND
+        bmoss.dispatch_order_code=oi.ORDER_CODE)
+        WHERE bl.ORDER_NUMBER IS NOT NULL and oi.status != 'CL'
+        <if test="warehouseId != null">
+            and oi.warehouse_id = #{warehouseId}
+        </if>
+        <if test="sendMerchantNo != null and sendMerchantNo !=''">
+            and bmo.merchant_code = #{sendMerchantNo}
+        </if>
+        <if test="billStatus != null and billStatus != ''">
+            <if test="billStatus == 'A'.toString()">
+                and bmoss.bill_sign_number is not null
+            </if>
+            <if test="billStatus == 'U'.toString()">
+                and bmoss.bill_sign_number is null
+            </if>
+        </if>
+        <if test="sendTimeStartS != null">
+            and date_format(bl.send_time,'%Y-%m-%d %H:%i:%S') &gt;= date_format(#{sendTimeStartS},'%Y-%m-%d %H:%i:%S')
+        </if>
+        <if test="sendTimeEndS != null">
+            and date_format(bl.send_time,'%Y-%m-%d %H:%i:%S') &lt;= date_format(#{sendTimeEndS},'%Y-%m-%d %H:%i:%S')
+        </if>
+        order by oi.updated_date desc
+    </select>
+
+    <select id="pageOrderInfo" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTOrderInfo"
+            resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTOrderInfoDTO">
+        select
+        distinct odi.order_code as dispatchOrderCode,
+        odi.id as Id,
+        bmo.order_number as merchantOrder,
+        bmo.order_time as orderTime,
+        bmo.url_dispatch_bills as urlDispatchBills,
+        bmo.model_device as modelDevice,
+        bmo.check_remark as checkRemark,
+        bmov.bs_parent_brand_name as bsParentBrandName,
+        bmov.bs_sub_brand_name as bsSubBrandName,
+        bmov.bs_audi_name as bsAudiName,
+        bmov.bs_motorcycle as bsMotorcycle,
+        bmov.bs_remark as bsRemark,
+        odi.total as total,
+        odi.send_quanlity as sendQuantities,
+        odi.status as status,
+        odi.device_id as deviceId,
+        odi.device_name as deviceName,
+        odi.package_one as packageOne,
+        odi.send_merchant_no as sendMerchantNo,
+        odi.send_merchant_name as sendMerchantName,
+        odi.address as address,
+        odi.contacts as contacts,
+        odi.mobile as mobile,
+        odi.created_date as createdTime,
+        odi.remark as remark,
+        odi.nd_scan as ndScan,
+        odi.attrib_code as attribCode,
+        odi.attrib_code AS materialCode,
+        ami.material_name AS materialName,
+        ai.name as mnumName,
+        ain.name as orNet,
+        ain.id as orNetId,
+        aic.name as cardSelf,
+        aic.id as cardSelfId,
+        wi.id as warehouseId,
+        wi.name as warehouseName,
+        dt.name as deviceTypeName,
+        dt.id as deviceTypeId,
+        bmov.id as vehicleId,
+        bdui.channel as channelId,
+        fmt.fact_material_code as factMaterialCode,
+        fmt.fact_material_name as factMaterialName,
+        b.send_time as sendTime
+        from order_info as odi
+        left join bs_merchant_order_vehicle as bmov on(odi.order_code = bmov.dispatch_order_code)
+        left join bs_merchant_order as bmo on(bmov.merchant_order = bmo.order_number)
+        left join attrib_mana am on(am.attrib_code = odi.attrib_code)
+        left join attrib_info ai on(ai.id=am.DEV_MNUM_ID)
+        left join attrib_info ain on(ain.id=am.OR_NET_ID)
+        left join attrib_info aic on(aic.id=am.CARD_SELF_ID)
+        left join device_code dc on(odi.device_id = dc.id)
+        left join device_type dt on(dt.id = dc.type_id)
+        left join warehouse_info as wi on(wi.id = odi.warehouse_id)
+        left join am_material_info AS ami ON(odi.attrib_code = ami.material_code)
+        left join bs_dealer_user_info as bdui on(bmo.merchant_code=bdui.merchant_code and bdui.deleted_flag = 'N')
+        left join factory_material_tran as fmt on(fmt.material_code=odi.attrib_code and
+        fmt.warehouse_id=odi.WAREHOUSE_ID and bmov.bs_parent_brand_name=fmt.bs_parent_brand_name and
+        bmov.bs_audi_name=fmt.bs_audi_name and bmov.bs_motorcycle=fmt.bs_motorcycle)
+        left join bs_logistics b on(odi.ORDER_CODE=b.SERVICE_CODE and (b.type=4 or b.type=5))
+        <where>
+            <if test="deviceTypeId != null">
+                and dc.type_id = #{deviceTypeId}
+            </if>
+            <if test="orderCode != null and orderCode !=''">
+                and odi.order_code like concat('%',#{orderCode,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="status != null and status != ''">
+                and odi.status = #{status}
+            </if>
+            <if test="merchantOrder != null and merchantOrder != ''">
+                and bmo.order_number like concat('%',#{merchantOrder,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="sendMerchantNo != null and sendMerchantNo !=''">
+                and odi.send_merchant_no = #{sendMerchantNo}
+            </if>
+            <if test="warehouseId != null">
+                and wi.id = #{warehouseId}
+            </if>
+            <if test="orderTimeStart != null">
+                and DATE_FORMAT(bmo.ORDER_TIME,'%Y-%m-%d') &gt;= DATE_FORMAT(#{orderTimeStart,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="orderTimeEnd != null">
+                and DATE_FORMAT(bmo.ORDER_TIME,'%Y-%m-%d') &lt;= DATE_FORMAT(#{orderTimeEnd,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="orderDistribTimeStart != null">
+                and DATE_FORMAT(odi.created_date,'%Y-%m-%d') &gt;= DATE_FORMAT(#{orderDistribTimeStart,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="orderDistribTimeEnd != null">
+                and DATE_FORMAT(odi.created_date,'%Y-%m-%d') &lt;= DATE_FORMAT(#{orderDistribTimeEnd,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="warehouseId != null">
+                and odi.WAREHOUSE_ID=#{warehouseId}
+            </if>
+            <if test="deletedFlag != null">
+                and odi.DELETED_FLAG = #{deletedFlag}
+            </if>
+            <if test="queryType != null and queryType !=''">
+                and odi.nd_scan != 'D'
+            </if>
+            <if test="factMaterialCode != null and factMaterialCode !=''">
+                and (fmt.fact_material_code like concat('%',#{factMaterialCode,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="factMaterialName != null and factMaterialName !=''">
+                or fmt.fact_material_name like concat('%',#{factMaterialName,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="startSendTime != null and startSendTime != ''">
+                and DATE_FORMAT(b.send_time,'%Y-%m-%d') &gt;= DATE_FORMAT(#{startSendTime,jdbcType=VARCHAR},'%Y-%m-%d')
+            </if>
+            <if test="endSendTime != null and endSendTime != ''">
+                and DATE_FORMAT(b.send_time,'%Y-%m-%d')  &lt;= DATE_FORMAT(#{endSendTime,jdbcType=VARCHAR},'%Y-%m-%d')
+            </if>
+        </where>
+        group by odi.order_code order by odi.id desc
+    </select>
+
+    <select id="exportOrderInfo" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTOrderInfo"
+            resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTOrderInfoDTO">
+        select
+        distinct odi.order_code as dispatchOrderCode,
+        odi.id as Id,
+        bmo.order_number as merchantOrder,
+        bmo.order_time as orderTime,
+        bmo.url_dispatch_bills as urlDispatchBills,
+        bmo.model_device as modelDevice,
+        bmo.check_remark as checkRemark,
+        bmov.bs_parent_brand_name as bsParentBrandName,
+        bmov.bs_sub_brand_name as bsSubBrandName,
+        bmov.bs_audi_name as bsAudiName,
+        bmov.bs_motorcycle as bsMotorcycle,
+        bmov.bs_remark as bsRemark,
+        odi.total as total,
+        odi.send_quanlity as sendQuantities,
+        odi.status as status,
+        odi.device_id as deviceId,
+        odi.device_name as deviceName,
+        odi.package_one as packageOne,
+        odi.send_merchant_no as sendMerchantNo,
+        odi.send_merchant_name as sendMerchantName,
+        odi.address as address,
+        odi.contacts as contacts,
+        odi.mobile as mobile,
+        odi.created_date as createdTime,
+        odi.remark as remark,
+        odi.nd_scan as ndScan,
+        odi.attrib_code as attribCode,
+        odi.attrib_code AS materialCode,
+        ami.material_name AS materialName,
+        ai.name as mnumName,
+        ain.name as orNet,
+        ain.id as orNetId,
+        aic.name as cardSelf,
+        aic.id as cardSelfId,
+        wi.id as warehouseId,
+        wi.name as warehouseName,
+        dt.name as deviceTypeName,
+        dt.id as deviceTypeId,
+        bmov.id as vehicleId,
+        bdui.channel as channelId,
+        fmt.fact_material_code as factMaterialCode,
+        fmt.fact_material_name as factMaterialName,
+        b.send_time as sendTime
+        from order_info as odi
+        left join bs_merchant_order_vehicle as bmov on(odi.order_code = bmov.dispatch_order_code)
+        left join bs_merchant_order as bmo on(bmov.merchant_order = bmo.order_number)
+        left join attrib_mana am on(am.attrib_code = odi.attrib_code)
+        left join attrib_info ai on(ai.id=am.DEV_MNUM_ID)
+        left join attrib_info ain on(ain.id=am.OR_NET_ID)
+        left join attrib_info aic on(aic.id=am.CARD_SELF_ID)
+        left join device_code dc on(odi.device_id = dc.id)
+        left join device_type dt on(dt.id = dc.type_id)
+        left join warehouse_info as wi on(wi.id = odi.warehouse_id)
+        left join am_material_info AS ami ON(odi.attrib_code = ami.material_code)
+        left join bs_dealer_user_info as bdui on(bmo.merchant_code=bdui.merchant_code and bdui.deleted_flag = 'N')
+        left join factory_material_tran as fmt on(fmt.material_code=odi.attrib_code and
+        fmt.warehouse_id=odi.WAREHOUSE_ID and bmov.bs_parent_brand_name=fmt.bs_parent_brand_name and
+        bmov.bs_audi_name=fmt.bs_audi_name and bmov.bs_motorcycle=fmt.bs_motorcycle)
+        left join bs_logistics b on(odi.ORDER_CODE=b.SERVICE_CODE and (b.type=4 or b.type=5))
+        <where>
+            <if test="deviceTypeId != null">
+                and dc.type_id = #{deviceTypeId}
+            </if>
+            <if test="orderCode != null and orderCode !=''">
+                and odi.order_code like concat('%',#{orderCode,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="status != null and status != ''">
+                and odi.status = #{status}
+            </if>
+            <if test="merchantOrder != null and merchantOrder != ''">
+                and bmo.order_number like concat('%',#{merchantOrder,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="sendMerchantNo != null and sendMerchantNo !=''">
+                and odi.send_merchant_no = #{sendMerchantNo}
+            </if>
+            <if test="warehouseId != null">
+                and wi.id = #{warehouseId}
+            </if>
+            <if test="orderTimeStart != null">
+                and DATE_FORMAT(bmo.ORDER_TIME,'%Y-%m-%d') &gt;= DATE_FORMAT(#{orderTimeStart,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="orderTimeEnd != null">
+                and DATE_FORMAT(bmo.ORDER_TIME,'%Y-%m-%d') &lt;= DATE_FORMAT(#{orderTimeEnd,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="orderDistribTimeStart != null">
+                and DATE_FORMAT(odi.created_date,'%Y-%m-%d') &gt;= DATE_FORMAT(#{orderDistribTimeStart,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="orderDistribTimeEnd != null">
+                and DATE_FORMAT(odi.created_date,'%Y-%m-%d') &lt;= DATE_FORMAT(#{orderDistribTimeEnd,jdbcType=TIMESTAMP},'%Y-%m-%d')
+            </if>
+            <if test="warehouseId != null">
+                and odi.WAREHOUSE_ID=#{warehouseId}
+            </if>
+            <if test="deletedFlag != null">
+                and odi.DELETED_FLAG = #{deletedFlag}
+            </if>
+            <if test="queryType != null and queryType !=''">
+                and odi.nd_scan != 'D'
+            </if>
+            <if test="factMaterialCode != null and factMaterialCode !=''">
+                and (fmt.fact_material_code like concat('%',#{factMaterialCode,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="factMaterialName != null and factMaterialName !=''">
+                or fmt.fact_material_name like concat('%',#{factMaterialName,jdbcType=VARCHAR},'%'))
+            </if>
+            <if test="startSendTime != null and startSendTime != ''">
+                and DATE_FORMAT(b.send_time,'%Y-%m-%d') &gt;= DATE_FORMAT(#{startSendTime,jdbcType=VARCHAR},'%Y-%m-%d')
+            </if>
+            <if test="endSendTime != null and endSendTime != ''">
+                and DATE_FORMAT(b.send_time,'%Y-%m-%d')  &lt;= DATE_FORMAT(#{endSendTime,jdbcType=VARCHAR},'%Y-%m-%d')
+            </if>
+        </where>
+        group by odi.order_code order by odi.id desc
+    </select>
+
+    <select id="pageOrderInfoMerchant" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTOrderInfo"
+            resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTOrderInfoMerchantDTO">
+        select
+        distinct send_merchant_no as sendMerchantNo,
+        send_merchant_name as sendMerchantName
+        from order_info
+        <where>
+            <if test="sendMerchantName != null">
+                and send_merchant_name like concat('%',#{sendMerchantName,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

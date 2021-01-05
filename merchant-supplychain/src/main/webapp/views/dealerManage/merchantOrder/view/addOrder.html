@@ -1,0 +1,108 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">新增订单</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body" >
+
+        <h4>请您选择希望采购的商品并输入采购数量，然后点击右下角提交按钮下单</h4>
+        <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="add_orderInfo_form"
+              method="post" enctype="multipart/form-data" >
+
+            <div class="form-group" style="margin-left: -60px;">
+                <label class="col-lg-3 control-label">物料编号 :</label>
+                <div class="control-content">
+                    <!--<div class="row">-->
+                        <div class="col-lg-4">
+                            <input name="materialCode" class="form-control" type="text"
+                                   ng-model="addMyOrderData.materialCode"/>
+                            <div class="m-t-xs" ng-show="add_orderInfo_form.materialCode.$invalid">
+                                <small class="text-danger" ng-show="add_orderInfo_form.materialCode.$error">
+                                    未找到相关物料编号
+                                </small>
+                            </div>
+                        <!--</div>-->
+                        </div>
+
+                </div>
+                <label class="control-label">物料名称 :</label>
+                <div class="control-content">
+                        <div class="col-lg-4">
+                            <input name="materialName" class="form-control" type="text"
+                                   ng-model="addMyOrderData.materialName"/>
+                        </div>
+                        <div class="m-t-xs" ng-show="add_orderInfo_form.materialName.$invalid">
+                            <small class="text-danger" style="margin-left: 18%;" ng-show="add_orderInfo_form.materialName.$error">
+                                未找到相关物料
+                            </small>
+                        </div>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">搜索</button>
+                    <button class="btn btn-primary " type="button" ng-click="Reset()">重置</button>
+                </div>
+            </div>
+
+
+            <dev ng-repeat="foreachViewiew in typeIdList.data">
+                <table class="" id="{{foreachViewiew.alias==null?foreachViewiew.productName:foreachViewiew.alias}}" style="width: 100%;" ng-if="foreachViewiew.Digest_show_hide_val">
+                    <p ng-style="setColor(foreachViewiew.productColorKey)" class="form-title" style="margin-bottom: 0px;vertical-align: middle;padding: 10px;margin-bottom: 5px;">
+                        {{foreachViewiew.alias==null?foreachViewiew.productName:foreachViewiew.alias}}&nbsp;&nbsp;
+                        <label ng-if="foreachViewiew.serviceType!=5">套餐 :{{foreachViewiew.packageOne}}&nbsp;&nbsp;
+                            服务期限 :{{foreachViewiew.serviceTime}}月&nbsp;&nbsp;<span ng-if="foreachViewiew.priceHidenFlag==true">价格 : {{foreachViewiew.saleSum.toFixed(2)}}</span></label>
+                        <span class="glyphicon glyphicon-chevron-down"  style="float: right;vertical-align: middle;line-height: 32px;"
+                              ng-click="Digest_show($index)"></span>
+                    </p>
+                    <thead>
+                        <tr style="height: 5%" >
+                            <th><input class='{{foreachViewiew.alias==null?foreachViewiew.productName:foreachViewiew.alias}}' ng-click="selectAll($index,all)" ng-model="all"  type="checkbox"></th>
+                            <th>物料编号</th>
+                            <th>物料名称</th>
+                            <th>数量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id='{{foreachViewiew.id}}' ng-repeat='item in foreachViewiew.productList'>
+                            <td ng-style="setColor(item.materialColorkey)"><input type="checkbox" ng-click="selectChange($index ,foreachViewiew, item)" ng-checked="item.checked" name="checkbox"></td>
+                            <td ng-style="setColor(item.materialColorkey)" class = "productCode">{{item.materialCode}}</td>
+                            <td ng-style="setColor(item.materialColorkey)" class = "productName" style="word-break: break-all;word-wrap: break-word;">{{item.materialName}}</td>
+                            <td ng-style="setColor(item.materialColorkey)"><input class="number" type="text" width="20%" maxlength="10"
+                                       ng-pattern="/^[1-9]\d*$/" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" ng-model="item.num" ng-blur="changeNum(item)"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </dev>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button id="orderOkButton" type="submit" class="btn btn-primary" ng-click="orderOK()">提交订单</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>
+<style>
+    table, th , td {
+        border: 1px solid grey;
+        border-collapse: collapse;
+        padding: 10px;
+    }
+    table tr:nth-child(odd) {
+        background-color: #f1f1f1;
+    }
+    table tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+    .form-title {
+        line-height: 32px;
+    }
+    .form-title:after {
+        content: '';
+        border-bottom: 1px solid #ccc;
+        display: block;
+    }
+</style>
+<script>
+
+</script>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.DeviceFileUnstockMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.DeviceFileUnstock">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="SN" property="sn" jdbcType="VARCHAR"/>
+        <result column="ICCID" property="iccid" jdbcType="VARCHAR"/>
+        <result column="IMSI" property="imsi" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, SN, ICCID, IMSI, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+    <select id="listDeviceFileUnstock" resultMap="BaseResultMap"
+            parameterType="cn.com.glsx.supplychain.model.DeviceFileUnstock">
+        select
+        <include refid="Base_Column_List"/>
+        from device_file_unstock
+        where DELETED_FLAG = "N"
+        <if test="sn != null and sn != '' ">
+            and SN = #{sn,jdbcType=VARCHAR}
+        </if>
+        <if test="iccid != null and iccid != ''">
+            and ICCID = #{iccid,jdbcType=VARCHAR}
+        </if>
+        <if test="imsi != null and imsi != ''">
+            and IMSI = #{imsi,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap"
+            parameterType="cn.com.glsx.supplychain.model.DeviceFileUnstock">
+        select
+        <include refid="Base_Column_List"/>
+        from device_file_unstock
+        where DELETED_FLAG = "N"
+        <if test="sn != null and sn != '' ">
+            and SN = #{sn,jdbcType=VARCHAR}
+        </if>
+        <if test="iccid != null and iccid != ''">
+            and ICCID = #{iccid,jdbcType=VARCHAR}
+        </if>
+        <if test="imsi != null and imsi != ''">
+            and IMSI = #{imsi,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+
+    <select id="selectDeviceFileUnstock" resultMap="BaseResultMap"
+            parameterType="cn.com.glsx.supplychain.model.DeviceFileUnstock">
+        select
+        <include refid="Base_Column_List"/>
+        from device_file_unstock
+        where DELETED_FLAG = "N"
+        <if test="sn != null and sn != '' ">
+            and SN = #{sn,jdbcType=VARCHAR}
+        </if>
+        <if test="iccid != null and iccid != ''">
+            and ICCID = #{iccid,jdbcType=VARCHAR}
+        </if>
+        <if test="imsi != null and imsi != ''">
+            and IMSI = #{imsi,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.DeviceFileUnstock">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into device_file_unstock
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sn != null">
+                SN,
+            </if>
+            <if test="iccid != null">
+                ICCID,
+            </if>
+            <if test="imsi != null">
+                IMSI,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sn != null">
+                #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imsi != null">
+                #{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.DeviceFileUnstock">
+        update device_file_unstock
+        <set>
+            <if test="sn != null">
+                SN = #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                ICCID = #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imsi != null">
+                IMSI = #{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByImsi" parameterType="cn.com.glsx.supplychain.model.DeviceFileUnstock">
+        update device_file_unstock
+        <set>
+            <if test="sn != null">
+                SN = #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                ICCID = #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imsi != null">
+                IMSI = #{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where IMSI = #{imsi,jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementSellRenewMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementSellRenew">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SETTLE_CUSTOMER_CODE" jdbcType="VARCHAR" property="settleCustomerCode" />
+    <result column="SETTLE_CUSTOMER_NAME" jdbcType="VARCHAR" property="settleCustomerName" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="REASONS" property="reasons" jdbcType="VARCHAR" />
+    <result column="SALE_GROUP_CODE" jdbcType="VARCHAR" property="saleGroupCode" />
+    <result column="SALE_GROUP_NAME" jdbcType="VARCHAR" property="saleGroupName" />
+    <result column="TRADE_TIME" jdbcType="TIMESTAMP" property="tradeTime" />
+    <result column="PUBACCOUNT_ID" jdbcType="VARCHAR" property="pubaccountId" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="SPECIAL_MERCHANT_CODE" jdbcType="VARCHAR" property="specialMerchantCode" />
+    <result column="DEVICE_SN" jdbcType="VARCHAR" property="deviceSn" />
+    <result column="WEIXIN_ORDER_NO" jdbcType="VARCHAR" property="weixinOrderNo" />
+    <result column="MERCHANT_ORDER_NO" jdbcType="VARCHAR" property="merchantOrderNo" />
+    <result column="USER_FLAG" jdbcType="VARCHAR" property="userFlag" />
+    <result column="TRADE_TYPE" jdbcType="VARCHAR" property="tradeType" />
+    <result column="TRADE_STATU" jdbcType="VARCHAR" property="tradeStatu" />
+    <result column="PAY_BANK" jdbcType="VARCHAR" property="payBank" />
+    <result column="CURRENCY_TYPE" jdbcType="VARCHAR" property="currencyType" />
+    <result column="SHSETTLE_ORDER_MONEY" jdbcType="DOUBLE" property="shsettleOrderMoney" />
+    <result column="VOUCHERS_MONEY" jdbcType="DOUBLE" property="vouchersMoney" />
+    <result column="WEIXIN_RETURN_NO" jdbcType="VARCHAR" property="weixinReturnNo" />
+    <result column="MERCHANT_RETURN_NO" jdbcType="VARCHAR" property="merchantReturnNo" />
+    <result column="RETURN_MONEY" jdbcType="DOUBLE" property="returnMoney" />
+    <result column="ERCHANGE_RETURN_MONEY" jdbcType="DOUBLE" property="erchangeReturnMoney" />
+    <result column="RETURN_TYPE" jdbcType="VARCHAR" property="returnType" />
+    <result column="RETURN_STATU" jdbcType="VARCHAR" property="returnStatu" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="CHARGES_MONEY" jdbcType="DOUBLE" property="chargesMoney" />
+    <result column="FEE_RATE" jdbcType="DOUBLE" property="feeRate" />
+    <result column="ORDER_MONEY" jdbcType="DOUBLE" property="orderMoney" />
+    <result column="APPLY_RETURN_MONEY" jdbcType="DOUBLE" property="applyReturnMoney" />
+    <result column="FEE_RATE_REMARK" jdbcType="VARCHAR" property="feeRateRemark" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SETTLE_CUSTOMER_CODE,SETTLE_CUSTOMER_NAME,STATUS,REASONS,SALE_GROUP_CODE,SALE_GROUP_NAME,TRADE_TIME, PUBACCOUNT_ID, MERCHANT_CODE, SPECIAL_MERCHANT_CODE, DEVICE_SN, WEIXIN_ORDER_NO, 
+    MERCHANT_ORDER_NO, USER_FLAG, TRADE_TYPE, TRADE_STATU, PAY_BANK, CURRENCY_TYPE, SHSETTLE_ORDER_MONEY, 
+    VOUCHERS_MONEY, WEIXIN_RETURN_NO, MERCHANT_RETURN_NO, RETURN_MONEY, ERCHANGE_RETURN_MONEY, 
+    RETURN_TYPE, RETURN_STATU, MERCHANT_NAME, CHARGES_MONEY, FEE_RATE, ORDER_MONEY, APPLY_RETURN_MONEY, 
+    FEE_RATE_REMARK, WORK_ORDER, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+  
+  <select id="pageStatementSellRenew" parameterType="cn.com.glsx.supplychain.model.am.StatementSellRenew" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from am_statement_sell_renew
+  	<where>
+  		<if test="settleCustomerCode != null and settleCustomerCode != ''">
+            AND (SETTLE_CUSTOMER_CODE = #{settleCustomerCode,jdbcType=VARCHAR}
+        </if>
+        <if test="settleCustomerName != null and settleCustomerName !=''">
+            or SETTLE_CUSTOMER_NAME = #{settleCustomerName,jdbcType=VARCHAR})
+        </if>
+        <if test="status != null">
+        	AND STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="workOrder != null">
+        	AND WORK_ORDER = #{workOrder,jdbcType=VARCHAR}
+        </if>	
+  		<if test="startDate != null">
+            AND TRADE_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND TRADE_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="iptStartDate != null">
+            AND CREATED_DATE &gt;= #{iptStartDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="iptEndDate != null">
+            AND CREATED_DATE &lt;= #{iptEndDate,jdbcType=TIMESTAMP}
+        </if>
+  	</where>
+  </select>
+</mapper>

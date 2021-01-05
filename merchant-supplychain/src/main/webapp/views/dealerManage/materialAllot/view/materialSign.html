@@ -1,0 +1,64 @@
+<div class="inmodal">
+        <div class="modal-header">
+            <h4 class="modal-title">签收确认</h4>
+            <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal form-fixed form-fixed-8" name="advance_form" role="form">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">始发商户 :</label>
+                    <div class="col-lg-8">
+                        <div class="form-control-static">
+                        	{{signData.fromMerchantName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">物料编码 :</label>
+                    <div class="col-lg-8">
+                        <div class="form-control-static">
+                            {{signData.materialCode}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">物料名称 :</label>
+                    <div class="col-lg-8">
+                        <div class="form-control-static">
+                            {{signData.materialName}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">数量 :</label>
+                    <div class="col-lg-8">
+                        <div class="form-control-static">
+                            {{signData.deliNum}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+	                <label class="col-lg-4 control-label required">实际签收 :</label>
+	                <div class="row">
+	                    <div class="col-lg-4">
+	                       <input name="signNum" class="form-control" type="text" ng-required="true" ng-model="signData.signNum"/>
+	                    </div>
+	                    <span class="form-control-static pull-left">个</span>
+	                    <div class="m-t-xs"
+	                         ng-show="advance_form.signNum.$invalid && advance_form.submitted">
+	                        <small class="text-danger"
+	                               ng-show="advance_form.signNum.$error.required">请填写实际签收数量！
+	                        </small>
+	                    </div>
+	                </div>
+	            </div>            
+            </form>
+        </div>
+        <div class="modal-footer">
+			<button type="submit" class="btn btn-primary" ng-click="materialSign();">确定</button>
+			<button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+		</div>
+    </div>

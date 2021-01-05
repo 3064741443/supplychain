@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.BsMerchantOrderDetailMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.BsMerchantOrderDetail">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="MERCHANT_ORDER_NUMBER" jdbcType="VARCHAR" property="merchantOrderNumber" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="ORDER_QUANTITY" jdbcType="INTEGER" property="orderQuantity" />
+    <result column="CHECK_QUANTITY" jdbcType="INTEGER" property="checkQuantity" />
+    <result column="ACCEPT_QUANTITY" jdbcType="INTEGER" property="acceptQuantity" />
+    <result column="DISPATCH_ORDER_NUMBER" jdbcType="VARCHAR" property="dispatchOrderNumber" />
+    <result column="CHECK_BY" jdbcType="VARCHAR" property="checkBy" />
+    <result column="CHECK_TIME" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="SUBJECT_ID" jdbcType="INTEGER" property="subjectId" />
+    <result column="INSURE" jdbcType="VARCHAR" property="insure" />
+    <result column="PRODUCT_REMARKS" jdbcType="VARCHAR" property="productRemarks" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MERCHANT_ORDER_NUMBER, PRODUCT_CODE, ORDER_QUANTITY, CHECK_QUANTITY, ACCEPT_QUANTITY, 
+    DISPATCH_ORDER_NUMBER, CHECK_BY, CHECK_TIME, SUBJECT_ID, INSURE, PRODUCT_REMARKS, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrderDetail">
+    insert into bs_merchant_order_detail (ID, MERCHANT_ORDER_NUMBER, PRODUCT_CODE, 
+      ORDER_QUANTITY, CHECK_QUANTITY, ACCEPT_QUANTITY, 
+      DISPATCH_ORDER_NUMBER, CHECK_BY, CHECK_TIME, 
+      SUBJECT_ID, INSURE, PRODUCT_REMARKS, 
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG)
+    values (#{id,jdbcType=BIGINT}, #{merchantOrderNumber,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, 
+      #{orderQuantity,jdbcType=INTEGER}, #{checkQuantity,jdbcType=INTEGER}, #{acceptQuantity,jdbcType=INTEGER}, 
+      #{dispatchOrderNumber,jdbcType=VARCHAR}, #{checkBy,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, 
+      #{subjectId,jdbcType=INTEGER}, #{insure,jdbcType=VARCHAR}, #{productRemarks,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrderDetail">
+    insert into bs_merchant_order_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="merchantOrderNumber != null">
+        MERCHANT_ORDER_NUMBER,
+      </if>
+      <if test="productCode != null">
+        PRODUCT_CODE,
+      </if>
+      <if test="orderQuantity != null">
+        ORDER_QUANTITY,
+      </if>
+      <if test="checkQuantity != null">
+        CHECK_QUANTITY,
+      </if>
+      <if test="acceptQuantity != null">
+        ACCEPT_QUANTITY,
+      </if>
+      <if test="dispatchOrderNumber != null">
+        DISPATCH_ORDER_NUMBER,
+      </if>
+      <if test="checkBy != null">
+        CHECK_BY,
+      </if>
+      <if test="checkTime != null">
+        CHECK_TIME,
+      </if>
+      <if test="subjectId != null">
+        SUBJECT_ID,
+      </if>
+      <if test="insure != null">
+        INSURE,
+      </if>
+      <if test="productRemarks != null">
+        PRODUCT_REMARKS,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantOrderNumber != null">
+        #{merchantOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderQuantity != null">
+        #{orderQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="checkQuantity != null">
+        #{checkQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="acceptQuantity != null">
+        #{acceptQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchOrderNumber != null">
+        #{dispatchOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="checkBy != null">
+        #{checkBy,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="insure != null">
+        #{insure,jdbcType=VARCHAR},
+      </if>
+      <if test="productRemarks != null">
+        #{productRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrderDetail">
+    update bs_merchant_order_detail
+    <set>
+      <if test="merchantOrderNumber != null">
+        MERCHANT_ORDER_NUMBER = #{merchantOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderQuantity != null">
+        ORDER_QUANTITY = #{orderQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="checkQuantity != null">
+        CHECK_QUANTITY = #{checkQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="acceptQuantity != null">
+        ACCEPT_QUANTITY = #{acceptQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchOrderNumber != null">
+        DISPATCH_ORDER_NUMBER = #{dispatchOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="checkBy != null">
+        CHECK_BY = #{checkBy,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        CHECK_TIME = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subjectId != null">
+        SUBJECT_ID = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="insure != null">
+        INSURE = #{insure,jdbcType=VARCHAR},
+      </if>
+      <if test="productRemarks != null">
+        PRODUCT_REMARKS = #{productRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrderDetail">
+    update bs_merchant_order_detail
+    set MERCHANT_ORDER_NUMBER = #{merchantOrderNumber,jdbcType=VARCHAR},
+      PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      ORDER_QUANTITY = #{orderQuantity,jdbcType=INTEGER},
+      CHECK_QUANTITY = #{checkQuantity,jdbcType=INTEGER},
+      ACCEPT_QUANTITY = #{acceptQuantity,jdbcType=INTEGER},
+      DISPATCH_ORDER_NUMBER = #{dispatchOrderNumber,jdbcType=VARCHAR},
+      CHECK_BY = #{checkBy,jdbcType=VARCHAR},
+      CHECK_TIME = #{checkTime,jdbcType=TIMESTAMP},
+      SUBJECT_ID = #{subjectId,jdbcType=INTEGER},
+      INSURE = #{insure,jdbcType=VARCHAR},
+      PRODUCT_REMARKS = #{productRemarks,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="webapp-supplychain-jst:war">
+    <output-path>$PROJECT_DIR$/webapp-supplychain-jst/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>webapp-supplychain-jst</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="webapp-supplychain-jst.war">
+      <element id="artifact" artifact-name="webapp-supplychain-jst:war exploded" />
+    </root>
+  </artifact>
+</component>

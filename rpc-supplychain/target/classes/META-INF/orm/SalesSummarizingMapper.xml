@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.SalesSummarizingMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.SalesSummarizing">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="SALES_TIME" property="salesTime" jdbcType="TIMESTAMP"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, MERCHANT_CODE, STATUS, SALES_TIME, CREATED_BY,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <sql id="s_Base_Column_List">
+    s.ID, s.MERCHANT_CODE, s.STATUS, s.SALES_TIME, s.CREATED_BY,
+    s.CREATED_DATE, s.UPDATED_BY, s.UPDATED_DATE, s.DELETED_FLAG
+  </sql>
+
+    <select id="listSalesSummarizing" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizing"
+            resultMap="BaseResultMap">
+        select
+        ui.MERCHANT_NAME,
+        <include refid="s_Base_Column_List"/>
+        from bs_sales_summarizing s
+        left join bs_dealer_user_info ui on s.MERCHANT_CODE = ui.MERCHANT_CODE
+        where s.DELETED_FLAG="N"
+        <if test="merchantName != null">
+            AND ui.MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="merchantCode != null">
+            AND s.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            AND s.STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="salesTime != null">
+            AND s.SALES_TIME = #{salesTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="startDate != null">
+            AND s.SALES_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND s.SALES_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        order by s.CREATED_DATE DESC
+    </select>
+
+    <select id="selectMaxTimeSalesSummarizing" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizing"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_sales_summarizing
+        where DELETED_FLAG = "N"
+        AND SALES_TIME = (select MAX(SALES_TIME) from bs_sales_summarizing where MERCHANT_CODE =
+        #{merchantCode,jdbcType=VARCHAR})
+    </select>
+
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizing">
+        update bs_sales_summarizing
+        <set>
+            <if test="merchantCode != null">
+                MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="salesTime != null">
+                SALES_TIME = #{salesTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizing" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_sales_summarizing
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="merchantCode != null" >
+                MERCHANT_CODE,
+            </if>
+            <if test="status != null" >
+                STATUS,
+            </if>
+            <if test="salesTime != null" >
+                SALES_TIME,
+            </if>
+            <if test="createdBy != null" >
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null" >
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null" >
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null" >
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null" >
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="merchantCode != null" >
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="salesTime != null" >
+                #{salesTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createdBy != null" >
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null" >
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null" >
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null" >
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null" >
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="addSalesSummarizingList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        insert into bs_sales_summarizing(MERCHANT_CODE,STATUS,SALES_TIME,CREATED_BY, CREATED_DATE, UPDATED_BY,
+        UPDATED_DATE,
+        DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.merchantCode,jdbcType=VARCHAR},
+            #{item.status,jdbcType=TINYINT},
+            #{item.salesTime,jdbcType=TIMESTAMP},
+            #{item.createdBy,jdbcType=VARCHAR},
+            #{item.createdDate,jdbcType=TIMESTAMP},
+            #{item.updatedBy,jdbcType=VARCHAR},
+            #{item.updatedDate,jdbcType=TIMESTAMP},
+            #{item.deletedFlag,jdbcType=VARCHAR}
+            )
+        </foreach>
+        on duplicate key update
+        MERCHANT_CODE = values(MERCHANT_CODE),
+        STATUS = values(STATUS),
+        SALES_TIME = values(SALES_TIME),
+        CREATED_BY = values(CREATED_BY),
+        UPDATED_BY = values(UPDATED_BY),
+        CREATED_DATE = values(CREATED_DATE),
+        UPDATED_DATE = values(UPDATED_DATE),
+        DELETED_FLAG = values(DELETED_FLAG)
+    </insert>
+
+    <select id="exportSalesSummarizingExit" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizing" resultMap="BaseResultMap">
+        select
+        ui.MERCHANT_NAME,
+        <include refid="s_Base_Column_List" />
+        from bs_sales_summarizing s
+        left join bs_dealer_user_info ui on s.MERCHANT_CODE = ui.MERCHANT_CODE
+        where  s.STATUS BETWEEN 4 AND 5
+            <if test="merchantName != null and merchantName != ''">
+                AND ui.MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR}
+            </if>
+            <if test="merchantCode != null">
+                AND s.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+            </if>
+            <if test="salesTime != null and salesTime != ''">
+                AND s.SALES_TIME = #{salesTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="createdDate != null and createdDate != ''">
+                AND s.CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="startDate != null">
+                AND s.SALES_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endDate != null">
+                AND s.SALES_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+            </if>
+        ORDER BY s.ID DESC
+    </select>
+
+    <select id="getDate" resultType="java.util.Date">
+        select SALES_TIME
+        from bs_sales_summarizing
+        where DELETED_FLAG = 'N'
+    </select>
+
+    <update id="batchUpdateByid" parameterType="java.util.List">
+        update bs_sales_summarizing set
+        <if test="status != null">
+            STATUS = #{status,jdbcType=VARCHAR}
+        </if>
+        where 1=1 and ID
+        <foreach collection="ids" item="item" index="index" open="in (" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

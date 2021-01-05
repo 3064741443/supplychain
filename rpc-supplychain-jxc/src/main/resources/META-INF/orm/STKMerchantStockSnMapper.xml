@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.STKMerchantStockSnMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.STKMerchantStockSn">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="to_merchant_code" jdbcType="VARCHAR" property="toMerchantCode" />
+    <result column="to_merchant_name" jdbcType="VARCHAR" property="toMerchantName" />
+    <result column="cur_merchant_code" jdbcType="VARCHAR" property="curMerchantCode" />
+    <result column="cur_merchant_name" jdbcType="VARCHAR" property="curMerchantName" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="active_time" jdbcType="VARCHAR" property="activeTime" />
+    <result column="send_time" jdbcType="VARCHAR" property="sendTime" />
+    <result column="transfer_time" jdbcType="VARCHAR" property="transferTime" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sn, to_merchant_code, to_merchant_name, cur_merchant_code, cur_merchant_name, 
+    device_type, material_code, material_name, active_time, send_time, transfer_time, 
+    created_by, created_date, updated_by, updated_date, deleted_flag
+  </sql>
+
+  <select id="exportMerchantStockSn" parameterType="cn.com.glsx.supplychain.jxc.model.STKMerchantStockSn"
+          resultType="cn.com.glsx.supplychain.jxc.dto.STKMerchantStockSnDTO">
+    select
+    smsss.sn as sn,
+    smsss.to_merchant_code as toMerchantCode,
+    smsss.to_merchant_name as toMerchantName,
+    smsss.cur_merchant_code as curMerchantCode,
+    smsss.cur_merchant_name as curMerchantName,
+    dt.name as deviceTypeName,
+    smsss.material_code as materialCode,
+    smsss.material_name as materialName,
+    smsss.active_time as activeTime,
+    smsss.send_time as sendTime,
+    smsss.transfer_time as transferTime,
+    smsss.active_sys_flag as activeSysFlag,
+    smsss.demolish_flag as demolishFlag
+    FROM stk_merchant_stock_sn smsss
+    LEFT JOIN device_type AS dt ON(smsss.device_type = dt.ID)
+    <where>
+      <if test="deviceType != null">
+       and smsss.device_type= #{deviceType,jdbcType=INTEGER}
+      </if>
+      <if test="updatedDate != null">
+        and smsss.updated_date &lt;= #{updatedDate,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by smsss.id desc
+  </select>
+  
+</mapper>

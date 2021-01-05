@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="rpc-supplychain-jxc:war">
+    <output-path>$PROJECT_DIR$/rpc-supplychain-jxc/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>rpc-supplychain-jxc</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="rpc-supplychain-jxc.war">
+      <element id="artifact" artifact-name="rpc-supplychain-jxc:war exploded" />
+    </root>
+  </artifact>
+</component>

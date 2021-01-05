@@ -1,0 +1,101 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">添加产品项</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="addItem_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">产品:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="product"  ng-model="itemData.product" ng-init="itemData.product" ng-required="true" ng-change="proChange(itemData.product)" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in proList" >
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="addItem_form.product.$invalid && addItem_form.submitted">
+                                <small class="text-danger" ng-show="addItem_form.product.$error.required">请选择产品</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">发货时间:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <input date-range-picker options="singleDateSettings"  name="sendTime"
+                                   class="form-control date-picker" type="text" ng-model="itemData.sendTime"  ng-required="true"/>
+                        </div>
+                    </div>
+                    <div class="m-t-xs"
+                                 ng-show="timeErrShow">
+                                <small class="text-danger" ng-show="timeErrShow">请选择时间</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+                    <colgroup>
+                        <col width="20%" />
+                        <col width="30%" />
+                        <col width="20%" />
+                        <col width="30%" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td class="text-right">产品名称 :</td>
+                        <td class="text-left">{{ itemData.product.productName||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">服务套餐 :</td>
+                        <td class="text-left">{{ itemData.product.packageOne||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">服务期限 :</td>
+                        <td class="text-left">{{ itemData.product.serviceTime||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">单位 :</td>
+                        <td class="text-left">{{ itemData.product.unitType||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">物料名称 :</td>
+                        <td class="text-left">{{ material.materialName||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">物料编号 :</td>
+                        <td class="text-left">{{ material.materialCode||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">硬件单价 :</td>
+                        <td class="text-left">{{ material.hardwarePrice||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">服务费单价 :</td>
+                        <td class="text-left">{{ material.servicePrice||'--' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">合计单价 :</td>
+                        <td class="text-left">{{ material.price||'--' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="add()">添加</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

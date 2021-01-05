@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.ExsysDispatchLogMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.ExsysDispatchLog">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="IMSI" jdbcType="VARCHAR" property="imsi" />
+    <result column="SIM_PHONE" jdbcType="VARCHAR" property="simPhone" />
+    <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo" />
+    <result column="PACKAGE_NO" jdbcType="VARCHAR" property="packageNo" />
+    <result column="TO_MERCHANT_NO" jdbcType="VARCHAR" property="toMerchantNo" />
+    <result column="OPERATORMERCHANT_NO" jdbcType="VARCHAR" property="operatormerchantNo" />
+    <result column="FACTORY_NO" jdbcType="VARCHAR" property="factoryNo" />
+    <result column="FACTORY_NAME" jdbcType="VARCHAR" property="factoryName" />
+    <result column="VERIF_CODE" jdbcType="VARCHAR" property="verifCode" />
+    <result column="DISPATCH_NO" jdbcType="VARCHAR" property="dispatchNo" />
+    <result column="PRODUCT_NO" jdbcType="VARCHAR" property="productNo" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="ORDER_NO" jdbcType="VARCHAR" property="orderNo" />
+    <result column="THIRD_ORDER_NO" jdbcType="VARCHAR" property="thirdOrderNo" />
+    <result column="IN_TIMESTAMP" jdbcType="BIGINT" property="inTimestamp" />
+    <result column="OUT_TIMESTAMP" jdbcType="BIGINT" property="outTimestamp" />
+    <result column="MNUM_NAME" jdbcType="VARCHAR" property="mnumName" />
+    <result column="DEVICE_CODE" jdbcType="INTEGER" property="deviceCode" />
+    <result column="DEVICE_CODE_NAME" jdbcType="VARCHAR" property="deviceCodeName" />
+    <result column="DEVICE_TYPE" jdbcType="INTEGER" property="deviceType" />
+    <result column="DEVICE_TYPE_NAME" jdbcType="VARCHAR" property="deviceTypeName" />
+    <result column="SOFTVERSION" jdbcType="VARCHAR" property="softversion" />
+    <result column="SYSTEM_FLAG" jdbcType="VARCHAR" property="systemFlag" />
+    <result column="MODULE_FLAG" jdbcType="VARCHAR" property="moduleFlag" />
+    <result column="RESENT_COUNT" jdbcType="INTEGER" property="resentCount" />
+    <result column="RESENT_MAX" jdbcType="INTEGER" property="resentMax" />
+    <result column="RET_CODE" jdbcType="VARCHAR" property="retCode" />
+    <result column="RET_DESC" jdbcType="VARCHAR" property="retDesc" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SN, ICCID, IMEI,IMSI SIM_PHONE, CARD_NO, PACKAGE_NO, TO_MERCHANT_NO, OPERATORMERCHANT_NO, 
+    FACTORY_NO,FACTORY_NAME, VERIF_CODE, DISPATCH_NO, PRODUCT_NO, PRODUCT_NAME, ORDER_NO, THIRD_ORDER_NO, 
+    IN_TIMESTAMP, OUT_TIMESTAMP, MNUM_NAME, DEVICE_CODE,DEVICE_CODE_NAME,DEVICE_TYPE, DEVICE_TYPE_NAME, SOFTVERSION,SYSTEM_FLAG,MODULE_FLAG, 
+    RESENT_COUNT, RESENT_MAX, RET_CODE,RET_DESC,CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <select id="listExsysDispatchLog" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from exsys_dispatch_log
+  	where RESENT_COUNT &lt; RESENT_MAX
+  </select>
+ 
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchLog">
+    insert into exsys_dispatch_log (ID, SN, ICCID, 
+      IMEI, IMSI,SIM_PHONE, CARD_NO, 
+      PACKAGE_NO, TO_MERCHANT_NO, OPERATORMERCHANT_NO, 
+      FACTORY_NO,FACTORY_NAME, VERIF_CODE, DISPATCH_NO, 
+      PRODUCT_NO, PRODUCT_NAME, ORDER_NO, 
+      THIRD_ORDER_NO, IN_TIMESTAMP, OUT_TIMESTAMP, 
+      MNUM_NAME, DEVICE_CODE,DEVICE_CODE_NAME,DEVICE_TYPE, DEVICE_TYPE_NAME, SOFTVERSION,
+      SYSTEM_FLAG,MODULE_FLAG, RESENT_COUNT, RESENT_MAX,RET_CODE,RET_DESC,
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}, #{iccid,jdbcType=VARCHAR}, 
+      #{imei,jdbcType=VARCHAR},#{imsi,jdbcType=VARCHAR}, #{simPhone,jdbcType=VARCHAR}, #{cardNo,jdbcType=VARCHAR}, 
+      #{packageNo,jdbcType=VARCHAR}, #{toMerchantNo,jdbcType=VARCHAR}, #{operatormerchantNo,jdbcType=VARCHAR}, 
+      #{factoryNo,jdbcType=VARCHAR},#{factoryName,jdbcType=VARCHAR}, #{verifCode,jdbcType=VARCHAR}, #{dispatchNo,jdbcType=VARCHAR}, 
+      #{productNo,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{thirdOrderNo,jdbcType=VARCHAR}, #{inTimestamp,jdbcType=BIGINT}, #{outTimestamp,jdbcType=BIGINT}, 
+      #{mnumName,jdbcType=VARCHAR}, #{deviceCode,jdbcType=INTEGER}, #{deviceCodeName,jdbcType=VARCHAR}, #{deviceType,jdbcType=INTEGER}, #{deviceTypeName,jdbcType=VARCHAR}, #{softversion,jdbcType=VARCHAR},
+      #{systemFlag,jdbcType=VARCHAR}, #{moduleFlag,jdbcType=VARCHAR},#{resentCount,jdbcType=INTEGER}, #{resentMax,jdbcType=INTEGER}, #{retCode,jdbcType=VARCHAR},#{retDesc,jdbcType=VARCHAR},
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchLog">
+    insert into exsys_dispatch_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sn != null">
+        SN,
+      </if>
+      <if test="iccid != null">
+        ICCID,
+      </if>
+      <if test="imei != null">
+        IMEI,
+      </if>
+      <if test="imsi != null">
+        IMSI,
+      </if>
+      <if test="simPhone != null">
+        SIM_PHONE,
+      </if>
+      <if test="cardNo != null">
+        CARD_NO,
+      </if>
+      <if test="packageNo != null">
+        PACKAGE_NO,
+      </if>
+      <if test="toMerchantNo != null">
+        TO_MERCHANT_NO,
+      </if>
+      <if test="operatormerchantNo != null">
+        OPERATORMERCHANT_NO,
+      </if>
+      <if test="factoryNo != null">
+        FACTORY_NO,
+      </if>
+      <if test="factoryName != null">
+        FACTORY_NAME,
+      </if>
+      <if test="verifCode != null">
+        VERIF_CODE,
+      </if>
+      <if test="dispatchNo != null">
+        DISPATCH_NO,
+      </if>
+      <if test="productNo != null">
+        PRODUCT_NO,
+      </if>
+      <if test="productName != null">
+        PRODUCT_NAME,
+      </if>
+      <if test="orderNo != null">
+        ORDER_NO,
+      </if>
+      <if test="thirdOrderNo != null">
+        THIRD_ORDER_NO,
+      </if>
+      <if test="inTimestamp != null">
+        IN_TIMESTAMP,
+      </if>
+      <if test="outTimestamp != null">
+        OUT_TIMESTAMP,
+      </if>
+      <if test="mnumName != null">
+        MNUM_NAME,
+      </if>
+      <if test="deviceCode != null">
+      	DEVICE_CODE,
+      </if>
+      <if test="deviceCodeName != null">
+      	DEVICE_CODE_NAME,
+      </if>
+      <if test="deviceType != null">
+        DEVICE_TYPE,
+      </if>
+      <if test="deviceTypeName != null">
+        DEVICE_TYPE_NAME,
+      </if>
+      <if test="softversion != null">
+      	SOFTVERSION,
+      </if>
+      <if test="systemFlag != null">
+        SYSTEM_FLAG,
+      </if>
+      <if test="moduleFlag != null">
+      	MODULE_FLAG,
+      </if>
+      <if test="resentCount != null">
+        RESENT_COUNT,
+      </if>
+      <if test="resentMax != null">
+        RESENT_MAX,
+      </if>
+      <if test="retCode != null">
+      	RET_CODE,
+      </if>
+      <if test="retDesc != null">
+      	RET_DESC,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="imsi != null">
+        #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="simPhone != null">
+        #{simPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="packageNo != null">
+        #{packageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="toMerchantNo != null">
+        #{toMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="operatormerchantNo != null">
+        #{operatormerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryNo != null">
+        #{factoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryName != null">
+        #{factoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="verifCode != null">
+        #{verifCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatchNo != null">
+        #{dispatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrderNo != null">
+        #{thirdOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inTimestamp != null">
+        #{inTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="outTimestamp != null">
+        #{outTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="mnumName != null">
+        #{mnumName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+      	#{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="deviceCodeName != null">
+      	#{deviceCodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="deviceTypeName != null">
+        #{deviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="softversion != null">
+      	#{softversion,jdbcType=VARCHAR},
+      </if>
+      <if test="systemFlag != null">
+        #{systemFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleFlag != null">
+      	#{moduleFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="resentCount != null">
+        #{resentCount,jdbcType=INTEGER},
+      </if>
+      <if test="resentMax != null">
+        #{resentMax,jdbcType=INTEGER},
+      </if>
+      <if test="retCode != null">
+      	#{retCode,jdbcType=VARCHAR},
+      </if>
+      <if test="retDesc != null">
+      	#{retDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchLog">
+    update exsys_dispatch_log
+    <set>
+      <if test="sn != null">
+        SN = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="imsi != null">
+        IMSI = #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="simPhone != null">
+        SIM_PHONE = #{simPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNo != null">
+        CARD_NO = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="packageNo != null">
+        PACKAGE_NO = #{packageNo,jdbcType=VARCHAR},
+      </if>
+      <if test="toMerchantNo != null">
+        TO_MERCHANT_NO = #{toMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="operatormerchantNo != null">
+        OPERATORMERCHANT_NO = #{operatormerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryNo != null">
+        FACTORY_NO = #{factoryNo,jdbcType=VARCHAR},
+      </if>
+      <if test="factoryName != null">
+        FACTORY_NAME = #{factoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="verifCode != null">
+        VERIF_CODE = #{verifCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dispatchNo != null">
+        DISPATCH_NO = #{dispatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productNo != null">
+        PRODUCT_NO = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        ORDER_NO = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdOrderNo != null">
+        THIRD_ORDER_NO = #{thirdOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inTimestamp != null">
+        IN_TIMESTAMP = #{inTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="outTimestamp != null">
+        OUT_TIMESTAMP = #{outTimestamp,jdbcType=BIGINT},
+      </if>
+      <if test="mnumName != null">
+        MNUM_NAME = #{mnumName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+      	DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="deviceCodeName != null">
+      	DEVICE_CODE_Name = #{deviceCodeName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        DEVICE_TYPE = #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="deviceTypeName != null">
+        DEVICE_TYPE_NAME = #{deviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="softversion != null">
+      	SOFTVERSION = #{softversion,jdbcType=VARCHAR},
+      </if>
+      <if test="systemFlag != null">
+        SYSTEM_FLAG = #{systemFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleFlag != null">
+      	MODULE_FLAG = #{moduleFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="resentCount != null">
+        RESENT_COUNT = #{resentCount,jdbcType=INTEGER},
+      </if>
+      <if test="resentMax != null">
+        RESENT_MAX = #{resentMax,jdbcType=INTEGER},
+      </if>
+      <if test="retCode != null">
+      	RET_CODE = #{retCode,jdbcType=VARCHAR},
+      </if>
+      <if test="retDesc != null">
+      	RET_DESC = #{retDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchLog">
+    update exsys_dispatch_log
+    set SN = #{sn,jdbcType=VARCHAR},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      IMSI = #{imsi,jdbcType=VARCHAR},
+      SIM_PHONE = #{simPhone,jdbcType=VARCHAR},
+      CARD_NO = #{cardNo,jdbcType=VARCHAR},
+      PACKAGE_NO = #{packageNo,jdbcType=VARCHAR},
+      TO_MERCHANT_NO = #{toMerchantNo,jdbcType=VARCHAR},
+      OPERATORMERCHANT_NO = #{operatormerchantNo,jdbcType=VARCHAR},
+      FACTORY_NO = #{factoryNo,jdbcType=VARCHAR},
+      FACTORY_NAME = #{factoryName,jdbcType=VARCHAR},
+      VERIF_CODE = #{verifCode,jdbcType=VARCHAR},
+      DISPATCH_NO = #{dispatchNo,jdbcType=VARCHAR},
+      PRODUCT_NO = #{productNo,jdbcType=VARCHAR},
+      PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+      ORDER_NO = #{orderNo,jdbcType=VARCHAR},
+      THIRD_ORDER_NO = #{thirdOrderNo,jdbcType=VARCHAR},
+      IN_TIMESTAMP = #{inTimestamp,jdbcType=BIGINT},
+      OUT_TIMESTAMP = #{outTimestamp,jdbcType=BIGINT},
+      MNUM_NAME = #{mnumName,jdbcType=VARCHAR},
+      DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      DEVICE_CODE_NAME = #{deviceCodeName,jdbcType=VARCHAR},
+      DEVICE_TYPE = #{deviceType,jdbcType=INTEGER},
+      DEVICE_TYPE_NAME = #{deviceTypeName,jdbcType=VARCHAR},
+      SOFTVERSION = #{softversion,jdbcType=VARCHAR},
+      SYSTEM_FLAG = #{systemFlag,jdbcType=VARCHAR},
+      MODULE_FLAG = #{moduleFlag,jdbcType=VARCHAR},
+      RESENT_COUNT = #{resentCount,jdbcType=INTEGER},
+      RESENT_MAX = #{resentMax,jdbcType=INTEGER},
+      RET_CODE = #{retCode,jdbcType=VARCHAR},
+      RET_DESC = #{retDesc,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

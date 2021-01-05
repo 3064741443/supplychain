@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.BsAfterSaleOrderMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.BsAfterSaleOrder">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+    <result column="ORDER_TIME" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="REASON" jdbcType="VARCHAR" property="reason" />
+    <result column="REJECT" jdbcType="VARCHAR" property="reject" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_NUMBER, TYPE, ORDER_TIME, MERCHANT_CODE, PRODUCT_CODE, STATUS, REASON, 
+    REJECT, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bs_after_sale_order
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="listBsAfterSaleOrderByConditon" parameterType="glsx.com.cn.task.model.BsAfterSaleOrder" resultType="glsx.com.cn.task.model.BsAfterSaleOrder">
+  	SELECT o.order_number as orderNumber,o.updated_date as updatedDate,o.created_by as createdBy, o.updated_by as updatedBy,o.merchant_code as merchantCode,u.MERCHANT_NAME as merchantName,p.MATERIAL_CODE as materialCode,
+	(SELECT COUNT(sn) FROM bs_after_sale_order_detail AS d WHERE o.ORDER_NUMBER = d.AFTER_SALE_ORDER_NUMBER) AS quality FROM bs_after_sale_order AS o LEFT JOIN bs_dealer_user_info AS u
+	ON(o.MERCHANT_CODE=u.MERCHANT_CODE) LEFT JOIN bs_product_detail AS p ON(o.PRODUCT_CODE=p.PRODUCT_CODE) WHERE  
+	o.STATUS=5 AND o.TYPE=1 AND DATE_FORMAT(o.`UPDATED_DATE`,'%Y-%m-%d %H:%i:%s') > DATE_FORMAT(#{updatedDate},'%Y-%m-%d %H:%i:%s') AND (p.TYPE=0 or p.TYPE=7)
+	order by o.`UPDATED_DATE` asc 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bs_after_sale_order
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.BsAfterSaleOrder">
+    insert into bs_after_sale_order (ID, ORDER_NUMBER, TYPE, 
+      ORDER_TIME, MERCHANT_CODE, PRODUCT_CODE, 
+      STATUS, REASON, REJECT, 
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE, DELETED_FLAG)
+    values (#{id,jdbcType=BIGINT}, #{orderNumber,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{orderTime,jdbcType=TIMESTAMP}, #{merchantCode,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{reason,jdbcType=VARCHAR}, #{reject,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.BsAfterSaleOrder">
+    insert into bs_after_sale_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="orderNumber != null">
+        ORDER_NUMBER,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="orderTime != null">
+        ORDER_TIME,
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE,
+      </if>
+      <if test="productCode != null">
+        PRODUCT_CODE,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="reason != null">
+        REASON,
+      </if>
+      <if test="reject != null">
+        REJECT,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="orderTime != null">
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="reject != null">
+        #{reject,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.BsAfterSaleOrder">
+    update bs_after_sale_order
+    <set>
+      <if test="orderNumber != null">
+        ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="orderTime != null">
+        ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null">
+        PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="reason != null">
+        REASON = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="reject != null">
+        REJECT = #{reject,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.BsAfterSaleOrder">
+    update bs_after_sale_order
+    set ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=TINYINT},
+      ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+      MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=TINYINT},
+      REASON = #{reason,jdbcType=VARCHAR},
+      REJECT = #{reject,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

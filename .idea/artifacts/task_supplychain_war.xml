@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="task-supplychain:war">
+    <output-path>$PROJECT_DIR$/task-supplychain/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>task-supplychain</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="task-supplychain.war">
+      <element id="artifact" artifact-name="task-supplychain:war exploded" />
+    </root>
+  </artifact>
+</component>

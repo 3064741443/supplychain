@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="rpc-supplychain-udp:war">
+    <output-path>$PROJECT_DIR$/rpc-supplychain-udp/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>rpc-supplychain-udp</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="rpc-supplychain-udp.war">
+      <element id="artifact" artifact-name="rpc-supplychain-udp:war exploded" />
+    </root>
+  </artifact>
+</component>

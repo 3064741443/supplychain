@@ -1,0 +1,30 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <label class="col-lg-3 control-label">产品回寄地址 :</label>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+            <colgroup>
+                <col width="10%" />
+                <col width="20%" />
+                <col width="20%" />
+                <col width="30%" />
+            </colgroup>
+            <tbody>
+            <tr>
+                <td class="text-right">收货人 :</td>
+                <td class="text-left">{{ rollbackDetailMyafterData.receiveAddress.name }} / {{rollbackDetailMyafterData.receiveAddress.mobile }}</td>
+            </tr>
+            <tr>
+                <td class="text-right">收货地址 :</td>
+                <td class="text-left">{{ rollbackDetailMyafterData.receiveAddress.provinceName }}{{
+                    rollbackDetailMyafterData.receiveAddress.cityName }}{{ rollbackDetailMyafterData.receiveAddress.areaName
+                    }}{{ rollbackDetailMyafterData.receiveAddress.address }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

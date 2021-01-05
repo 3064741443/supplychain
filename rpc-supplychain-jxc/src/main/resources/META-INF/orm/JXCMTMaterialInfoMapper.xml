@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTMaterialInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTMaterialInfo">
+    <id column="material_id" jdbcType="INTEGER" property="materialId" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="term" jdbcType="INTEGER" property="term" />
+    <result column="price" jdbcType="DOUBLE" property="price" />
+    <result column="tax_rate" jdbcType="DOUBLE" property="taxRate" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_type_name" jdbcType="VARCHAR" property="productTypeName" />
+    <result column="material_type_id" jdbcType="INTEGER" property="materialTypeId" />
+    <result column="material_type_name" jdbcType="VARCHAR" property="materialTypeName" />
+    <result column="device_type_id" jdbcType="INTEGER" property="deviceTypeId" />
+    <result column="device_type" jdbcType="VARCHAR" property="deviceType" />
+    <result column="first_level_id" jdbcType="INTEGER" property="firstLevelId" />
+    <result column="first_level_name" jdbcType="VARCHAR" property="firstLevelName" />
+    <result column="second_level_id" jdbcType="INTEGER" property="secondLevelId" />
+    <result column="second_level_name" jdbcType="VARCHAR" property="secondLevelName" />
+    <result column="last_operator_id" jdbcType="INTEGER" property="lastOperatorId" />
+    <result column="last_operator_name" jdbcType="VARCHAR" property="lastOperatorName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="ND_SCAN" jdbcType="VARCHAR" property="ndScan" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    material_id, material_code, material_name, term, price, tax_rate, product_id, product_name, 
+    product_type_name, material_type_id, material_type_name, device_type_id, device_type, 
+    first_level_id, first_level_name, second_level_id, second_level_name, last_operator_id, 
+    last_operator_name, create_time, update_time, ND_SCAN
+  </sql>
+  
+  <select id="pageMaterialInfo" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTMaterialInfo" 
+  							resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from am_material_info
+  	<where>
+  		<if test="deviceTypeId != null">
+  			and device_type_id = #{deviceTypeId}
+  		</if>
+  		<if test="materialCode != null">
+  			and (material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="materialName != null">
+  			or material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+  		</if>
+  	</where>
+  	order by material_id desc					
+  </select>
+ 
+</mapper>

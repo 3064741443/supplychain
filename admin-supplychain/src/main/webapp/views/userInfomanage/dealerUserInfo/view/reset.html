@@ -1,0 +1,39 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">重置密码</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="reset_busUser_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">用户名 :</label>
+                <div class="control-content">
+                    <input class="form-control" type="text" ng-required="true"
+                           maxlength="50" ng-model="resetDealerUserData.name" disabled="disabled"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">密码 :</label>
+                <div class="control-content">
+                    <input name="password" class="form-control" type="text" ng-required="true"
+                           onKeyUp="[0-9]*$"
+                           maxlength="50" ng-model="resetDealerUserData.password"/>
+                    <div class="m-t-xs"
+                         ng-show="reset_busUser_form.password.$invalid && reset_busUser_form.submitted">
+                        <small class="text-danger"
+                               ng-show="reset_busUser_form.password.$error.required">请输入密码</small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

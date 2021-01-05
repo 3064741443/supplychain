@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTDeviceInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTDeviceInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="iccid" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+    <result column="WAREHOUSE_ID_UP" jdbcType="INTEGER" property="warehouseIdUp" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="VCODE" jdbcType="VARCHAR" property="vcode" />
+    <result column="imsi" jdbcType="VARCHAR" property="imsi" />
+    <result column="sim_card_no" jdbcType="VARCHAR" property="simCardNo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, iccid, IMEI, ATTRIB_CODE, BATCH, STATUS, WAREHOUSE_ID, WAREHOUSE_ID_UP, ORDER_CODE, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, SN, VCODE,imsi,simCardNo
+  </sql>
+ 
+</mapper>

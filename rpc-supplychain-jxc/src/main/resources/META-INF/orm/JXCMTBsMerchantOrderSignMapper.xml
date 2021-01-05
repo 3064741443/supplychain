@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTBsMerchantOrderSignMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTBsMerchantOrderSign">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="MERCHANT_ORDER_NUMBER" jdbcType="VARCHAR" property="merchantOrderNumber" />
+    <result column="MERCHANT_SIGN_NUMBER" jdbcType="VARCHAR" property="merchantSignNumber" />
+    <result column="SIGN_URL" jdbcType="VARCHAR" property="signUrl" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MERCHANT_ORDER_NUMBER, MERCHANT_SIGN_NUMBER, SIGN_URL, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>  
+  
+  <insert id="insertBsMerchantOrderSignOnDupliteKey" parameterType="java.util.List">
+  	insert into bs_merchant_order_sign(MERCHANT_ORDER_NUMBER, MERCHANT_SIGN_NUMBER, SIGN_URL, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG) values
+    <foreach collection="list" item="item" index="index" separator=",">
+    	(
+    	#{item.merchantOrderNumber,jdbcType=VARCHAR},
+    	#{item.merchantSignNumber,jdbcType=VARCHAR},
+    	#{item.signUrl,jdbcType=VARCHAR},
+    	#{item.createdBy,jdbcType=VARCHAR},
+    	#{item.createdDate,jdbcType=TIMESTAMP},
+    	#{item.updatedBy,jdbcType=VARCHAR},
+    	#{item.updatedDate,jdbcType=TIMESTAMP},
+    	#{item.deletedFlag,jdbcType=VARCHAR}
+    	)
+    </foreach>
+    on duplicate key update
+    MERCHANT_ORDER_NUMBER=values(MERCHANT_ORDER_NUMBER), 
+    MERCHANT_SIGN_NUMBER=values(MERCHANT_SIGN_NUMBER), 
+    SIGN_URL=values(SIGN_URL), 
+    CREATED_BY=values(CREATED_BY), 
+    CREATED_DATE=values(CREATED_DATE), 
+    UPDATED_BY=values(UPDATED_BY), 
+    UPDATED_DATE=values(UPDATED_DATE), 
+    DELETED_FLAG=values(DELETED_FLAG)
+  </insert>
+</mapper>

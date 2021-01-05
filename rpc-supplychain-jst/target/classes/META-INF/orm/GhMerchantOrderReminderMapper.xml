@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.GhMerchantOrderReminderMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.GhMerchantOrderReminder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="spa_purchase_code" jdbcType="INTEGER" property="spaPurchaseCode" />
+    <result column="gh_merchant_order_code" jdbcType="VARCHAR" property="ghMerchantOrderCode"/>
+    <result column="reminder_total" jdbcType="VARCHAR" property="reminderTotal" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, `spa_purchase_code`, `gh_merchant_order_code`, `reminder_total`, `created_by`, created_date, updated_by, updated_date
+  </sql>
+
+</mapper>

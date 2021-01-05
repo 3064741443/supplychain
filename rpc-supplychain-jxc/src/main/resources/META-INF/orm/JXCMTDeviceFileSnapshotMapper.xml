@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTDeviceFileSnapshotMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTDeviceFileSnapshot">
+    <id column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PACKAGE_STATU" jdbcType="VARCHAR" property="packageStatu" />
+    <result column="PACKAGE_ID" jdbcType="INTEGER" property="packageId" />
+    <result column="ANDROID_PACKAGE_ID" jdbcType="INTEGER" property="androidPackageId" />
+    <result column="PACKAGE_USER_ID" jdbcType="INTEGER" property="packageUserId" />
+    <result column="PACKAGE_USER_TIME" jdbcType="VARCHAR" property="packageUserTime" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="USER_TIME" jdbcType="VARCHAR" property="userTime" />
+    <result column="CARD_ID" jdbcType="INTEGER" property="cardId" />
+    <result column="CARD_TIME" jdbcType="VARCHAR" property="cardTime" />
+    <result column="FIRMWARE_ID" jdbcType="INTEGER" property="firmwareId" />
+    <result column="VEHICLE_ID" jdbcType="INTEGER" property="vehicleId" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    SN, ID, PACKAGE_STATU, PACKAGE_ID, ANDROID_PACKAGE_ID, PACKAGE_USER_ID, PACKAGE_USER_TIME, 
+    USER_ID, USER_TIME, CARD_ID, CARD_TIME, FIRMWARE_ID, VEHICLE_ID, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+ 
+</mapper>

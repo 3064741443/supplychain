@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.DeviceFileMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.DeviceFile">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="DEVICE_CODE" jdbcType="INTEGER" property="deviceCode" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="VERIF_CODE" jdbcType="VARCHAR" property="verifCode" />
+    <result column="BATCH_NO" jdbcType="VARCHAR" property="batchNo" />
+    <result column="PACKAGE_ID" jdbcType="INTEGER" property="packageId" />
+    <result column="ANDROID_PACKAGE_ID" jdbcType="INTEGER" property="androidPackageId" />
+    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+    <result column="ORDER_MERCHANT_NO" jdbcType="VARCHAR" property="orderMerchantNo" />
+    <result column="IN_STORAGE_TIME" jdbcType="VARCHAR" property="inStorageTime" />
+    <result column="OUT_STORAGE_TIME" jdbcType="VARCHAR" property="outStorageTime" />
+    <result column="OUT_STORAGE_TYPE" jdbcType="VARCHAR" property="outStorageType" />
+    <result column="TERMINAL_DISCODE" jdbcType="VARCHAR" property="terminalDiscode" />
+    <result column="EXTERNAL_FLAG" jdbcType="VARCHAR" property="externalFlag" />
+    <result column="MANUFACTURER_CODE" jdbcType="VARCHAR" property="manufacturerCode" />
+    <result column="FIRMWARE_ID" jdbcType="INTEGER" property="firmwareId" />
+    <result column="CARD_ID" jdbcType="INTEGER" property="cardId" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.com.glsx.supplychain.jst.model.DeviceFile">
+    <result column="REMARK" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SN, DEVICE_CODE, ORDER_CODE, VERIF_CODE, BATCH_NO, PACKAGE_ID, ANDROID_PACKAGE_ID, 
+    OPERATOR_MERCHANT_NO, SEND_MERCHANT_NO, ORDER_MERCHANT_NO, IN_STORAGE_TIME, OUT_STORAGE_TIME, 
+    OUT_STORAGE_TYPE, TERMINAL_DISCODE, EXTERNAL_FLAG, MANUFACTURER_CODE, FIRMWARE_ID, 
+    CARD_ID, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, IMEI
+  </sql>
+  <sql id="Blob_Column_List">
+    REMARK
+  </sql>
+  
+  <select id="listSnNotInMerchantStock" parameterType="java.util.List" resultType="cn.com.glsx.supplychain.jst.model.DeviceSnNotInMerchantStock">
+  	select f.sn as sn,f.send_merchant_no as sendMerchantNo,d.attrib_code as attribCode,d.iccid as iccid,f.out_storage_time as updatedDate,
+  	d.logistics_id as logisticsId from device_file as f left join order_info_detail as d on(f.sn=d.sn) where f.deleted_flag='N' and f.sn in
+  	<foreach collection="list" item="sn" index="index" open="(" close=")" separator=",">
+          #{sn}
+    </foreach>
+  </select>
+</mapper>

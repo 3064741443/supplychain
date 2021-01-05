@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.BsMerchantStockCainouMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.BsMerchantStockCainou">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="FROM_MERCHANT_CODE" jdbcType="VARCHAR" property="fromMerchantCode" />
+    <result column="FROM_MERCHANT_NAME" jdbcType="VARCHAR" property="fromMerchantName" />
+    <result column="TO_MERCHANT_CODE" jdbcType="VARCHAR" property="toMerchantCode" />
+    <result column="TO_MERCHANT_NAME" jdbcType="VARCHAR" property="toMerchantName" />
+    <result column="DEVICE_TYPE" jdbcType="INTEGER" property="deviceType" />
+    <result column="DEVICE_TYPE_NAME" jdbcType="VARCHAR" property="deviceTypeName" />
+    <result column="DELI_TIME" jdbcType="TIMESTAMP" property="deliTime" />
+    <result column="SIGN_TIME" jdbcType="TIMESTAMP" property="signTime" />
+    <result column="DELI_NUM" jdbcType="INTEGER" property="deliNum" />
+    <result column="SIGN_NUM" jdbcType="INTEGER" property="signNum" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="LOGISTICSCPY" jdbcType="VARCHAR" property="logisticscpy" />
+    <result column="LOGISTICSNO" jdbcType="VARCHAR" property="logisticsno" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MATERIAL_CODE, MATERIAL_NAME, FROM_MERCHANT_CODE, FROM_MERCHANT_NAME, TO_MERCHANT_CODE, 
+    TO_MERCHANT_NAME, DEVICE_TYPE, DEVICE_TYPE_NAME, DELI_TIME, SIGN_TIME, DELI_NUM, 
+    SIGN_NUM, STATUS, LOGISTICSCPY, LOGISTICSNO, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bs_merchant_stock_cainou
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bs_merchant_stock_cainou
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.BsMerchantStockCainou">
+    insert into bs_merchant_stock_cainou (ID, MATERIAL_CODE, MATERIAL_NAME, 
+      FROM_MERCHANT_CODE, FROM_MERCHANT_NAME, TO_MERCHANT_CODE, 
+      TO_MERCHANT_NAME, DEVICE_TYPE, DEVICE_TYPE_NAME, 
+      DELI_TIME, SIGN_TIME, DELI_NUM, 
+      SIGN_NUM, STATUS, LOGISTICSCPY, 
+      LOGISTICSNO, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=INTEGER}, #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
+      #{fromMerchantCode,jdbcType=VARCHAR}, #{fromMerchantName,jdbcType=VARCHAR}, #{toMerchantCode,jdbcType=VARCHAR}, 
+      #{toMerchantName,jdbcType=VARCHAR}, #{deviceType,jdbcType=INTEGER}, #{deviceTypeName,jdbcType=VARCHAR}, 
+      #{deliTime,jdbcType=TIMESTAMP}, #{signTime,jdbcType=TIMESTAMP}, #{deliNum,jdbcType=INTEGER}, 
+      #{signNum,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{logisticscpy,jdbcType=VARCHAR}, 
+      #{logisticsno,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.BsMerchantStockCainou">
+    insert into bs_merchant_stock_cainou
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE,
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME,
+      </if>
+      <if test="fromMerchantCode != null">
+        FROM_MERCHANT_CODE,
+      </if>
+      <if test="fromMerchantName != null">
+        FROM_MERCHANT_NAME,
+      </if>
+      <if test="toMerchantCode != null">
+        TO_MERCHANT_CODE,
+      </if>
+      <if test="toMerchantName != null">
+        TO_MERCHANT_NAME,
+      </if>
+      <if test="deviceType != null">
+        DEVICE_TYPE,
+      </if>
+      <if test="deviceTypeName != null">
+        DEVICE_TYPE_NAME,
+      </if>
+      <if test="deliTime != null">
+        DELI_TIME,
+      </if>
+      <if test="signTime != null">
+        SIGN_TIME,
+      </if>
+      <if test="deliNum != null">
+        DELI_NUM,
+      </if>
+      <if test="signNum != null">
+        SIGN_NUM,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="logisticscpy != null">
+        LOGISTICSCPY,
+      </if>
+      <if test="logisticsno != null">
+        LOGISTICSNO,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="materialCode != null">
+        #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="fromMerchantCode != null">
+        #{fromMerchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromMerchantName != null">
+        #{fromMerchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="toMerchantCode != null">
+        #{toMerchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toMerchantName != null">
+        #{toMerchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="deviceTypeName != null">
+        #{deviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliTime != null">
+        #{deliTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signTime != null">
+        #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deliNum != null">
+        #{deliNum,jdbcType=INTEGER},
+      </if>
+      <if test="signNum != null">
+        #{signNum,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="logisticscpy != null">
+        #{logisticscpy,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsno != null">
+        #{logisticsno,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.BsMerchantStockCainou">
+    update bs_merchant_stock_cainou
+    <set>
+      <if test="materialCode != null">
+        MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="fromMerchantCode != null">
+        FROM_MERCHANT_CODE = #{fromMerchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromMerchantName != null">
+        FROM_MERCHANT_NAME = #{fromMerchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="toMerchantCode != null">
+        TO_MERCHANT_CODE = #{toMerchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toMerchantName != null">
+        TO_MERCHANT_NAME = #{toMerchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null">
+        DEVICE_TYPE = #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="deviceTypeName != null">
+        DEVICE_TYPE_NAME = #{deviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliTime != null">
+        DELI_TIME = #{deliTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signTime != null">
+        SIGN_TIME = #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deliNum != null">
+        DELI_NUM = #{deliNum,jdbcType=INTEGER},
+      </if>
+      <if test="signNum != null">
+        SIGN_NUM = #{signNum,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="logisticscpy != null">
+        LOGISTICSCPY = #{logisticscpy,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsno != null">
+        LOGISTICSNO = #{logisticsno,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.BsMerchantStockCainou">
+    update bs_merchant_stock_cainou
+    set MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      FROM_MERCHANT_CODE = #{fromMerchantCode,jdbcType=VARCHAR},
+      FROM_MERCHANT_NAME = #{fromMerchantName,jdbcType=VARCHAR},
+      TO_MERCHANT_CODE = #{toMerchantCode,jdbcType=VARCHAR},
+      TO_MERCHANT_NAME = #{toMerchantName,jdbcType=VARCHAR},
+      DEVICE_TYPE = #{deviceType,jdbcType=INTEGER},
+      DEVICE_TYPE_NAME = #{deviceTypeName,jdbcType=VARCHAR},
+      DELI_TIME = #{deliTime,jdbcType=TIMESTAMP},
+      SIGN_TIME = #{signTime,jdbcType=TIMESTAMP},
+      DELI_NUM = #{deliNum,jdbcType=INTEGER},
+      SIGN_NUM = #{signNum,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=INTEGER},
+      LOGISTICSCPY = #{logisticscpy,jdbcType=VARCHAR},
+      LOGISTICSNO = #{logisticsno,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

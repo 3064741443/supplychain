@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.ProductSplitDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.ProductSplitDetail">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="TINYINT"/>
+        <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_NAME" property="materialName" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="TINYINT"/>
+        <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+        <result column="CHANNEL" property="channel" jdbcType="TINYINT"/>
+        <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR"/>
+        <result column="PACKAGE_ONE" property="OnePackage" jdbcType="VARCHAR"/>
+        <result column="SERVICE_TIME" property="serviceTime" jdbcType="VARCHAR"/>
+        <result column="prop_quantity" property="propQuantity" jdbcType="INTEGER"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, PRODUCT_CODE, SERVICE_TYPE, MATERIAL_CODE, MATERIAL_NAME, TYPE, PRODUCT_TYPE, CREATED_BY, CREATED_DATE,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG,prop_quantity
+  </sql>
+
+    <sql id="sd_Base_Column_List">
+    sd.id, sd.PRODUCT_CODE, sd.SERVICE_TYPE, sd.MATERIAL_CODE, sd.MATERIAL_NAME, sd.TYPE, sd.PRODUCT_TYPE, sd.CREATED_BY, sd.CREATED_DATE,
+    sd.UPDATED_BY, sd.UPDATED_DATE, sd.DELETED_FLAG,sd.prop_quantity
+  </sql>
+  
+  <select id="listProductCodesByMaterialCode" parameterType="java.lang.String" resultType="java.lang.String">
+  	select DISTINCT product_code from am_product_split_detail where MATERIAL_CODE=#{materialCode};
+  </select>
+
+    <select id="getlistProductSplitDetail" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitDetail"
+            resultMap="BaseResultMap">
+        select
+        ps.PRODUCT_NAME,ps.PACKAGE_ONE,ps.SERVICE_TIME,ps.MERCHANT_CODE,ps.CHANNEL,
+        <include refid="sd_Base_Column_List"/>
+        from
+        am_product_split_detail sd
+        left join am_product_split ps on sd.PRODUCT_CODE = ps.PRODUCT_CODE
+        left join am_product_merchant_hide pmd on pmd.MERCHANT_CODE = ps.MERCHANT_CODE
+        where
+        sd.PRODUCT_TYPE in ('0','7')
+        and ps.DELETED_FLAG = 'N'
+        <if test="merchantCode != null and merchantCode != '' and channel != null and channel != ''">
+            AND (ps.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}  or ps.CHANNEL = #{channel,jdbcType=VARCHAR})
+        </if>
+        <if test="productName != null and productName != '' and productCode != null and productCode != ''">
+            AND (ps.PRODUCT_NAME LIKE "%"#{productName,jdbcType=VARCHAR}"%" or ps.PRODUCT_CODE = #{productCode,jdbcType=VARCHAR})
+        </if>
+        <if test="serviceType != null and serviceType != ''">
+            AND ps.SERVICE_TYPE = #{serviceType,jdbcType=TINYINT}
+        </if>
+    </select>
+
+    <select id="listProductSplitDetail" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitDetail"
+            resultMap="BaseResultMap">
+        SELECT
+        sd.id,
+        sd.PRODUCT_CODE,
+        sd.SERVICE_TYPE,
+        sd.TYPE,
+        sd.PRODUCT_TYPE,
+        sd.CREATED_BY,
+        sd.CREATED_DATE,
+        sd.UPDATED_BY,
+        sd.UPDATED_DATE,
+        sd.DELETED_FLAG,
+        sd.prop_quantity,
+        msmi.MATERIAL_CODE,
+        msmi.material_name
+        FROM
+        am_product_split_detail sd
+        LEFT JOIN am_material_info msmi ON msmi.first_level_name = sd.MATERIAL_CODE
+        WHERE
+        sd.DELETED_FLAG = "N"
+        <if test="materialCode != null and materialCode != ''">
+            AND ( msmi.first_level_name = #{materialCode,jdbc=VARCHAR} OR msmi.MATERIAL_CODE =
+            #{materialCode,jdbc=VARCHAR})
+        </if>
+        and PRODUCT_CODE not in (SELECT PRODUCT_CODE FROM am_product_merchant_hide WHERE MERCHANT_CODE =
+        #{merchantCode,jdbcType=VARCHAR})
+        and sd.PRODUCT_TYPE in ('0','7')
+        AND sd.`MATERIAL_CODE` != ''
+        AND sd.PRODUCT_CODE in (
+        SELECT PRODUCT_CODE FROM am_product_split
+        where DELETED_FLAG = 'N'
+        <if test="serviceType != null and serviceType != ''">
+            AND SERVICE_TYPE = #{serviceType,jdbcType=TINYINT}
+        </if>
+        <if test="productName != null and productName != ''">
+            AND (PRODUCT_NAME LIKE "%"#{productName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="productCode != null and productCode != ''">
+            or PRODUCT_CODE = #{productCode,jdbcType=VARCHAR})
+        </if>
+        <if test="merchantCode != null and merchantCode != ''">
+            AND (MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="channel != null and channel != ''">
+            or CHANNEL = #{channel,jdbcType=VARCHAR})
+        </if>
+        )
+        AND
+        sd.MATERIAL_CODE in (SELECT msami.MATERIAL_CODE FROM am_material_info msami LEFT JOIN am_product_split_detail
+        msasd ON msami.material_code = msasd.MATERIAL_CODE)
+        <if test="materialCode != null and materialCode != ''">
+            AND ( sd.MATERIAL_CODE LIKE "%" #{materialCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="materialName != null and materialName != ''">
+            or sd.MATERIAL_NAME LIKE "%" #{materialName,jdbcType=VARCHAR}"%" )
+        </if>
+        <if test="deletedFlag != null and deletedFlag != ''">
+            AND sd.DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+        </if>
+        ORDER BY sd.CREATED_DATE DESC
+    </select>
+
+    <select id="getProductSplitDetailByProductTypeList" parameterType="list" resultMap="BaseResultMap">
+        select ps.MERCHANT_CODE,ps.CHANNEL,
+        <include refid="sd_Base_Column_List"/>
+        from am_product_split_detail sd
+        left join am_product_split ps on sd.PRODUCT_CODE = ps.PRODUCT_CODE
+        where sd.DELETED_FLAG = "N"
+        AND  ps.DELETED_FLAG = "N"
+        AND sd.MATERIAL_CODE != ''
+        and sd.PRODUCT_CODE in
+        <foreach collection="productSplitDetail" item="item" open="(" close=")" separator=",">
+            #{item.productCode,jdbcType=VARCHAR}
+        </foreach>
+        ORDER BY sd.PRODUCT_CODE,sd.PRODUCT_TYPE
+    </select>
+
+    <select id="getProductSplitDetailByProductTypeZeroList" parameterType="list" resultMap="BaseResultMap">
+        select
+        <include refid="sd_Base_Column_List"/>
+        ,s.CHANNEL
+        from am_product_split_detail sd
+        LEFT JOIN am_product_split s ON s.PRODUCT_CODE = sd.PRODUCT_CODE
+        where sd.DELETED_FLAG = "N"
+        AND sd.PRODUCT_TYPE in(0,7)
+        AND sd.MATERIAL_CODE != ''
+        and sd.PRODUCT_CODE in
+        <foreach collection="productSplitDetailList" item="item" open="(" close=")" separator=",">
+            #{item.productCode,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitDetail">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into am_product_split_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE,
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE,
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+            <if test="propQuantity != null">
+                prop_quantity,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="productType != null">
+                #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="propQuantity != null">
+                #{propQuantity,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitDetail">
+        update am_product_split_detail
+        <set>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="propQuantity != null">
+               prop_quantity = #{propQuantity,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByProductCode" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitDetail">
+        update am_product_split_detail
+        <set>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="propQuantity != null">
+                prop_quantity = #{propQuantity,jdbcType=INTEGER},
+            </if>
+        </set>
+        where PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="batchInsertOnDuplicateKeyUpdateProductSplitDetail" parameterType="java.util.List">
+        insert into am_product_split_detail(PRODUCT_CODE,SERVICE_TYPE,MATERIAL_CODE, MATERIAL_NAME, TYPE,
+        PRODUCT_TYPE,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATED_DATE,DELETED_FLAG,prop_quantity)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.productCode,jdbcType=VARCHAR},
+            #{item.serviceType,jdbcType=TINYINT},
+            #{item.materialCode,jdbcType=VARCHAR},
+            #{item.materialName,jdbcType=VARCHAR},
+            #{item.type,jdbcType=TINYINT},
+            #{item.productType,jdbcType=VARCHAR},
+            #{item.createdBy,jdbcType=VARCHAR},
+            #{item.createdDate,jdbcType=TIMESTAMP},
+            #{item.updatedBy,jdbcType=VARCHAR},
+            #{item.updatedDate,jdbcType=TIMESTAMP},
+            #{item.deletedFlag,jdbcType=VARCHAR},
+            #{item.propQuantity,jdbcType=INTEGER})
+        </foreach>
+        on duplicate key update
+        PRODUCT_CODE=values(PRODUCT_CODE),
+        SERVICE_TYPE=values(SERVICE_TYPE),
+        MATERIAL_CODE=values(MATERIAL_CODE),
+        MATERIAL_NAME=values(MATERIAL_NAME),
+        TYPE=values(TYPE),
+        PRODUCT_TYPE=values(PRODUCT_TYPE),
+        CREATED_BY=values(CREATED_BY),
+        CREATED_DATE=values(CREATED_DATE),
+        UPDATED_BY=values(UPDATED_BY),
+        UPDATED_DATE=values(UPDATED_DATE),
+        DELETED_FLAG=values(DELETED_FLAG),
+        prop_quantity=values(prop_quantity)
+    </insert>
+
+</mapper>

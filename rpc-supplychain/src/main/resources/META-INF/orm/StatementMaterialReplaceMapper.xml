@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementMaterialReplaceMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementMaterialReplace">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="MATERIAL_CODE_ORG" jdbcType="VARCHAR" property="materialCodeOrg" />
+    <result column="MATERIAL_NAME_ORG" jdbcType="VARCHAR" property="materialNameOrg" />
+    <result column="MATERIAL_CODE_DST" jdbcType="VARCHAR" property="materialCodeDst" />
+    <result column="MATERIAL_NAME_DST" jdbcType="VARCHAR" property="materialNameDst" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MATERIAL_CODE_ORG, MATERIAL_NAME_ORG, MATERIAL_CODE_DST, MATERIAL_NAME_DST
+  </sql>
+  
+</mapper>

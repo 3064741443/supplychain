@@ -1,0 +1,60 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="merchantUser_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">商户名称</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="商户名称" name="formData.merchantName" ng-model="formData.merchantName" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">渠道类型</label>
+                    <div class="col-lg-8">
+                        <ui-select name="type" ng-model="formData.channel" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in userChannelList" >
+                                <div ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">销售模式</label>
+                    <div class="col-lg-8">
+                        <ui-select name="type" ng-model="formData.saleMode" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in salesModelList" >
+                                <div ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            <button class="btn btn-primary " type="button" ng-click="addbusUser()">新增用户</button>
+        </div>
+
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>商户信息</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

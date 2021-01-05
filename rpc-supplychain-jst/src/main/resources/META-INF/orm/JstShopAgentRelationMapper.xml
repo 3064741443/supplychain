@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.JstShopAgentRelationMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.JstShopAgentRelation">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="SHOP_CODE" jdbcType="VARCHAR" property="shopCode"/>
+        <result column="AGENT_MERCHANT_CODE" jdbcType="VARCHAR" property="agentMerchantCode"/>
+        <result column="AGENT_MERCHANT_NAME" jdbcType="VARCHAR" property="agentMerchantName"/>
+        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+        <result column="CHECK_FAIL_RESULT" jdbcType="VARCHAR" property="checkFailResult"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, SHOP_CODE, AGENT_MERCHANT_CODE, AGENT_MERCHANT_NAME,STATUS,CHECK_FAIL_RESULT, CREATED_BY, CREATED_DATE,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.JstShopAgentRelation">
+    insert into jst_shop_agent_relation (ID, SHOP_CODE, AGENT_MERCHANT_CODE, 
+      AGENT_MERCHANT_NAME,STATUS,CHECK_FAIL_RESULT, CREATED_BY, CREATED_DATE,
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=INTEGER}, #{shopCode,jdbcType=VARCHAR}, #{agentMerchantCode,jdbcType=VARCHAR}, 
+      #{agentMerchantName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},#{checkFailResult,jdbcType=VARCHAR},
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR},
+      #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.JstShopAgentRelation">
+        insert into jst_shop_agent_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="shopCode != null">
+                SHOP_CODE,
+            </if>
+            <if test="agentMerchantCode != null">
+                AGENT_MERCHANT_CODE,
+            </if>
+            <if test="agentMerchantName != null">
+                AGENT_MERCHANT_NAME,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="checkFailResult != null">
+                CHECK_FAIL_RESULT,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="shopCode != null">
+                #{shopCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantCode != null">
+                #{agentMerchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantName != null">
+                #{agentMerchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="checkFailResult != null">
+                #{checkFailResult,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.JstShopAgentRelation">
+        update jst_shop_agent_relation
+        <set>
+            <if test="shopCode != null">
+                SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantCode != null">
+                AGENT_MERCHANT_CODE = #{agentMerchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="agentMerchantName != null">
+                AGENT_MERCHANT_NAME = #{agentMerchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="checkFailResult != null">
+                CHECK_FAIL_RESULT = #{checkFailResult,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.JstShopAgentRelation">
+    update jst_shop_agent_relation
+    set SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+      AGENT_MERCHANT_CODE = #{agentMerchantCode,jdbcType=VARCHAR},
+      AGENT_MERCHANT_NAME = #{agentMerchantName,jdbcType=VARCHAR},
+       STATUS = #{status,jdbcType=VARCHAR},
+       CHECK_FAIL_RESULT = #{checkFailResult,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <update id="updateByShopCodeAndAgentMerchantCode" parameterType="cn.com.glsx.supplychain.jst.model.JstShopAgentRelation">
+        update jst_shop_agent_relation
+        <set>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="checkFailResult != null">
+                CHECK_FAIL_RESULT = #{checkFailResult,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where SHOP_CODE = #{shopCode,jdbcType=VARCHAR} and AGENT_MERCHANT_CODE = #{agentMerchantCode,jdbcType=VARCHAR}
+    </update>
+</mapper>

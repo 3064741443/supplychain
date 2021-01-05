@@ -1,0 +1,51 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">更多</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <tr>
+            <td class="text-right">收货人 :</td>
+            <td class="text-left">{{ detailMyorderData.logistics.receiveAddress.name }}</td>
+            <td class="text-right">联系电话 :</td>
+            <td class="text-left">{{detailMyorderData.logistics.receiveAddress.mobile }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">收货地址 :</td>
+            <td class="text-left">{{ detailMyorderData.logistics.receiveAddress.provinceName }}{{
+                detailMyorderData.logistics.receiveAddress.cityName }}{{ detailMyorderData.logistics.receiveAddress.areaName
+                }}{{ detailMyorderData.logistics.receiveAddress.address }}</td>
+            <td class="text-right">订单备注 :</td>
+            <td class="text-left">{{productRemark}}</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+<!--<style>
+    .detailMyOrder tr td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    ul{
+        width: 50%;
+        float: left;
+    }
+    ul,li{
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+</style>-->

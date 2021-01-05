@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.FirmwareInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.FirmwareInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="MODEL" jdbcType="INTEGER" property="model" />
+    <result column="CONFIGURE" jdbcType="INTEGER" property="configure" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="BOARD_VERSION" jdbcType="VARCHAR" property="boardVersion" />
+    <result column="MCU_VERSION" jdbcType="VARCHAR" property="mcuVersion" />
+    <result column="FASTENER_VERSION" jdbcType="VARCHAR" property="fastenerVersion" />
+    <result column="SOFT_VERSION" jdbcType="VARCHAR" property="softVersion" />
+    <result column="VENDOR_CODE" jdbcType="VARCHAR" property="vendorCode" />
+    <result column="SVN_ADDRESS" jdbcType="VARCHAR" property="svnAddress" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+ 	
+ 	<association property="attribMana" resultMap="AttribManaMap"/> 
+  </resultMap>
+  
+  <resultMap id="AttribManaMap" type="cn.com.glsx.supplychain.model.AttribMana">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="ATTRIB_CODE" property="attribCode" jdbcType="VARCHAR" />
+		<result column="TYPE" property="type" jdbcType="INTEGER" />
+		<result column="MODEL" property="model" jdbcType="INTEGER" />
+		<result column="CONFIGURE" property="configure" jdbcType="INTEGER" />
+		<result column="BOARD_VERSION" property="boardVersion" jdbcType="VARCHAR" />
+		<result column="SOFT_VERSION" property="softVersion" jdbcType="VARCHAR" />
+		<result column="FASTENER_VERSION" property="fastenerVersion" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.com.glsx.supplychain.model.FirmwareInfo">
+    <result column="UPDATE_CONTENT" jdbcType="LONGVARCHAR" property="updateContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MODEL, CONFIGURE, BOARD_VERSION, MCU_VERSION, FASTENER_VERSION,SOFT_VERSION, VENDOR_CODE, 
+    SVN_ADDRESS, CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, DELETED_FLAG,MODEL, TYPE, CONFIGURE
+  </sql>
+  <sql id="Blob_Column_List">
+    UPDATE_CONTENT
+  </sql>
+  
+  <select id="getFirmwareInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from firmware_info where ID=#{id,jdbcType=INTEGER}
+  </select>
+  
+  <!--查询设备版本号 -->
+  <select id="getVersion" parameterType="cn.com.glsx.supplychain.model.FirmwareInfo" resultMap="ResultMapWithBLOBs" >
+    select 
+    	<include refid="Base_Column_List" />
+    from firmware_info f
+    <where>	
+	      <if test="model != null and model != '' ">
+	       	AND f.MODEL = #{model}
+	      </if>
+	      <if test="configure != null and configure != ''">
+	        AND f.CONFIGURE = #{configure}
+	      </if>
+	      <if test="type != null and type != ''">
+	        AND f.TYPE = #{type}
+	      </if>
+	  </where>
+  </select>
+  
+  <select id="getFirmwareInfoByVersion" parameterType="cn.com.glsx.supplychain.model.FirmwareInfo" resultMap="ResultMapWithBLOBs">
+  	select 
+  		<include refid="Base_Column_List" />
+  	from firmware_info where MODEL=#{model} and CONFIGURE=#{configure} and `TYPE`=#{type} and SOFT_VERSION=#{softVersion}
+  </select>
+  
+   <!-- 查询固件配置列表 -->
+  <select id="listFirmwareInfo" parameterType="cn.com.glsx.supplychain.model.FirmwareInfo" resultMap="ResultMapWithBLOBs">
+    select 
+    	<include refid="Base_Column_List" />,<include refid="Blob_Column_List" />
+    from firmware_info f
+    	<where>
+    		 1=1
+		   <if test="model != null">
+		        AND MODEL = #{model,jdbcType=INTEGER}
+		   </if>
+		   <if test="configure != null">
+		        AND CONFIGURE = #{configure,jdbcType=INTEGER}
+		   </if>
+		   <if test="type != null">
+		        AND TYPE = #{type,jdbcType=INTEGER}
+		   </if>
+		   <if test="boardVersion != null and boardVersion !=''">
+		        AND BOARD_VERSION LIKE CONCAT('%',#{boardVersion},'%')
+		   </if>
+		   <if test="fastenerVersion != null and fastenerVersion !=''">
+		        AND FASTENER_VERSION LIKE CONCAT('%',#{fastenerVersion},'%')
+		   </if>
+		   <if test="softVersion != null and softVersion !=''">
+		        AND SOFT_VERSION LIKE CONCAT('%',#{softVersion},'%')
+		   </if>
+		    <if test="mcuVersion != null and mcuVersion !=''">
+		        AND MCU_VERSION LIKE CONCAT('%',#{mcuVersion},'%')
+		   </if>
+	    </where>
+  </select>
+  
+   <!-- 统计固件列表总记录数 -->
+  <select id="count" parameterType="cn.com.glsx.supplychain.model.FirmwareInfo" resultType="java.lang.Integer">
+    select 
+    	count(*)
+    from firmware_info f
+    <where>
+		   <if test="model != null">
+		        AND MODEL = #{model,jdbcType=INTEGER}
+		   </if>
+		   <if test="configure != null">
+		        AND CONFIGURE = #{configure,jdbcType=INTEGER}
+		   </if>
+		   <if test="type != null">
+		        AND TYPE = #{type,jdbcType=INTEGER}
+		   </if>
+		   <if test="boardVersion != null and boardVersion !=''">
+		        AND BOARD_VERSION LIKE CONCAT('%',#{boardVersion},'%')
+		   </if>
+		   <if test="fastenerVersion != null and fastenerVersion !=''">
+		        AND FASTENER_VERSION LIKE CONCAT('%',#{fastenerVersion},'%')
+		   </if>
+		   <if test="softVersion != null and softVersion !=''">
+		        AND SOFT_VERSION LIKE CONCAT('%',#{softVersion},'%')
+		   </if>
+		    <if test="mcuVersion != null and mcuVersion !=''">
+		        AND MCU_VERSION LIKE CONCAT('%',#{mcuVersion},'%')
+		   </if>
+	    </where>
+  </select>
+  
+   <!-- 插入固件信息 -->
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.FirmwareInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into firmware_info (ID,MODEL, CONFIGURE, BOARD_VERSION, TYPE,
+      MCU_VERSION, FASTENER_VERSION,SOFT_VERSION, VENDOR_CODE, 
+      SVN_ADDRESS, CREATED_DATE, CREATED_BY, 
+      UPDATED_DATE, UPDATED_BY, DELETED_FLAG, 
+      UPDATE_CONTENT)
+    values (#{id,jdbcType=INTEGER}, #{model,jdbcType=INTEGER}, #{configure,jdbcType=INTEGER}, #{boardVersion,jdbcType=VARCHAR},  #{type,jdbcType=INTEGER}, 
+      #{mcuVersion,jdbcType=VARCHAR}, #{fastenerVersion,jdbcType=VARCHAR},#{softVersion,jdbcType=VARCHAR}, #{vendorCode,jdbcType=VARCHAR}, 
+      #{svnAddress,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 'N', 
+      #{updateContent,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.FirmwareInfo">
+  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into firmware_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="model != null">
+        MODEL,
+      </if>
+      <if test="configure != null">
+        CONFIGURE,
+      </if>
+      <if test="boardVersion != null">
+        BOARD_VERSION,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="mcuVersion != null">
+        MCU_VERSION,
+      </if>
+      <if test="fastenerVersion != null">
+        FASTENER_VERSION,
+      </if>
+      <if test="softVersion != null">
+        SOFT_VERSION,
+      </if>
+      <if test="vendorCode != null">
+        VENDOR_CODE,
+      </if>
+      <if test="svnAddress != null">
+        SVN_ADDRESS,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="updateContent != null">
+        UPDATE_CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=INTEGER},
+      </if>
+      <if test="configure != null">
+        #{configure,jdbcType=INTEGER},
+      </if>
+      <if test="boardVersion != null">
+        #{boardVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="mcuVersion != null">
+        #{mcuVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="fastenerVersion != null">
+        #{fastenerVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="softVersion != null">
+        #{softVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorCode != null">
+        #{vendorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="svnAddress != null">
+        #{svnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateContent != null">
+        #{updateContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+   <!-- 更新固件信息 --> 
+  <update id="update" parameterType="cn.com.glsx.supplychain.model.FirmwareInfo">
+    update firmware_info
+    <set>
+      <if test="model != null">
+        MODEL = #{model,jdbcType=INTEGER},
+      </if>
+      <if test="configure != null">
+        CONFIGURE = #{configure,jdbcType=INTEGER},
+      </if>
+      <if test="boardVersion != null and boardVersion !=''">
+        BOARD_VERSION = #{boardVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="mcuVersion != null and mcuVersion !=''">
+        MCU_VERSION = #{mcuVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="fastenerVersion != null and fastenerVersion !=''">
+        FASTENER_VERSION = #{fastenerVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="softVersion != null and softVersion !=''">
+        SOFT_VERSION = #{softVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorCode != null and vendorCode !=''">
+        VENDOR_CODE = #{vendorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="svnAddress != null and svnAddress !=''">
+        SVN_ADDRESS = #{svnAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy !=''">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null and updatedBy !=''">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null and deletedFlag !=''">
+        DELETED_FLAG = #{deletedFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateContent != null and updateContent !=''">
+        UPDATE_CONTENT = #{updateContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.KcCustomerRelationMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.KcCustomerRelation" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+    <result column="CUSTOMER_CODE" property="customerCode" jdbcType="VARCHAR"/>
+    <result column="CUSTOMER_NAME" property="customerName" jdbcType="VARCHAR"/>
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, MERCHANT_CODE, CUSTOMER_CODE, CUSTOMER_NAME,CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+  <sql id="KC_Base_Column_List" >
+    kc.ID, kc.MERCHANT_CODE, kc.CUSTOMER_CODE, kc.CUSTOMER_NAME, kc.CREATED_BY, kc.CREATED_DATE, kc.UPDATED_BY, kc.UPDATED_DATE, kc.DELETED_FLAG
+  </sql>
+
+  <select id="getKcCustomerRelationList" parameterType="cn.com.glsx.supplychain.model.am.KcCustomerRelation" resultMap="BaseResultMap">
+    select
+    <include refid="KC_Base_Column_List"/>
+    from am_kc_customer_relation kc
+    where kc.DELETED_FLAG = "N"
+    <if test="merchantCode != null">
+      AND kc.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+    </if>
+    <if test="customerCode != null">
+      AND kc.CUSTOMER_CODE = #{customerCode,jdbcType=VARCHAR})
+    </if>
+    <if test="customerName != null and customerName !=''">
+      AND kc.CUSTOMER_NAME LIKE "%"#{customerName,jdbcType=VARCHAR}"%"
+    </if>
+  </select>
+  
+  <select id="pageKcCustomerRelation" parameterType="cn.com.glsx.supplychain.model.am.KcCustomerRelation" resultMap="BaseResultMap">
+  	select
+    <include refid="KC_Base_Column_List"/>
+    from am_kc_customer_relation kc
+    where kc.DELETED_FLAG = "N"
+    <if test="customerCode != null">
+      AND (kc.CUSTOMER_CODE like concat('%',#{customerCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="customerName != null and customerName !=''">
+      OR kc.CUSTOMER_NAME LIKE concat('%',#{customerName,jdbcType=VARCHAR},'%'))
+    </if>
+  </select>
+
+  <select id="getKcCustomerRelationByid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from am_kc_customer_relation
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.KcCustomerRelation" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into am_kc_customer_relation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="merchantCode != null" >
+        MERCHANT_CODE,
+      </if>
+      <if test="customerCode != null" >
+        CUSTOMER_CODE,
+      </if>
+      <if test="customerName != null" >
+        CUSTOMER_NAME,
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="merchantCode != null" >
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null" >
+        #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.KcCustomerRelation" >
+    update am_kc_customer_relation
+    <set >
+      <if test="merchantCode != null" >
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerCode != null" >
+        CUSTOMER_CODE = #{customerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        CUSTOMER_NAME = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateDeletedFlagById" parameterType="cn.com.glsx.supplychain.model.am.KcCustomerRelation">
+    update am_kc_customer_relation
+    set DELETED_FLAG ="Y"
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+</mapper>

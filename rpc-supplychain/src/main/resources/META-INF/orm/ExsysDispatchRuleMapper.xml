@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.ExsysDispatchRuleMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.ExsysDispatchRule">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="DEVICE_TYPE" jdbcType="INTEGER" property="deviceType" />
+    <result column="MNUM_NAME" jdbcType="VARCHAR" property="mnumName" />
+    <result column="SN_HEAD" jdbcType="VARCHAR" property="snHead" />
+    <result column="SUBJECT" jdbcType="INTEGER" property="subject" />
+    <result column="ISSURE" jdbcType="VARCHAR" property="issure" />
+    <result column="SYSTEM_FLAG" jdbcType="VARCHAR" property="systemFlag" />
+    <result column="MODULE_FLAG" jdbcType="VARCHAR" property="moduleFlag" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, DEVICE_TYPE, MNUM_NAME, SN_HEAD, SUBJECT, ISSURE, SYSTEM_FLAG, MODULE_FLAG, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from exsys_dispatch_rule
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchRule">
+    insert into exsys_dispatch_rule (ID, DEVICE_TYPE, MNUM_NAME, 
+      SN_HEAD, SUBJECT, ISSURE, 
+      SYSTEM_FLAG, MODULE_FLAG, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{deviceType,jdbcType=INTEGER}, #{mnumName,jdbcType=VARCHAR}, 
+      #{snHead,jdbcType=VARCHAR}, #{subject,jdbcType=INTEGER}, #{issure,jdbcType=VARCHAR}, 
+      #{systemFlag,jdbcType=VARCHAR}, #{moduleFlag,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchRule">
+    insert into exsys_dispatch_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="deviceType != null">
+        DEVICE_TYPE,
+      </if>
+      <if test="mnumName != null">
+        MNUM_NAME,
+      </if>
+      <if test="snHead != null">
+        SN_HEAD,
+      </if>
+      <if test="subject != null">
+        SUBJECT,
+      </if>
+      <if test="issure != null">
+        ISSURE,
+      </if>
+      <if test="systemFlag != null">
+        SYSTEM_FLAG,
+      </if>
+      <if test="moduleFlag != null">
+        MODULE_FLAG,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="deviceType != null">
+        #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="mnumName != null">
+        #{mnumName,jdbcType=VARCHAR},
+      </if>
+      <if test="snHead != null">
+        #{snHead,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=INTEGER},
+      </if>
+      <if test="issure != null">
+        #{issure,jdbcType=VARCHAR},
+      </if>
+      <if test="systemFlag != null">
+        #{systemFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleFlag != null">
+        #{moduleFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchRule">
+    update exsys_dispatch_rule
+    <set>
+      <if test="deviceType != null">
+        DEVICE_TYPE = #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="mnumName != null">
+        MNUM_NAME = #{mnumName,jdbcType=VARCHAR},
+      </if>
+      <if test="snHead != null">
+        SN_HEAD = #{snHead,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        SUBJECT = #{subject,jdbcType=INTEGER},
+      </if>
+      <if test="issure != null">
+        ISSURE = #{issure,jdbcType=VARCHAR},
+      </if>
+      <if test="systemFlag != null">
+        SYSTEM_FLAG = #{systemFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleFlag != null">
+        MODULE_FLAG = #{moduleFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.ExsysDispatchRule">
+    update exsys_dispatch_rule
+    set DEVICE_TYPE = #{deviceType,jdbcType=INTEGER},
+      MNUM_NAME = #{mnumName,jdbcType=VARCHAR},
+      SN_HEAD = #{snHead,jdbcType=VARCHAR},
+      SUBJECT = #{subject,jdbcType=INTEGER},
+      ISSURE = #{issure,jdbcType=VARCHAR},
+      SYSTEM_FLAG = #{systemFlag,jdbcType=VARCHAR},
+      MODULE_FLAG = #{moduleFlag,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

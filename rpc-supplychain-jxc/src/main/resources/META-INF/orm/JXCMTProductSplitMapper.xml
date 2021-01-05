@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTProductSplitMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTProductSplit">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SERVICE_TYPE" jdbcType="TINYINT" property="serviceType" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="CHANNEL" jdbcType="TINYINT" property="channel" />
+    <result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+    <result column="DEVICE_QUANTITY" jdbcType="INTEGER" property="deviceQuantity" />
+    <result column="SALE_MODE" jdbcType="TINYINT" property="saleMode" />
+    <result column="SERVICE_TIME" jdbcType="VARCHAR" property="serviceTime" />
+    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+    <result column="HARDWARE_CONTAIN_SOURCE" jdbcType="VARCHAR" property="hardwareContainSource" />
+    <result column="SOURCE_PROPORTION" jdbcType="DOUBLE" property="sourceProportion" />
+    <result column="NOT_SOURCE_PROPORTION" jdbcType="DOUBLE" property="notSourceProportion" />
+    <result column="CAR_TYPE" jdbcType="TINYINT" property="carType" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="PLUS_JRFK" jdbcType="VARCHAR" property="plusJrfk" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SERVICE_TYPE, PRODUCT_CODE, PRODUCT_NAME, MERCHANT_CODE, MERCHANT_NAME, CHANNEL, 
+    ALIAS, DEVICE_QUANTITY, SALE_MODE, SERVICE_TIME, PACKAGE_ONE, HARDWARE_CONTAIN_SOURCE, 
+    SOURCE_PROPORTION, NOT_SOURCE_PROPORTION, CAR_TYPE, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG, PLUS_JRFK
+  </sql>
+  
+  <sql id="Distinct_Product_Code_List">
+  	DISTINCT a.PRODUCT_CODE, a.SERVICE_TYPE, a.PRODUCT_NAME, a.MERCHANT_CODE, a.MERCHANT_NAME, a.CHANNEL, 
+    a.ALIAS, a.DEVICE_QUANTITY, a.SALE_MODE, a.SERVICE_TIME, a.PACKAGE_ONE, a.HARDWARE_CONTAIN_SOURCE, 
+    a.SOURCE_PROPORTION, a.NOT_SOURCE_PROPORTION, a.CAR_TYPE, a.CREATED_BY, a.CREATED_DATE, a.UPDATED_BY, 
+    a.UPDATED_DATE, a.DELETED_FLAG, a.PLUS_JRFK
+  </sql>
+  
+  <select id="listJxcProductSplit" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTProductSplit" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Distinct_Product_Code_List"/>
+  	from am_product_split as a
+  	left join am_product_split_detail as d on(a.product_code=d.product_code)
+  	<where>
+  		<if test="deletedFlag != null">
+  			and a.DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+  		</if>
+  		<if test="serviceType != null">
+  			and a.SERVICE_TYPE = #{serviceType,jdbcType=TINYINT}
+  		</if>
+  		<if test="productCode != null">
+  			and (a.PRODUCT_CODE like CONCAT('%',#{productCode},'%')
+  		</if>
+  		<if test="productName != null">
+  			or a.PRODUCT_NAME like CONCAT('%',#{productName},'%'))
+  		</if>
+  		<if test="merchantCode != null">
+  			and (a.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+  		</if>
+  		<if test="channel != null">
+  			or a.CHANNEL = #{channel,jdbcType=TINYINT})
+  		</if>
+  		<if test="materialCode != null">
+  			and (d.MATERIAL_CODE like CONCAT('%',#{materialCode},'%')
+  		</if>
+  		<if test="materialName != null">
+  			or d.MATERIAL_NAME like CONCAT('%',#{materialName},'%'))
+  		</if>
+  	</where>
+  	order by a.CHANNEL asc
+  </select>
+</mapper>

@@ -1,0 +1,297 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">{{isEdit?'修改':'创建'}}订单</h4>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="add_orderInfo_form"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                <label class="col-lg-3 control-label required">设备类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="typeId" ng-change="hardwareChange(orderInfo.typeId)"  ng-required="true" ng-model="orderInfo.typeId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in typeIdList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_orderInfo_form.typeId.$invalid && add_orderInfo_form.submitted">
+                                <small class="text-danger" ng-show="add_orderInfo_form.typeId.$error.required">请选择设备类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">硬件设备 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ui-select name="hardware_device" ng-disabled="alreadyShipped" ng-required="true" ng-model="orderInfo.deviceId"
+                                           theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in hardware_devices | filter: $select.search">
+                                        <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search" ng-click="deviceCallback(item)"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_orderInfo_form.hardware_device.$invalid && add_orderInfo_form.submitted">
+                                    <small class="text-danger"
+                                           ng-show="add_orderInfo_form.hardware_device.$error.required">请选择硬件设备
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">总数量 :</label>
+                    <div class="col-lg-10 control-content">
+                        <input type="hidden" name="id" ng-model="orderInfo.id">
+                        <input name="total" class="form-control" v-limit="{min: orderInfo.total}" ng-pattern="/^[1-9]\d*$/" onkeyup='this.value=this.value.replace(/\D/gi,"")' type="text"
+                               class="form-control" required  maxlength="20" ng-model="orderInfo.total"/>
+                        <div class="m-t-xs" ng-show="add_orderInfo_form.total.$invalid && add_orderInfo_form.submitted">
+                            <small class="text-danger" ng-show="add_orderInfo_form.total.$error.required">请输入总数量</small>
+                            <small class="text-danger" ng-show="add_orderInfo_form.total.$error.pattern">总数量必须大于0</small>
+                            <small class="text-danger" ng-show="add_orderInfo_form.total.$error.vLimit">不能少于已发货数</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">设备配置 :</label>
+                <div class="col-lg-6 col-sm-6" style="margin-left: 222px">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">类型编码</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="请输入类型编码"  ng-model="orderInfo.attribCode"/>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+
+                <div class="control-content">
+                    <div class="col-lg-12" >
+                         <div process-datatable name="attribCode" dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns"
+                            ng-required="true" ng-model="attribList" ng-click="table_click()">
+                         </div>
+                       <div class="m-t-xs"  ng-show="add_orderInfo_form.attribCode.$invalid  && add_orderInfo_form.submitted">
+                            <small class="text-danger" ng-show="add_orderInfo_form.attribCode.$error.required">
+                                请选择设备配置
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <div class="col-lg-6" ng-if="packagedisable">
+                    <label class="col-lg-3 control-label required">套餐 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ui-select name="packageOne" ng-disabled="alreadyShipped" ng-required="true" ng-model="orderInfo.packageOne"
+                                           theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{orderInfo.packageOne.name}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in packageOne">
+                                        <div ng-if="item.text!=0" ng-bind="item.name "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_orderInfo_form.packageOne.$invalid && add_orderInfo_form.submitted">
+                                    <small class="text-danger" ng-show="add_orderInfo_form.packageOne.$error.required">
+                                        请选择套餐
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">套餐二 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ui-select name="packageTwo" ng-disabled="alreadyShipped" ng-required="true" ng-model="orderInfo.packageTwo"
+                                           theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.packageName}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="item in packageTwo">
+                                        <div ng-if="item.text!=0" ng-bind="item.packageName "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_orderInfo_form.packageTwo.$invalid && add_orderInfo_form.submitted">
+                                    <small class="text-danger" ng-show="add_orderInfo_form.packageTwo.$error.required">
+                                        请选择套餐
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="form-group">
+                    <div class="col-lg-6">
+                        <label class="col-lg-3 control-label required">批次号 :</label>
+                        <div class="control-content">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input name="batch_num" ng-disabled="alreadyShipped" class="form-control"  ng-required="true" maxlength="50"
+                                           onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"     ng-model="orderInfo.batch"/>
+                                    <div class="m-t-xs"
+                                         ng-show="add_orderInfo_form.batch_num.$invalid && add_orderInfo_form.submitted">
+                                        <small class="text-danger" ng-show="add_orderInfo_form.batch_num.$error.required">
+                                            请输入批次号
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required" style="width: 8em;">运营商商户号 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <input name="operator_merchant_no" ng-disabled="alreadyShipped" class="form-control"  string-to-number ng-required="true"
+                                       onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))" maxlength="50" ng-model="orderInfo.operatorMerchantNo"/>
+                                <div class="m-t-xs"
+                                     ng-show="add_orderInfo_form.operator_merchant_no.$invalid && add_orderInfo_form.submitted">
+                                    <small class="text-danger"
+                                           ng-show="add_orderInfo_form.operator_merchant_no.$error.required">请输入运营商商户号
+                                    </small>
+                                </div>
+                                <small class="text-danger"
+                                       ng-show="add_orderInfo_form.operator_merchant_no_type">请输入正确运营商商户号
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">发往商户 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ui-select name="sendMerchantNo" ng-disabled="alreadyShipped" uis-open-close="onOpenClose(isOpen)" ng-required="true" ng-model="orderInfo.sendMerchantNo"
+                                           theme="bootstrap" ng-keyup="myKeyUp()" id="sendMerchantNo">
+                                    <ui-select-match placeholder="请输入内容进行查询">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in sendMerchantNoList | filter: $select.search">
+                                        <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search" ng-click="sendMerchantClick(sendMerchantNoList)"></div>
+                                    </ui-select-choices>
+                                    <ui-select-no-choice style="padding: 10px;text-align: center;">
+                                        没有匹配的数据
+                                    </ui-select-no-choice>
+                                </ui-select>
+                                <div class="m-t-xs" ng-show="add_orderInfo_form.sendMerchantNo.$invalid && add_orderInfo_form.submitted">
+                                    <small class="text-danger"
+                                           ng-show="add_orderInfo_form.sendMerchantNo.$error.required">请选择发往商户号
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">选择仓库 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ui-select name="warehouseId" ng-disabled="alreadyShipped" ng-required="true" ng-model="orderInfo.warehouseId"
+                                           theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in warehouseIdList">
+                                        <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_orderInfo_form.warehouseId.$invalid && add_orderInfo_form.submitted">
+                                    <small class="text-danger" ng-show="add_orderInfo_form.warehouseId.$error.required">
+                                        请选择仓库
+                                    </small>流量卡网卡号
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">联系人 :</label>
+                    <div class="control-content">
+                        <input name="contacts" class="form-control" ng-disabled="alreadyShipped" type="text" ng-required="true" maxlength="50"
+                               ng-model="orderInfo.contacts"/>
+                        <div class="m-t-xs"
+                             ng-show="add_orderInfo_form.contacts.$invalid && add_orderInfo_form.submitted">
+                            <small class="text-danger" ng-show="add_orderInfo_form.contacts.$error.required">请输入联系人
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">联系电话 :</label>
+                    <div class="control-content">
+                        <input name="mobile" ng-disabled="alreadyShipped" ng-pattern="/^(((0\d{2,3}-?)?\d{7,8})|(1[0-9]{10}))$/" class="form-control"
+                               type="text" required ng-model="orderInfo.mobile"/>
+                        <div class="m-t-xs"
+                             ng-show="add_orderInfo_form.mobile.$invalid && add_orderInfo_form.submitted">
+                            <small class="text-danger" ng-show="add_orderInfo_form.mobile.$error.required">请输入联系电话
+                            </small>
+                            <small class="text-danger" ng-show="add_orderInfo_form.mobile.$error.pattern">请输入正确的联系电话
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">发货地址 :</label>
+                    <div class="col-lg-10 control-content">
+                        <textarea class="textarea form-control" rows="3" ng-disabled="alreadyShipped"
+                                  ng-required="true" name="address" ng-model="orderInfo.address" maxlength="100" style="width: 675px"></textarea>
+                        <div class="m-t-xs"
+                             ng-show="add_orderInfo_form.address.$invalid && add_orderInfo_form.submitted">
+                            <small class="text-danger" ng-show="add_orderInfo_form.address.$error.required">
+                                请输入发货地址
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">备注 :</label>
+                    <div class="col-lg-10 control-content">
+                <textarea class="textarea form-control" rows="3" ng-model="orderInfo.remark" ng-disabled="alreadyShipped" name="remark"
+                          style="width: 675px"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="state==undefined" type="submit" class="btn btn-primary" ng-click="ok()">{{isEdit ? "修改":"保存"}}
+        </button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.AfterSaleOrderMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.AfterSaleOrder">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="TINYINT"/>
+        <result column="ORDER_TIME" property="orderTime" jdbcType="TIMESTAMP"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="REASON" property="reason" jdbcType="VARCHAR"/>
+        <result column="REJECT" property="reject" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="TINYINT"/>
+        <result column="signQuantity" property="signQuantity" jdbcType="TINYINT"/>
+        <association property="productInfo" resultMap="productInfoMap"/>
+    </resultMap>
+
+    <resultMap id="productInfoMap" type="cn.com.glsx.supplychain.model.bs.Product">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="CODE" property="code" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="SPECIFICATION" property="specification" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="AMOUNT" property="amount" jdbcType="DOUBLE"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, ORDER_NUMBER, TYPE, ORDER_TIME, PRODUCT_CODE, STATUS, REASON, REJECT, CREATED_BY, MERCHANT_CODE,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <sql id="a_Base_Column_List">
+    a.ID, a.ORDER_NUMBER, a.TYPE, a.ORDER_TIME, a.PRODUCT_CODE,p.NAME,p.SPECIFICATION, a.STATUS, a.REASON,a.MERCHANT_CODE,
+    a.REJECT, a.CREATED_BY,a.CREATED_DATE, a.UPDATED_BY, a.UPDATED_DATE, a.DELETED_FLAG
+  </sql>
+
+    <sql id="aso_Base_Column_List">
+    a.ID, a.ORDER_NUMBER, a.TYPE, a.ORDER_TIME, a.PRODUCT_CODE, a.STATUS, a.REASON,a.MERCHANT_CODE,
+    a.REJECT, a.CREATED_BY,a.CREATED_DATE, a.UPDATED_BY, a.UPDATED_DATE, a.DELETED_FLAG
+  </sql>
+
+    <select id="selectAfterSaleOrderOngoingBySn" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="aso_Base_Column_List"/>
+        from bs_after_sale_order a
+        left join bs_after_sale_order_detail asod ON a.ORDER_NUMBER = asod.AFTER_SALE_ORDER_NUMBER
+        where (
+        a.STATUS = "1" or a.STATUS = "2" or a.STATUS = "3"
+        or a.STATUS = "4" or a.STATUS = "8" )
+        <if test="sn != null">
+            AND asod.sn = #{sn,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="selectMaintainProductOngoingBySn" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="aso_Base_Column_List"/>
+        from bs_after_sale_order a
+        left join bs_maintain_product_detail mpd ON a.ORDER_NUMBER = mpd.AFTER_SALE_ORDER_NUMBER
+        where (
+        a.STATUS = "1" or a.STATUS = "2" or a.STATUS = "3"
+        or a.STATUS = "4" or a.STATUS = "8" or a.STATUS = "9" or a.STATUS = "10" )
+        <if test="sn != null">
+            AND mpd.SN = #{sn,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="listAfterSaleOrder" parameterType="cn.com.glsx.supplychain.model.bs.AfterSaleOrder"
+            resultMap="BaseResultMap">
+        select
+        (SELECT count(sn) FROM bs_after_sale_order_detail where AFTER_SALE_ORDER_NUMBER =  a.ORDER_NUMBER and status = 1)
+        as number,
+        (SELECT count(sn) FROM bs_after_sale_order_detail where AFTER_SALE_ORDER_NUMBER =  a.ORDER_NUMBER and status = 2)
+        as signQuantity,
+        ui.MERCHANT_NAME,
+        <include refid="a_Base_Column_List"/>
+        from bs_after_sale_order a
+        left join bs_dealer_user_info ui on a.MERCHANT_CODE = ui.MERCHANT_CODE
+        left join bs_product p on a.PRODUCT_CODE = p.CODE
+        where a.DELETED_FLAG="N"
+        AND ui.DELETED_FLAG="N"
+        <if test="orderNumber != null">
+            AND a.ORDER_NUMBER like "%"#{orderNumber,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="orderTime != null">
+            AND a.ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="orderStartDate != null">
+            AND a.ORDER_TIME &gt;= #{orderStartDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="orderEndDate != null">
+            AND a.ORDER_TIME &lt;= #{orderEndDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="type != null">
+            AND a.TYPE = #{type,jdbcType=TINYINT}
+        </if>
+        <if test="merchantCode != null">
+            AND a.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="merchantName != null">
+            AND ui.MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="productInfo != null and productInfo.name != null">
+            AND p.NAME like "%"#{productInfo.name,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="status != null">
+            AND a.STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="productCode != null">
+            AND a.PRODUCT_CODE like "%"#{productCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="startDate != null">
+            AND a.ORDER_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND a.ORDER_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        order by a.CREATED_DATE DESC
+    </select>
+
+    <select id="getAfterSaleOrderSignQuantity" resultMap="BaseResultMap">
+        select
+        (SELECT count(sn) FROM bs_after_sale_order_detail where AFTER_SALE_ORDER_NUMBER =  a.ORDER_NUMBER and status = 2)
+        as signQuantity,
+        <include refid="Base_Column_List"/>
+        from bs_after_sale_order a
+        where a.DELETED_FLAG="N"
+        <if test="orderNumber != null">
+            AND a.ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getAfterSaleOrderListByDate" resultMap="BaseResultMap">
+        select
+        ui.MERCHANT_NAME,
+        <include refid="a_Base_Column_List"/>
+        from bs_after_sale_order a
+        left join bs_dealer_user_info ui on a.MERCHANT_CODE = ui.MERCHANT_CODE
+        where a.DELETED_FLAG="N"
+        AND ui.DELETED_FLAG="N"
+        <if test="startTime != null">
+            AND mo.ORDER_TIME &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            AND mo.ORDER_TIME &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <update id="updateByOrderNumber" parameterType="cn.com.glsx.supplychain.model.bs.AfterSaleOrder">
+        update bs_after_sale_order
+        <set>
+            <if test="orderNumber != null">
+                ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="orderTime != null">
+                ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reason != null">
+                REASON = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="reject != null">
+                REJECT = #{reject,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.bs.AfterSaleOrder">
+        update bs_after_sale_order
+        <set>
+            <if test="orderNumber != null">
+                ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="orderTime != null">
+                ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reason != null">
+                REASON = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="reject != null">
+                REJECT = #{reject,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.MaintainProductDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.MaintainProductDetail">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="AFTER_SALE_ORDER_NUMBER" property="afterSaleOrderNumber" jdbcType="VARCHAR"/>
+        <result column="ICCID" property="iccid" jdbcType="VARCHAR"/>
+        <result column="IMEI" property="imei" jdbcType="VARCHAR"/>
+        <result column="SN" property="sn" jdbcType="VARCHAR"/>
+        <result column="DISPATCH_FLAG" property="dispatchFlag" jdbcType="VARCHAR"/>
+        <result column="PACKAGE_USER_TIME" property="packageUserTime" jdbcType="VARCHAR"/>
+        <result column="WAREHOUSE_ID" property="warehouseId" jdbcType="INTEGER"/>
+        <result column="MAINTAIN_DETAILS" property="mainTainDetails" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, AFTER_SALE_ORDER_NUMBER,ICCID,IMEI,DISPATCH_FLAG,SN, PACKAGE_USER_TIME,WAREHOUSE_ID,MAINTAIN_DETAILS, STATUS,
+    CREATED_BY, CREATED_DATE,UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <sql id="MPD_Base_Column_List">
+        mpd.ID, mpd.AFTER_SALE_ORDER_NUMBER,mpd.ICCID,mpd.IMEI,mpd.SN,mpd.DISPATCH_FLAG, mpd.PACKAGE_USER_TIME, mpd.WAREHOUSE_ID, mpd.MAINTAIN_DETAILS, mpd.STATUS,
+        mpd.CREATED_BY, mpd.CREATED_DATE, mpd.UPDATED_BY, mpd.UPDATED_DATE, mpd.DELETED_FLAG
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_maintain_product_detail
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bs_maintain_product_detail
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <select id="getMaintainProductDetailInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_maintain_product_detail
+        where DELETED_FLAG="N"
+        <if test="afterSaleOrderNumber != null">
+            AND AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null">
+            AND STATUS = #{status,jdbcType=TINYINT},
+        </if>
+        <if test="sn != null">
+            AND SN = #{sn,jdbcType=TINYINT}
+        </if>
+    </select>
+
+    <select id="getMainTainProductDetailList" resultMap="BaseResultMap">
+        select
+        wi.NAME as warehouseName,
+        <include refid="MPD_Base_Column_List"/>
+        from bs_maintain_product_detail mpd
+        left join warehouse_info wi on mpd.WAREHOUSE_ID = wi.ID
+        where mpd.DELETED_FLAG="N"
+        <if test="afterSaleOrderNumber != null">
+            AND mpd.AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            AND mpd.STATUS = #{status,jdbcType=TINYINT}
+        </if>
+    </select>
+
+    <select id="getMainTainProductDetailByAfterOrderNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_maintain_product_detail
+        <where>
+            <if test="_parameter != null">
+                AND AFTER_SALE_ORDER_NUMBER = #{_parameter,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertList" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProductDetail">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_maintain_product_detail (AFTER_SALE_ORDER_NUMBER,ICCID,IMEI,SN,DISPATCH_FLAG, PACKAGE_USER_TIME,WAREHOUSE_ID,MAINTAIN_DETAILS, STATUS,
+        CREATED_BY, CREATED_DATE,UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.afterSaleOrderNumber,jdbcType=VARCHAR}, #{item.iccid,jdbcType=VARCHAR},#{item.imei,jdbcType=VARCHAR},#{item.sn,jdbcType=VARCHAR},
+            #{item.dispatchFlag,jdbcType=VARCHAR},#{item.packageUserTime,jdbcType=TINYINT},
+            #{item.warehouseId,jdbcType=TINYINT},#{item.mainTainDetails,jdbcType=TINYINT},#{item.status,jdbcType=TINYINT},
+        #{item.createdBy,jdbcType=VARCHAR},#{item.createdDate,jdbcType=TIMESTAMP}, #{item.updatedBy,jdbcType=VARCHAR}, #{item.updatedDate,jdbcType=TIMESTAMP},
+        #{item.deletedFlag,jdbcType=VARCHAR})
+        </foreach>
+        on duplicate key update
+        AFTER_SALE_ORDER_NUMBER = values(AFTER_SALE_ORDER_NUMBER),
+        ICCID = values(ICCID),
+        IMEI = values(IMEI),
+        SN = values(SN),
+        DISPATCH_FLAG = values(DISPATCH_FLAG),
+        PACKAGE_USER_TIME = values(PACKAGE_USER_TIME),
+        WAREHOUSE_ID = values(WAREHOUSE_ID),
+        MAINTAIN_DETAILS = values(MAINTAIN_DETAILS),
+        STATUS = values(STATUS),
+        CREATED_BY = values(CREATED_BY),
+        CREATED_DATE = values(CREATED_DATE),
+        UPDATED_BY = values(UPDATED_BY),
+        UPDATED_DATE = values(UPDATED_DATE),
+        DELETED_FLAG = values(DELETED_FLAG)
+    </insert>
+
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProductDetail">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_maintain_product_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="afterSaleOrderNumber != null">
+                AFTER_SALE_ORDER_NUMBER,
+            </if>
+            <if test="iccid != null">
+                ICCID,
+            </if>
+            <if test="imei != null">
+                IMEI,
+            </if>
+            <if test="SN != null">
+                SN,
+            </if>
+            <if test="dispatchFlag != null">
+                DISPATCH_FLAG,
+            </if>
+            <if test="packageUserTime != null">
+                PACKAGE_USER_TIME,
+            </if>
+            <if test="warehouseId != null">
+                WAREHOUSE_ID,
+            </if>
+            <if test="mainTainDetails != null">
+                MAINTAIN_DETAILS,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="afterSaleOrderNumber != null">
+                #{afterSaleOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imei != null">
+                #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="dispatchFlag != null">
+                #{dispatchFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="packageUserTime != null">
+                #{packageUserTime,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseId != null">
+                #{warehouseId,jdbcType=INTEGER},
+            </if>
+            <if test="mainTainDetails != null">
+                #{mainTainDetails,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProductDetail">
+        update bs_maintain_product_detail
+        <set>
+            <if test="afterSaleOrderNumber != null">
+                AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="iccid != null">
+                ICCID = #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imei != null">
+                IMEI = #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                SN = #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="dispatchFlag != null">
+                DISPATCH_FLAG = #{dispatchFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="packageUserTime != null">
+                PACKAGE_USER_TIME = #{packageUserTime,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseId != null">
+                WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+            </if>
+            <if test="mainTainDetails != null">
+                MAINTAIN_DETAILS = #{mainTainDetails,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProductDetail">
+    update bs_maintain_product_detail
+    set AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      SN = #{sn,jdbcType=VARCHAR},
+      DISPATCH_FLAG = #{dispatchFlag,jdbcType=VARCHAR},
+      PACKAGE_USER_TIME = #{packageUserTime,jdbcType=VARCHAR},
+      WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      MAINTAIN_DETAILS = #{mainTainDetails,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=TINYINT},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

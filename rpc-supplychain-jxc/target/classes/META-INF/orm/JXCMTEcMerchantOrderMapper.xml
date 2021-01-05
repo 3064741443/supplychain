@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTEcMerchantOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTEcMerchantOrder">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="CHANNEL" jdbcType="VARCHAR" property="channel" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="DEVICE_TYPE" jdbcType="VARCHAR" property="deviceType" />
+    <result column="PRICE" jdbcType="DOUBLE" property="price" />
+    <result column="ORDER_QUANTITY" jdbcType="INTEGER" property="orderQuantity" />
+    <result column="CHECK_QUANTITY" jdbcType="INTEGER" property="checkQuantity" />
+    <result column="DISPATCH_ORDER_NUMBER" jdbcType="VARCHAR" property="dispatchOrderNumber" />
+    <result column="ALREADY_SHIPMENT_QUANTITY" jdbcType="INTEGER" property="alreadyShipmentQuantity" />
+    <result column="SHIPMENT_TIME" jdbcType="VARCHAR" property="shipmentTime" />
+    <result column="SHIPMENT_QUANTITY" jdbcType="VARCHAR" property="shipmentQuantity" />
+    <result column="SIGN_QUANTITY" jdbcType="INTEGER" property="signQuantity" />
+    <result column="OWE_QUANTITY" jdbcType="INTEGER" property="oweQuantity" />
+    <result column="TOTAL_AMOUNT" jdbcType="DOUBLE" property="totalAmount" />
+    <result column="ORDER_TIME" jdbcType="VARCHAR" property="orderTime" />
+    <result column="PRODUCT_REMARKS" jdbcType="VARCHAR" property="productRemarks" />
+    <result column="CHECK_BY" jdbcType="VARCHAR" property="checkBy" />
+    <result column="CHECK_TIME" jdbcType="VARCHAR" property="checkTime" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="ADDRESSEE" jdbcType="VARCHAR" property="addressee" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="ADDRESS_DETAIL" jdbcType="VARCHAR" property="addressDetail" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="logistics_desc" jdbcType="VARCHAR" property="logisticsDesc" />
+    <result column="order_remark" jdbcType="VARCHAR" property="orderRemark" />
+    <result column="check_remark" jdbcType="VARCHAR" property="checkRemark" />
+    <result column="sign_status" jdbcType="VARCHAR" property="signStatus" />
+    <result column="order_material_code" jdbcType="VARCHAR" property="orderMaterialCode" />
+    <result column="order_material_name" jdbcType="VARCHAR" property="orderMaterialName" />
+    <result column="reback_reason" jdbcType="VARCHAR" property="rebackReason" />
+    <result column="recall_reason" jdbcType="VARCHAR" property="recallReason" />
+    <result column="finish_reason" jdbcType="VARCHAR" property="finishReason" />
+    <result column="product_total" jdbcType="INTEGER" property="productTotal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CHANNEL, MERCHANT_CODE, MERCHANT_NAME, ORDER_NUMBER, PRODUCT_NAME, PRODUCT_CODE, 
+    DEVICE_TYPE, PRICE, ORDER_QUANTITY, CHECK_QUANTITY, DISPATCH_ORDER_NUMBER, ALREADY_SHIPMENT_QUANTITY, 
+    SHIPMENT_TIME, SHIPMENT_QUANTITY, SIGN_QUANTITY, OWE_QUANTITY, TOTAL_AMOUNT, ORDER_TIME, 
+    PRODUCT_REMARKS, CHECK_BY, CHECK_TIME, STATUS, ADDRESSEE, MOBILE, ADDRESS_DETAIL, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, material_code, 
+    material_name, logistics_desc, order_remark, check_remark,sign_status,order_material_code,order_material_name,
+    reback_reason,finish_reason,recall_reason,product_total
+  </sql>
+
+</mapper>

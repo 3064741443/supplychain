@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.DeviceUpdateRecordMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.DeviceUpdateRecord">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="FLAG_ID" jdbcType="INTEGER" property="flagId" />
+    <result column="PRE_FLAG_ID" jdbcType="INTEGER" property="preFlagId" />
+    <result column="FLAG_TYPE" jdbcType="VARCHAR" property="flagType" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SN, FLAG_ID, PRE_FLAG_ID, FLAG_TYPE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+  <select id="selectLastRecord" parameterType="glsx.com.cn.task.model.DeviceUpdateRecord" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from device_update_record
+  	<where>
+  	  <if test="sn != null">
+        AND SN = #{sn,jdbcType=VARCHAR}
+      </if>
+      <if test="flagId != null">
+        AND FLAG_ID = #{flagId,jdbcType=INTEGER}
+      </if>
+      <if test="preFlagId != null">
+        AND PRE_FLAG_ID = #{preFlagId,jdbcType=INTEGER}
+      </if>
+      <if test="flagType != null">
+        AND FLAG_TYPE = #{flagType,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	order by ID DESC limit 1
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_update_record
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="pageDeviceUpdateRecord" parameterType="glsx.com.cn.task.model.DeviceUpdateRecord" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from device_update_record
+  	<where>
+  		<if test="flagType != null and flagType !=''">
+  			AND FLAG_TYPE=#{flagType,jdbcType=VARCHAR}
+  		</if>
+  		<if test="sn != null and sn !=''">
+  			AND SN LIKE CONCAT('%',#{sn,jdbcType=VARCHAR},'%')
+  		</if>
+  	</where>
+  </select>
+  <select id="exportDeviceUpdateRecord" parameterType="glsx.com.cn.task.model.DeviceUpdateRecord" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from device_update_record
+  	<where>
+  		<if test="flagType != null and flagType !=''">
+  			AND FLAG_TYPE=#{flagType,jdbcType=VARCHAR}
+  		</if>
+  		<if test="sn != null and sn !=''">
+  			AND SN LIKE CONCAT('%',#{sn,jdbcType=VARCHAR},'%')
+  		</if>
+  	</where>
+  	ORDER BY ID ASC 
+  	<if test="pageSize > 0">
+  	LIMIT  #{pageSize,jdbcType=INTEGER}
+  	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_update_record
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.DeviceUpdateRecord">
+    insert into device_update_record (ID, SN, FLAG_ID, 
+      PRE_FLAG_ID, FLAG_TYPE, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}, #{flagId,jdbcType=INTEGER}, 
+      #{preFlagId,jdbcType=INTEGER}, #{flagType,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.DeviceUpdateRecord">
+    insert into device_update_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sn != null">
+        SN,
+      </if>
+      <if test="flagId != null">
+        FLAG_ID,
+      </if>
+      <if test="preFlagId != null">
+        PRE_FLAG_ID,
+      </if>
+      <if test="flagType != null">
+        FLAG_TYPE,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="flagId != null">
+        #{flagId,jdbcType=INTEGER},
+      </if>
+      <if test="preFlagId != null">
+        #{preFlagId,jdbcType=INTEGER},
+      </if>
+      <if test="flagType != null">
+        #{flagType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.DeviceUpdateRecord">
+    update device_update_record
+    <set>
+      <if test="sn != null">
+        SN = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="flagId != null">
+        FLAG_ID = #{flagId,jdbcType=INTEGER},
+      </if>
+      <if test="preFlagId != null">
+        PRE_FLAG_ID = #{preFlagId,jdbcType=INTEGER},
+      </if>
+      <if test="flagType != null">
+        FLAG_TYPE = #{flagType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.DeviceUpdateRecord">
+    update device_update_record
+    set SN = #{sn,jdbcType=VARCHAR},
+      FLAG_ID = #{flagId,jdbcType=INTEGER},
+      PRE_FLAG_ID = #{preFlagId,jdbcType=INTEGER},
+      FLAG_TYPE = #{flagType,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

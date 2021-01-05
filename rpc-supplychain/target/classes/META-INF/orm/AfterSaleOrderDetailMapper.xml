@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.AfterSaleOrderDetailMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.AfterSaleOrderDetail" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="AFTER_SALE_ORDER_NUMBER" property="afterSaleOrderNumber" jdbcType="VARCHAR" />
+    <result column="SN" property="sn" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="LOGISTICS_ID" property="logisticsId" jdbcType="BIGINT" />
+    <result column="DEVICE_AFTER_REASON" property="deviceAfterReason" jdbcType="VARCHAR"/>
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, AFTER_SALE_ORDER_NUMBER, SN,STATUS, LOGISTICS_ID, DEVICE_AFTER_REASON, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,
+    DELETED_FLAG
+  </sql>
+
+  <select id="afterSaleOrderDetailList" parameterType="cn.com.glsx.supplychain.model.bs.AfterSaleOrderDetail" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from bs_after_sale_order_detail
+      <where>
+          <if test="afterSaleOrderNumber != null">
+              and AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR},
+          </if>
+          <if test="sn != null">
+              and SN = #{sn,jdbcType=VARCHAR},
+          </if>
+          <if test="status != null">
+              and STATUS = #{status,jdbcType=TINYINT},
+          </if>
+      </where>
+  </select>
+
+    <update id="batchUpdateAfterSaleChangeSn" parameterType="java.util.List">
+        update bs_after_sale_order_detail set
+        <if test="logisticsId != null">
+            LOGISTICS_ID = #{logisticsId,jdbcType=BIGINT}
+        </if>
+        where 1=1
+        and ID
+        <foreach collection="afterSaleOrderDetailList" item="item" index="index" open="in (" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="updateAfterSaleDetailLogisticsId" parameterType="cn.com.glsx.supplychain.model.bs.AfterSaleOrderDetail">
+        update bs_after_sale_order_detail
+        <set>
+            <if test="logisticsId != null">
+                LOGISTICS_ID = #{logisticsId,jdbcType=BIGINT},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

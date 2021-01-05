@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.MaintainProductMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.MaintainProduct">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="AFTER_SALE_ORDER_NUMBER" property="afterSaleOrderNumber" jdbcType="VARCHAR"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="REPAIR_COST" property="repairCost" jdbcType="DOUBLE"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, AFTER_SALE_ORDER_NUMBER,PRODUCT_CODE, MERCHANT_CODE, STATUS, REPAIR_COST,
+    CREATED_BY, CREATED_DATE,UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <sql id="P_Base_Column_List">
+    p.ID, p.AFTER_SALE_ORDER_NUMBER, p.MERCHANT_CODE,p.PRODUCT_CODE, p.STATUS, p.REPAIR_COST,
+    p.CREATED_BY, p.CREATED_DATE,p.UPDATED_BY, p.UPDATED_DATE, p.DELETED_FLAG
+  </sql>
+
+    <select id="listMaintainProduct" resultMap="BaseResultMap" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProduct">
+        select
+        u.MERCHANT_NAME as merchantName,
+        pd.NAME as productName,
+        aso.TYPE as type,
+        aso.ORDER_TIME as orderTime,
+        (SELECT count(AFTER_SALE_ORDER_NUMBER) FROM bs_maintain_product_detail where AFTER_SALE_ORDER_NUMBER =  p.AFTER_SALE_ORDER_NUMBER)
+        as number,
+        <include refid="P_Base_Column_List"/>
+        from bs_maintain_product p
+        left join bs_after_sale_order aso on aso.ORDER_NUMBER = p.AFTER_SALE_ORDER_NUMBER
+        left join bs_dealer_user_info u on u.MERCHANT_CODE = p.MERCHANT_CODE
+        left join bs_product pd on pd.CODE = p.PRODUCT_CODE
+        where 1=1
+        <if test="afterSaleOrderNumber != null">
+            and p.AFTER_SALE_ORDER_NUMBER like "%"#{afterSaleOrderNumber,jdbcType=INTEGER}"%"
+        </if>
+        <if test="merchantCode != null">
+            and p.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null and status != ''">
+            and p.STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="type != null and type !=''">
+            AND aso.TYPE = #{type,jdbcType=TINYINT}
+        </if>
+        <if test="merchantName != null and merchantName != ''">
+            and u.MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="startDate != null">
+            AND p.PACKAGE_USER_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND p.PACKAGE_USER_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        ORDER BY p.CREATED_DATE DESC
+    </select>
+
+    <select id="getMainTainProductInfo" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProduct"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM
+        bs_maintain_product
+        where DELETED_FLAG="N"
+        <if test="afterSaleOrderNumber != null">
+            and AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="merchantCode != null">
+            and MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null and status != ''">
+            and STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="type != null and type !=''">
+            AND TYPE = #{type,jdbcType=TINYINT}
+        </if>
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        aso.TYPE as type,
+        <include refid="P_Base_Column_List"/>
+        from bs_maintain_product p
+        left join bs_after_sale_order aso on aso.ORDER_NUMBER = p.AFTER_SALE_ORDER_NUMBER
+        where p.ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bs_maintain_product
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <insert id="insertList" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProduct">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_maintain_product (AFTER_SALE_ORDER_NUMBER, PRODUCT_CODE,MERCHANT_CODE, STATUS,
+        REPAIR_COST,CREATED_BY,CREATED_DATE, UPDATED_BY, UPDATED_DATE,DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.afterSaleOrderNumber,jdbcType=VARCHAR}, #{item.merchantCode,jdbcType=VARCHAR},#{item.productCode,jdbcType=VARCHAR}, #{item.status,jdbcType=TINYINT},
+        #{item.repairCost,jdbcType=DOUBLE}, #{item.createdBy,jdbcType=VARCHAR},#{item.createdDate,jdbcType=TIMESTAMP}, #{item.updatedBy,jdbcType=VARCHAR}, #{item.updatedDate,jdbcType=TIMESTAMP},
+        #{item.deletedFlag,jdbcType=VARCHAR})
+        </foreach>
+        on duplicate key update
+        AFTER_SALE_ORDER_NUMBER = values(AFTER_SALE_ORDER_NUMBER),
+        MERCHANT_CODE = values(MERCHANT_CODE),
+        PRODUCT_CODE = values(PRODUCT_CODE),
+        STATUS = values(STATUS),
+        REPAIR_COST = values(REPAIR_COST),
+        CREATED_BY = values(CREATED_BY),
+        CREATED_DATE = values(CREATED_DATE),
+        UPDATED_BY = values(UPDATED_BY),
+        UPDATED_DATE = values(UPDATED_DATE),
+        DELETED_FLAG = values(DELETED_FLAG)
+    </insert>
+
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProduct">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_maintain_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="afterSaleOrderNumber != null">
+                AFTER_SALE_ORDER_NUMBER,
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE,
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="repairCost != null">
+                REPAIR_COST,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="afterSaleOrderNumber != null">
+                #{afterSaleOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="repairCost != null">
+                #{repairCost,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProduct">
+        update bs_maintain_product
+        <set>
+            <if test="afterSaleOrderNumber != null">
+                AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="repairCost != null">
+                REPAIR_COST = #{repairCost,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.bs.MaintainProduct">
+    update bs_maintain_product
+    set AFTER_SALE_ORDER_NUMBER = #{afterSaleOrderNumber,jdbcType=VARCHAR},
+      MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=TINYINT},
+      REPAIR_COST = #{repairCost,jdbcType=DOUBLE},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

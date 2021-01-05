@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementSellRzfbMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementSellRzfb">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SETTLE_CUSTOMER_CODE" jdbcType="VARCHAR" property="settleCustomerCode" />
+    <result column="SETTLE_CUSTOMER_NAME" jdbcType="VARCHAR" property="settleCustomerName" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="REASONS" property="reasons" jdbcType="VARCHAR" />
+    <result column="SALE_GROUP_CODE" jdbcType="VARCHAR" property="saleGroupCode" />
+    <result column="SALE_GROUP_NAME" jdbcType="VARCHAR" property="saleGroupName" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="ALIPAY_TRANSACTION_NUMBER" jdbcType="VARCHAR" property="alipayTransactionNumber" />
+    <result column="ALIPAY_SERIAL_NUMBER" jdbcType="VARCHAR" property="alipaySerialNumber" />
+    <result column="MERCHANT_ORDER_CODE" jdbcType="VARCHAR" property="merchantOrderCode" />
+    <result column="ACCOUNT_TYPE" jdbcType="VARCHAR" property="accountType" />
+    <result column="INCOME" jdbcType="DOUBLE" property="income" />
+    <result column="EXPENDITURE" jdbcType="DOUBLE" property="expenditure" />
+    <result column="ACCOUNT_BALANCE" jdbcType="DOUBLE" property="accountBalance" />
+    <result column="SERVICE_FEE" jdbcType="DOUBLE" property="serviceFee" />
+    <result column="PAYMENT_CHANNEL" jdbcType="VARCHAR" property="paymentChannel" />
+    <result column="SIGNED_PRODUCTS" jdbcType="VARCHAR" property="signedProducts" />
+    <result column="COUNTER_ACCOUNT" jdbcType="VARCHAR" property="counterAccount" />
+    <result column="COUNTER_NAME" jdbcType="VARCHAR" property="counterName" />
+    <result column="BANK_ORDER_NUMBER" jdbcType="VARCHAR" property="bankOrderNumber" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="RECORDED_DATA" jdbcType="TIMESTAMP" property="recordedData" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SETTLE_CUSTOMER_CODE, SETTLE_CUSTOMER_NAME,STATUS,REASONS,SALE_GROUP_CODE,SALE_GROUP_NAME, WORK_ORDER, ALIPAY_TRANSACTION_NUMBER, 
+    ALIPAY_SERIAL_NUMBER, MERCHANT_ORDER_CODE, ACCOUNT_TYPE, INCOME, EXPENDITURE, ACCOUNT_BALANCE, 
+    SERVICE_FEE, PAYMENT_CHANNEL, SIGNED_PRODUCTS, COUNTER_ACCOUNT, COUNTER_NAME, BANK_ORDER_NUMBER, 
+    PRODUCT_NAME, RECORDED_DATA, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+  <select id="pageStatementSellRzfb" parameterType="cn.com.glsx.supplychain.model.am.StatementSellRzfb" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from am_statement_sell_rzfb
+  	<where>
+  		<if test="settleCustomerCode != null and settleCustomerCode != ''">
+            AND (SETTLE_CUSTOMER_CODE = #{settleCustomerCode,jdbcType=VARCHAR}
+        </if>
+        <if test="settleCustomerName != null and settleCustomerName !=''">
+            or SETTLE_CUSTOMER_NAME = #{settleCustomerName,jdbcType=VARCHAR})
+        </if>
+        <if test="status != null">
+        	AND STATUS = #{status,jdbcType=TINYINT}
+        </if>	
+        <if test="workOrder != null">
+        	AND WORK_ORDER = #{workOrder,jdbcType=VARCHAR}
+        </if>
+  		<if test="startDate != null">
+            AND RECORDED_DATA &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND RECORDED_DATA &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="iptStartDate != null">
+            AND CREATED_DATE &gt;= #{iptStartDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="iptEndDate != null">
+            AND CREATED_DATE &lt;= #{iptEndDate,jdbcType=TIMESTAMP}
+        </if>
+  	</where>
+  </select>
+</mapper>

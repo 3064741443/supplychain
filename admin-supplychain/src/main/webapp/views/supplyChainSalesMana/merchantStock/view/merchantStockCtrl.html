@@ -1,0 +1,73 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="business_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">商户名称</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入商户名称"  ng-model="formData.merchantName" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">物料编码/名称</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入物料编码/名称"  ng-model="formData.materialCode" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">设备类型</label>
+                    <div class="col-lg-4">
+                        <ui-select name="deviceTypeName" ng-model="formData.materialDeviceTypeId" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in typeList">
+                                <div ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">库存数量</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" placeholder="0"  ng-model="formData.minStockNum"/>
+                    </div>
+                    <label class="pull-left control-label">~</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control" placeholder="100"  ng-model="formData.maxStockNum"/>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            <button class="btn btn-primary " type="button" ng-click="exportExcel()" style="margin-right: 15px">导出</button>
+        </div>
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <label class="pull-left control-label">总出货数量：{{numStatData.statSellNum}}</label></label>
+            <label style="margin-left: 100px;">总退货数量：{{numStatData.statRetnNum}}</label>
+            <label style="margin-left: 100px;">总结算数量：{{numStatData.statSettNum}}</label>
+            <label style="margin-left: 100px;">总调入数量：{{numStatData.statCainNum}}</label>
+            <label style="margin-left: 100px;">总调出数量：{{numStatData.statCaouNum}}</label>
+            <label style="margin-left: 100px;">总库存数量：{{numStatData.statStckNum}}</label>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

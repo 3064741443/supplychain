@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.BsMerchantStockMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.BsMerchantStock">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="MATERIAL_TYPE_ID" jdbcType="INTEGER" property="materialTypeId" />
+    <result column="MATERIAL_TYPE_NAME" jdbcType="VARCHAR" property="materialTypeName" />
+    <result column="MATERIAL_DEVICE_TYPE_ID" jdbcType="INTEGER" property="materialDeviceTypeId" />
+    <result column="MATERIAL_DEVICE_TYPE_NAME" jdbcType="VARCHAR" property="materialDeviceTypeName" />
+    <result column="STAT_SELL_NUM" jdbcType="INTEGER" property="statSellNum" />
+    <result column="STAT_RETN_NUM" jdbcType="INTEGER" property="statRetnNum" />
+    <result column="STAT_SETT_NUM" jdbcType="INTEGER" property="statSettNum" />
+    <result column="STAT_CAIN_NUM" jdbcType="INTEGER" property="statCainNum" />
+    <result column="STAT_CAOU_NUM" jdbcType="INTEGER" property="statCaouNum" />
+    <result column="STAT_STCK_NUM" jdbcType="INTEGER" property="statStckNum" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MERCHANT_CODE, MERCHANT_NAME, MATERIAL_CODE, MATERIAL_NAME, MATERIAL_TYPE_ID, 
+    MATERIAL_TYPE_NAME, MATERIAL_DEVICE_TYPE_ID, MATERIAL_DEVICE_TYPE_NAME, STAT_SELL_NUM, 
+    STAT_RETN_NUM, STAT_SETT_NUM, STAT_CAIN_NUM, STAT_CAOU_NUM, STAT_STCK_NUM, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <!--  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bs_merchant_stock
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bs_merchant_stock
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  -->
+  <select id="pageMerchantStocks" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantStock" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from bs_merchant_stock
+  	<where>
+  		<if test="merchantName != null">
+  			AND MERCHANT_NAME LIKE CONCAT('%',#{merchantName},'%')	
+  		</if>
+  		<if test="merchantCode != null">
+  			AND MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+  		</if>
+  		<if test="materialCode != null">
+  			AND MATERIAL_CODE LIKE CONCAT('%',#{materialCode},'%')	 
+  		</if>
+  		<if test="materialName != null">
+  			AND MATERIAL_NAME LIKE CONCAT('%',#{materialName},'%')	 
+  		</if>
+  		<if test="materialDeviceTypeId != null">
+  			AND MATERIAL_DEVICE_TYPE_ID = #{materialDeviceTypeId,jdbcType=INTEGER}
+  		</if>
+  		<if test="materialDeviceTypeName != null">
+  			AND MATERIAL_DEVICE_TYPE_NAME = #{materialDeviceTypeName,jdbcType=VARCHAR}
+  		</if>
+  		<if test="minStockNum != null">
+  			AND STAT_STCK_NUM <![CDATA[>= ]]> #{minStockNum,jdbcType=INTEGER}
+  		</if>
+  		<if test="maxStockNum != null">
+  			AND STAT_STCK_NUM <![CDATA[<= ]]> #{maxStockNum,jdbcType=INTEGER}
+  		</if>
+  		<if test="deletedFlag != null">
+  			AND DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  	order by ID desc
+  </select>
+  <select id="listMerchantStocks" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantStock" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from bs_merchant_stock 
+  	<where>
+  		<if test="merchantName != null">
+  			AND MERCHANT_NAME LIKE CONCAT('%',#{merchantName},'%')	
+  		</if>
+  		<if test="merchantCode != null">
+  			AND MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+  		</if>
+  		<if test="materialCode != null">
+  			AND MATERIAL_CODE LIKE CONCAT('%',#{materialCode},'%')	 
+  		</if>
+  		<if test="materialName != null">
+  			AND MATERIAL_NAME LIKE CONCAT('%',#{materialName},'%')	 
+  		</if>
+  		<if test="materialDeviceTypeId != null">
+  			AND MATERIAL_DEVICE_TYPE_ID = #{materialDeviceTypeId,jdbcType=INTEGER}
+  		</if>
+  		<if test="materialDeviceTypeName != null">
+  			AND MATERIAL_DEVICE_TYPE_NAME = #{materialDeviceTypeName,jdbcType=VARCHAR}
+  		</if>
+  		<if test="minStockNum != null">
+  			AND STAT_STCK_NUM <![CDATA[>= ]]> #{minStockNum,jdbcType=INTEGER}
+  		</if>
+  		<if test="maxStockNum != null">
+  			AND STAT_STCK_NUM <![CDATA[<= ]]> #{maxStockNum,jdbcType=INTEGER}
+  		</if>
+  		<if test="deletedFlag != null">
+  			AND DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  	order by ID desc;
+  </select>
+  <select id="getStatMerchantStocks" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantStock" resultMap="BaseResultMap">
+  	select sum(STAT_SELL_NUM) as statSellNum,sum(STAT_RETN_NUM) as statRetnNum, sum(STAT_SETT_NUM) as statSettNum, sum(STAT_CAIN_NUM) as statCainNum,
+  	sum(STAT_CAOU_NUM) as  statCaouNum, sum(STAT_STCK_NUM) as statStckNum from bs_merchant_stock
+  	<where>
+  		<if test="merchantCode != null and merchantCode != ''">
+  			AND MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+  		</if>
+  		<if test="materialCode != null and materialCode != ''">
+  			AND MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR}
+  		</if>
+  		<if test="deletedFlag != null">
+  			AND DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  </select>
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantStock">
+    insert into bs_merchant_stock (ID, MERCHANT_CODE, MERCHANT_NAME, 
+      MATERIAL_CODE, MATERIAL_NAME, MATERIAL_TYPE_ID, 
+      MATERIAL_TYPE_NAME, MATERIAL_DEVICE_TYPE_ID, 
+      MATERIAL_DEVICE_TYPE_NAME, STAT_SELL_NUM, STAT_RETN_NUM, 
+      STAT_SETT_NUM, STAT_CAIN_NUM, STAT_CAOU_NUM, 
+      STAT_STCK_NUM, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=INTEGER}, #{merchantCode,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
+      #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{materialTypeId,jdbcType=INTEGER}, 
+      #{materialTypeName,jdbcType=VARCHAR}, #{materialDeviceTypeId,jdbcType=INTEGER}, 
+      #{materialDeviceTypeName,jdbcType=VARCHAR}, #{statSellNum,jdbcType=INTEGER}, #{statRetnNum,jdbcType=INTEGER}, 
+      #{statSettNum,jdbcType=INTEGER}, #{statCainNum,jdbcType=INTEGER}, #{statCaouNum,jdbcType=INTEGER}, 
+      #{statStckNum,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantStock">
+    insert into bs_merchant_stock
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE,
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME,
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE,
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME,
+      </if>
+      <if test="materialTypeId != null">
+        MATERIAL_TYPE_ID,
+      </if>
+      <if test="materialTypeName != null">
+        MATERIAL_TYPE_NAME,
+      </if>
+      <if test="materialDeviceTypeId != null">
+        MATERIAL_DEVICE_TYPE_ID,
+      </if>
+      <if test="materialDeviceTypeName != null">
+        MATERIAL_DEVICE_TYPE_NAME,
+      </if>
+      <if test="statSellNum != null">
+        STAT_SELL_NUM,
+      </if>
+      <if test="statRetnNum != null">
+        STAT_RETN_NUM,
+      </if>
+      <if test="statSettNum != null">
+        STAT_SETT_NUM,
+      </if>
+      <if test="statCainNum != null">
+        STAT_CAIN_NUM,
+      </if>
+      <if test="statCaouNum != null">
+        STAT_CAOU_NUM,
+      </if>
+      <if test="statStckNum != null">
+        STAT_STCK_NUM,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null">
+        #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeId != null">
+        #{materialTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="materialTypeName != null">
+        #{materialTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDeviceTypeId != null">
+        #{materialDeviceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="materialDeviceTypeName != null">
+        #{materialDeviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="statSellNum != null">
+        #{statSellNum,jdbcType=INTEGER},
+      </if>
+      <if test="statRetnNum != null">
+        #{statRetnNum,jdbcType=INTEGER},
+      </if>
+      <if test="statSettNum != null">
+        #{statSettNum,jdbcType=INTEGER},
+      </if>
+      <if test="statCainNum != null">
+        #{statCainNum,jdbcType=INTEGER},
+      </if>
+      <if test="statCaouNum != null">
+        #{statCaouNum,jdbcType=INTEGER},
+      </if>
+      <if test="statStckNum != null">
+        #{statStckNum,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantStock">
+    update bs_merchant_stock
+    <set>
+      <if test="merchantCode != null">
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTypeId != null">
+        MATERIAL_TYPE_ID = #{materialTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="materialTypeName != null">
+        MATERIAL_TYPE_NAME = #{materialTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDeviceTypeId != null">
+        MATERIAL_DEVICE_TYPE_ID = #{materialDeviceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="materialDeviceTypeName != null">
+        MATERIAL_DEVICE_TYPE_NAME = #{materialDeviceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="statSellNum != null">
+        STAT_SELL_NUM = #{statSellNum,jdbcType=INTEGER},
+      </if>
+      <if test="statRetnNum != null">
+        STAT_RETN_NUM = #{statRetnNum,jdbcType=INTEGER},
+      </if>
+      <if test="statSettNum != null">
+        STAT_SETT_NUM = #{statSettNum,jdbcType=INTEGER},
+      </if>
+      <if test="statCainNum != null">
+        STAT_CAIN_NUM = #{statCainNum,jdbcType=INTEGER},
+      </if>
+      <if test="statCaouNum != null">
+        STAT_CAOU_NUM = #{statCaouNum,jdbcType=INTEGER},
+      </if>
+      <if test="statStckNum != null">
+        STAT_STCK_NUM = #{statStckNum,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantStock">
+    update bs_merchant_stock
+    set MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      MATERIAL_TYPE_ID = #{materialTypeId,jdbcType=INTEGER},
+      MATERIAL_TYPE_NAME = #{materialTypeName,jdbcType=VARCHAR},
+      MATERIAL_DEVICE_TYPE_ID = #{materialDeviceTypeId,jdbcType=INTEGER},
+      MATERIAL_DEVICE_TYPE_NAME = #{materialDeviceTypeName,jdbcType=VARCHAR},
+      STAT_SELL_NUM = #{statSellNum,jdbcType=INTEGER},
+      STAT_RETN_NUM = #{statRetnNum,jdbcType=INTEGER},
+      STAT_SETT_NUM = #{statSettNum,jdbcType=INTEGER},
+      STAT_CAIN_NUM = #{statCainNum,jdbcType=INTEGER},
+      STAT_CAOU_NUM = #{statCaouNum,jdbcType=INTEGER},
+      STAT_STCK_NUM = #{statStckNum,jdbcType=INTEGER},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

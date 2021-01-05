@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.TaskRecordExportMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.TaskRecordExport">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="TASK_CFG_ID" jdbcType="INTEGER" property="taskCfgId" />
+    <result column="CHECK_CONDITION" jdbcType="VARCHAR" property="checkCondition" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="STATU" jdbcType="VARCHAR" property="statu" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="OPERATOR_FLAG" jdbcType="VARCHAR" property="operatorFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, TASK_CFG_ID, CHECK_CONDITION, URL, STATU, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG,OPERATOR_FLAG
+  </sql>
+  <select id="pageTaskRecordExport" parameterType="cn.com.glsx.supplychain.model.TaskRecordExport" resultType="cn.com.glsx.supplychain.model.TaskRecordExport">
+  	select 
+  	t.id as id,t.TASK_CFG_ID as taskCfgId,t.CHECK_CONDITION as checkCondition, t.URL as url,t.STATU as statu,
+  	t.CREATED_BY as createdBy,t.CREATED_DATE as createdDate,t.UPDATED_BY as updatedBy, t.UPDATED_DATE as updatedDate,
+  	t.DELETED_FLAG as deletedFlag, t.OPERATOR_FLAG as operatorFlag, a.name as taskCfgName
+  	from task_record_export as t left join attrib_info as a on(t.TASK_CFG_ID=a.id)
+  	<where>
+  		<if test="taskCfgId != null">
+  			and t.TASK_CFG_ID = #{taskCfgId,jdbcType=INTEGER}
+  		</if>
+  		<if test="condition != null">
+  			and t.CHECK_CONDITION = #{checkCondition,jdbcType=VARCHAR}
+  		</if>
+  		<if test="statu != null">
+  			and t.STATU = #{statu,jdbcType=VARCHAR}
+  		</if>
+  		<if test="createdBy != null">
+  			and t.CREATED_BY = #{createdBy,jdbcType=VARCHAR}
+  		</if>
+  		<if test="operatorFlag != null">
+  			and t.OPERATOR_FLAG = #{operatorFlag,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  	order by t.id desc
+  </select>
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.TaskRecordExport">
+    insert into task_record_export (ID, TASK_CFG_ID, CHECK_CONDITION, 
+      URL, STATU, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG,OPERATOR_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{taskCfgId,jdbcType=INTEGER}, #{checkCondition,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{statu,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR},#{operatorFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.TaskRecordExport">
+    insert into task_record_export
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="taskCfgId != null">
+        TASK_CFG_ID,
+      </if>
+      <if test="condition != null">
+        CHECK_CONDITION,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="statu != null">
+        STATU,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="operatorFlag != null">
+      	OPERATOR_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskCfgId != null">
+        #{taskCfgId,jdbcType=INTEGER},
+      </if>
+      <if test="condition != null">
+        #{checkCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="statu != null">
+        #{statu,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorFlag != null">
+      	#{operatorFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.TaskRecordExport">
+    update task_record_export
+    <set>
+      <if test="taskCfgId != null">
+        TASK_CFG_ID = #{taskCfgId,jdbcType=INTEGER},
+      </if>
+      <if test="condition != null">
+        CHECK_CONDITION = #{checkCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="statu != null">
+        STATU = #{statu,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorFlag != null">
+      	OPERATOR_FLAG = #{operatorFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.TaskRecordExport">
+    update task_record_export
+    set TASK_CFG_ID = #{taskCfgId,jdbcType=INTEGER},
+      CHECK_CONDITION = #{checkCondition,jdbcType=VARCHAR},
+      URL = #{url,jdbcType=VARCHAR},
+      STATU = #{statu,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      OPERATOR_FLAG = #{operatorFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

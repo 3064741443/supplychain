@@ -1,0 +1,79 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">新建用户</h4>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_userInfo_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">用户名 :</label>
+                <div class="control-content">
+                    <input name="userName" class="form-control" type="text" ng-required="true"
+                           maxlength="50" ng-model="userInfo.userName"/>
+                    <div class="m-t-xs"
+                         ng-show="add_userInfo_form.userName.$invalid && add_userInfo_form.submitted">
+                        <small class="text-danger"
+                               ng-show="add_userInfo_form.userName.$error.required">请输入用户名</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">密码 :</label>
+                <div class="control-content">
+                    <input name="password" class="form-control" type="text" ng-required="true"
+                           maxlength="50" ng-model="userInfo.password"/>
+                    <div class="m-t-xs"
+                         ng-show="add_userInfo_form.password.$invalid && add_userInfo_form.submitted">
+                        <small class="text-danger"
+                               ng-show="add_userInfo_form.password.$error.required">请输入密码</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">角色 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="role" ng-required="true" ng-model="userInfo.role" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in roleList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs" ng-show="add_userInfo_form.role.$invalid && add_userInfo_form.submitted">
+                                <small class="text-danger" ng-show="add_userInfo_form.role.$error.required">请选择角色</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">工厂/仓库名 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="warehouseId" ng-required="true" ng-model="userInfo.warehouseId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in warehouseIdList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs" ng-show="add_userInfo_form.warehouseId.$invalid && add_userInfo_form.submitted">
+                                <small class="text-danger" ng-show="add_userInfo_form.warehouseId.$error.required">请选择仓库</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="state==undefined" type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

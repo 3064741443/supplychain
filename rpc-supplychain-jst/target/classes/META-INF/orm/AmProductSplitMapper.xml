@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.AmProductSplitMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.AmProductSplit">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SERVICE_TYPE" jdbcType="TINYINT" property="serviceType" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="CHANNEL" jdbcType="TINYINT" property="channel" />
+    <result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+    <result column="DEVICE_QUANTITY" jdbcType="INTEGER" property="deviceQuantity" />
+    <result column="SALE_MODE" jdbcType="TINYINT" property="saleMode" />
+    <result column="SERVICE_TIME" jdbcType="VARCHAR" property="serviceTime" />
+    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+    <result column="HARDWARE_CONTAIN_SOURCE" jdbcType="VARCHAR" property="hardwareContainSource" />
+    <result column="SOURCE_PROPORTION" jdbcType="DOUBLE" property="sourceProportion" />
+    <result column="NOT_SOURCE_PROPORTION" jdbcType="DOUBLE" property="notSourceProportion" />
+    <result column="CAR_TYPE" jdbcType="TINYINT" property="carType" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="PLUS_JRFK" jdbcType="VARCHAR" property="plusJrfk" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SERVICE_TYPE, PRODUCT_CODE, PRODUCT_NAME, MERCHANT_CODE, MERCHANT_NAME, CHANNEL, 
+    ALIAS, DEVICE_QUANTITY, SALE_MODE, SERVICE_TIME, PACKAGE_ONE, HARDWARE_CONTAIN_SOURCE, 
+    SOURCE_PROPORTION, NOT_SOURCE_PROPORTION, CAR_TYPE, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG,PLUS_JRFK
+  </sql>
+   
+  <select id="selectDisProduct" parameterType="cn.com.glsx.supplychain.jst.model.AmProductSplit" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from am_product_split 
+  	<where>
+  		<if test="record.listChannel != null">
+  			AND (CHANNEL IN
+  			<foreach collection="record.listChannel" item="channel" index="index" open="(" close=")" separator=",">
+  				#{channel}
+  			</foreach>
+  		</if>
+  		<if test="record.listMerchantCode != null">
+  			or MERCHANT_CODE in
+  			<foreach collection="record.listMerchantCode" item="merchantCode" index="index" open="(" close=")" separator=",">
+  				#{merchantCode}
+  			</foreach>
+  			)
+  		</if>
+  		<if test="record.productName != null">
+  			AND PRODUCT_NAME like CONCAT('%',#{record.productName},'%')
+  		</if>
+  		<if test="record.serviceType != null">
+  			AND SERVICE_TYPE = #{record.serviceType}
+  		</if>
+  		<if test="record.deletedFlag != null">
+  			AND DELETED_FLAG = #{record.deletedFlag}
+  		</if>
+  		<if test="record.plusJrfk != null">
+  			AND PLUS_JRFK = #{record.plusJrfk}
+  		</if>
+  	</where>
+  	order by id desc limit #{record.pageStart},#{record.pageSize}
+  </select>
+  
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.AmProductSplit">
+    insert into am_product_split (ID, SERVICE_TYPE, PRODUCT_CODE, 
+      PRODUCT_NAME, MERCHANT_CODE, MERCHANT_NAME, 
+      CHANNEL, ALIAS, DEVICE_QUANTITY, 
+      SALE_MODE, SERVICE_TIME, PACKAGE_ONE, 
+      HARDWARE_CONTAIN_SOURCE, SOURCE_PROPORTION, 
+      NOT_SOURCE_PROPORTION, CAR_TYPE, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG,PLUS_JRFK)
+    values (#{id,jdbcType=INTEGER}, #{serviceType,jdbcType=TINYINT}, #{productCode,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{merchantCode,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
+      #{channel,jdbcType=TINYINT}, #{alias,jdbcType=VARCHAR}, #{deviceQuantity,jdbcType=INTEGER}, 
+      #{saleMode,jdbcType=TINYINT}, #{serviceTime,jdbcType=VARCHAR}, #{packageOne,jdbcType=VARCHAR}, 
+      #{hardwareContainSource,jdbcType=VARCHAR}, #{sourceProportion,jdbcType=DOUBLE}, 
+      #{notSourceProportion,jdbcType=DOUBLE}, #{carType,jdbcType=TINYINT}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR},#{plusJrfk,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.AmProductSplit">
+    insert into am_product_split
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="serviceType != null">
+        SERVICE_TYPE,
+      </if>
+      <if test="productCode != null">
+        PRODUCT_CODE,
+      </if>
+      <if test="productName != null">
+        PRODUCT_NAME,
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE,
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME,
+      </if>
+      <if test="channel != null">
+        CHANNEL,
+      </if>
+      <if test="alias != null">
+        ALIAS,
+      </if>
+      <if test="deviceQuantity != null">
+        DEVICE_QUANTITY,
+      </if>
+      <if test="saleMode != null">
+        SALE_MODE,
+      </if>
+      <if test="serviceTime != null">
+        SERVICE_TIME,
+      </if>
+      <if test="packageOne != null">
+        PACKAGE_ONE,
+      </if>
+      <if test="hardwareContainSource != null">
+        HARDWARE_CONTAIN_SOURCE,
+      </if>
+      <if test="sourceProportion != null">
+        SOURCE_PROPORTION,
+      </if>
+      <if test="notSourceProportion != null">
+        NOT_SOURCE_PROPORTION,
+      </if>
+      <if test="carType != null">
+        CAR_TYPE,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="plusJrfk != null">
+        PLUS_JRFK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=TINYINT},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null">
+        #{channel,jdbcType=TINYINT},
+      </if>
+      <if test="alias != null">
+        #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceQuantity != null">
+        #{deviceQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="saleMode != null">
+        #{saleMode,jdbcType=TINYINT},
+      </if>
+      <if test="serviceTime != null">
+        #{serviceTime,jdbcType=VARCHAR},
+      </if>
+      <if test="packageOne != null">
+        #{packageOne,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareContainSource != null">
+        #{hardwareContainSource,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceProportion != null">
+        #{sourceProportion,jdbcType=DOUBLE},
+      </if>
+      <if test="notSourceProportion != null">
+        #{notSourceProportion,jdbcType=DOUBLE},
+      </if>
+      <if test="carType != null">
+        #{carType,jdbcType=TINYINT},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="plusJrfk != null">
+        #{plusJrfk,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.AmProductSplit">
+    update am_product_split
+    <set>
+      <if test="serviceType != null">
+        SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+      </if>
+      <if test="productCode != null">
+        PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null">
+        CHANNEL = #{channel,jdbcType=TINYINT},
+      </if>
+      <if test="alias != null">
+        ALIAS = #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceQuantity != null">
+        DEVICE_QUANTITY = #{deviceQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="saleMode != null">
+        SALE_MODE = #{saleMode,jdbcType=TINYINT},
+      </if>
+      <if test="serviceTime != null">
+        SERVICE_TIME = #{serviceTime,jdbcType=VARCHAR},
+      </if>
+      <if test="packageOne != null">
+        PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareContainSource != null">
+        HARDWARE_CONTAIN_SOURCE = #{hardwareContainSource,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceProportion != null">
+        SOURCE_PROPORTION = #{sourceProportion,jdbcType=DOUBLE},
+      </if>
+      <if test="notSourceProportion != null">
+        NOT_SOURCE_PROPORTION = #{notSourceProportion,jdbcType=DOUBLE},
+      </if>
+      <if test="carType != null">
+        CAR_TYPE = #{carType,jdbcType=TINYINT},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="plusJrfk != null">
+        PLUS_JRFK = #{plusJrfk,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.AmProductSplit">
+    update am_product_split
+    set SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+      PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+      MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      CHANNEL = #{channel,jdbcType=TINYINT},
+      ALIAS = #{alias,jdbcType=VARCHAR},
+      DEVICE_QUANTITY = #{deviceQuantity,jdbcType=INTEGER},
+      SALE_MODE = #{saleMode,jdbcType=TINYINT},
+      SERVICE_TIME = #{serviceTime,jdbcType=VARCHAR},
+      PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      HARDWARE_CONTAIN_SOURCE = #{hardwareContainSource,jdbcType=VARCHAR},
+      SOURCE_PROPORTION = #{sourceProportion,jdbcType=DOUBLE},
+      NOT_SOURCE_PROPORTION = #{notSourceProportion,jdbcType=DOUBLE},
+      CAR_TYPE = #{carType,jdbcType=TINYINT},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      PLUS_JRFK = #{plusJrfk,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,135 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">更多</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <!--<tr>
+            <td class="text-right">订单ID :</td>
+            <td class="text-left">{{ detailMyorderData.orderNumber}}</td>
+            <td class="text-right">订单时间 :</td>
+            <td class="text-left">{{ detailMyorderData.orderTime}}</td>
+        </tr>
+        <tr>
+            <td class="text-right">订单总金额 :</td>
+            <td class="text-left">{{ "¥"+detailMyorderData.totalAmount.toFixed(2)}}</td>
+        </tr>-->
+        <tr>
+            <td class="text-right">收货人 :</td>
+            <td class="text-left">{{ detailMyorderData.logistics.receiveAddress.name }}</td>
+            <td class="text-right">联系电话 :</td>
+            <td class="text-left">{{detailMyorderData.logistics.receiveAddress.mobile }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">收货地址 :</td>
+            <td class="text-left">{{ detailMyorderData.logistics.receiveAddress.provinceName }}{{
+                detailMyorderData.logistics.receiveAddress.cityName }}{{ detailMyorderData.logistics.receiveAddress.areaName
+                }}{{ detailMyorderData.logistics.receiveAddress.address }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">订单备注 :</td>
+            <td class="text-left">{{productRemark}}</td>
+        </tr>
+        </tbody>
+    </table>
+        <!--<div class="form-group">
+            <div class="col-lg-12 control-content">
+                <label class="col-lg-3 control-label">订单明细 :</label>
+                <table datatable="ng" dt-options="dtOptions"
+                       class="table table-striped table-bordered table-hover">
+                    <colgroup>
+                        <col width="10%"/>
+                        <col width="10%"/>
+                        <col width="10%"/>
+                        <col width="5%"/>
+                        <col width="5%"/>
+                        <col width="5%"/>
+                        <col width="5%"/>
+                        <col width="5%"/>
+                        <col width="20%"/>
+                        <col width="15%"/>
+                        <col width="10%"/>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th >产品编号</th>
+                        <th >产品名称</th>
+                        <th >产品规格</th>
+                        <th >单价</th>
+                        <th >订购数量</th>
+                        <th >审核数量</th>
+                        <th >已发数量</th>
+                        <th >签收数量</th>
+                        <th >物流信息</th>
+                        <th >备注</th>
+                        <th >操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr  ng-repeat='item in detailMyorderData.merchantOrderDetailList'>
+                        <td >{{item.productCode}}</td>
+                        <td >{{item.productName}}</td>
+                        <td >{{item.productSpecification}}</td>
+                        <td >{{"¥"+item.productAmount.toFixed(2)}}</td>
+                        <td >{{item.orderQuantity}}</td>
+                        <td >{{item.checkQuantity}}</td>
+                        <td >{{item.shipmentsQuantity}}</td>
+                        <td >{{item.acceptQuantity}}</td>
+                        <td >
+                            <div class="list" style="width: auto">
+                                <span ng-repeat="logistics in item.logisticsArr">{{logistics.company }}:{{logistics.orderNumber}}</br></span>
+                            </div>
+                            &lt;!&ndash;<div class="list">
+
+                            </div>&ndash;&gt;
+                        </td>
+                        <td class="productRemarks" title="{{item.productRemarks}}" style="max-width:8px;text-overflow:ellipsis;overflow:hidden;td:hover">{{item.productRemarks}}</td>
+                        <td ng-show="showDispatch(item.acceptQuantity,item.dispatchOrderNumber,item.shipmentsQuantity,item.checkQuantity)">
+                            <a class="text-info" ng-click="singin(item)" style="margin-left: 10px">签收</a></td>
+                    </tr>
+                    <tr>
+                        <td>总计</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{detailMyorderData.totalOrder}}</td>
+                        <td>{{detailMyorderData.totalCheck}}</td>
+                        <td>{{detailMyorderData.shipmentsQuantitySum}}</td>
+                        <td>{{detailMyorderData.acceptQuantitySum}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>-->
+    </div>
+</div>
+
+<style>
+    .detailMyOrder tr td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    ul{
+        width: 50%;
+        float: left;
+    }
+    ul,li{
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+</style>

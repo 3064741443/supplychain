@@ -1,0 +1,83 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">上传签收单</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="upload_signPice_form"
+              method="post" enctype="multipart/form-data" style="height:520px;">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">签收单单据号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="name" ng-required="true" placeholder="签收单单据号" class="form-control" type="text"
+                                   style="float: left;width: 30%; margin-right: 25px" ng-model="uploadSignPiceData.signOrderNumber"/>
+                            <div class="m-t-xs"
+                                 ng-show="upload_signPice_form.name.$invalid && upload_signPice_form.submitted">
+                                <small class="text-danger" ng-show="upload_signPice_form.name.$error.required">请输入签收单据号
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="operate-line" >
+                <span class="operate-label">签收单图片：</span>
+                <div class="operate-upload" style="position: absolute;top: 87px;left: 30px;">
+                    <div ng-show="!item.img" class="operate-files">
+                        <input type="file"  accept="image/*" data-id="uploadImg{{$index}}"  name="img" ng-model="item.img"
+                               nv-file-select="" uploader="uploaderSnList" ng-click="clearItems(0)">
+                    <img id="img0" src="" style ="width:300px;height:200px;"  class="del-img">
+                </div>
+             </div>
+
+
+            <div class="operate-line"  >
+                <div class="operate-upload" style="position: absolute;top: 87px;right: 50px;">
+                    <div style="margin-left: 72px;float: right" ng-show="!item.img" class="operate-files">
+                        <input type="file" accept="image/*" data-id="uploadImg{{$index}}" name="img" ng-model="item.img"
+                               nv-file-select="" uploader="uploaderSnList" ng-click="clearItems(1)">
+                       <img id="img1" src=""  style ="width:300px;height:200px;" class="del-img">
+                    </div>
+                </div>
+                <div class="m-t-xs operate-error" ng-show="!item.img && submitFlag1[$index][0]">
+                    <small class="text-danger">请上传签收单图片</small>
+                </div>
+            </div>
+
+
+            <div class="operate-line">
+                <div class="operate-upload"  style="position: absolute;top: 245px;left: -41px;">
+                 <div style="margin-left: 72px;float: left;margin-top: 80px" ng-show="!item.img" class="operate-files">
+                        <input type="file" accept="image/*" data-id="uploadImg{{$index}}" name="img" ng-model="item.img"
+                               nv-file-select="" uploader="uploaderSnList" ng-click="clearItems(2)">
+                        <img id="img2" src="" style ="width:300px;height:200px;" class="del-img">
+
+                    </div>
+                </div>
+
+
+            <div class="operate-line" >
+                <div class="operate-upload" style="position: absolute;top: 245px;right: 50px;">
+                <div style="margin-left: 72px;float: right;margin-top: 80px" ng-show="!item.img" class="operate-files">
+                        <input type="file" accept="image/*" data-id="uploadImg{{$index}}" name="img" ng-model="item.img"
+                               nv-file-select="" uploader="uploaderSnList" ng-click="clearItems(3)">
+                        <img id="img3" src="" style ="width:300px;height:200px;"  class="del-img">
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button id="okButton" type="submit" class="btn btn-primary" ng-click="ok();">上传</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.am.AmSyncLastidRecordMapper">
+	
+	<resultMap id="BaseResultMap" type="glsx.com.cn.task.model.AmSyncLastidRecord">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="LAST_STATEMENT_COLLECTION_ID" jdbcType="BIGINT" property="lastStatementCollectionId"/>
+		<result column="LAST_STATEMENT_FINANCE_ID" jdbcType="BIGINT" property="lastStatementFinanceId"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID,LAST_STATEMENT_COLLECTION_ID,LAST_STATEMENT_FINANCE_ID
+	</sql>
+	
+	<!-- 获取记录 -->
+	<select id="getSyncLastidRecord" resultMap="BaseResultMap">
+  	  select
+			<include refid="Base_Column_List"/>
+		from am_sync_lastid_record where `id`=1
+  	</select>
+  	
+  	<!-- 修改记录 -->
+  	<update id="updateSyncLastidRecord" parameterType="glsx.com.cn.task.model.SyncLastidRecord">
+  		update am_sync_lastid_record
+  		<set>
+			<if test="lastStatementCollectionId != null">
+				LAST_STATEMENT_COLLECTION_ID = #{lastStatementCollectionId,jdbcType=INTEGER},
+			</if>
+			<if test="lastStatementFinanceId != null">
+				LAST_STATEMENT_FINANCE_ID = #{lastStatementFinanceId,jdbcType=INTEGER},
+			</if>
+  		</set>
+  		 where ID = #{id,jdbcType=INTEGER}
+  	</update>
+</mapper>

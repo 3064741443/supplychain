@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.com.glsx.framework</groupId>
+		<artifactId>framework-rpc-api</artifactId>
+		<version>1.0.2-SNAPSHOT</version>
+	</parent>
+	<groupId>cn.com.glsx.supplychain</groupId>
+	<artifactId>rpc-supplychain-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>rpc-supplychain-api</name>
+	<properties>
+        <deploy.scanPackage>cn.com.glsx.supplychain.remote</deploy.scanPackage>
+    </properties> 
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.oreframework.boot</groupId>
+			<artifactId>ore-boot-starter-office</artifactId>
+		</dependency>
+		<!--流量服务-->
+		<dependency>
+			<groupId>com.glsx.biz</groupId>
+			<artifactId>oms-flowservice-api</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>2.7.7</version>
+            <scope>compile</scope>
+        </dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>easyexcel</artifactId>
+			<version>2.2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>28.2-jre</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+        <plugins>
+			<!--<plugin>
+				<groupId>cn.com.glsx.framework</groupId>
+				<artifactId>rpc-api-deploy-maven-plugin</artifactId>
+				<version>1.0.1-SNAPSHOT</version>
+				<dependencies>
+					<dependency>
+						<groupId>cn.com.glsx.supplychain</groupId>
+						<artifactId>rpc-supplychain-api</artifactId>
+						<version>0.0.1-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
+			</plugin>-->
+        </plugins>
+    </build>
+    
+	
+</project>
+

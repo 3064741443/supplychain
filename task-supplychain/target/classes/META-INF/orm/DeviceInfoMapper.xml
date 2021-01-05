@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.DeviceInfoMapper">
+	
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.DeviceInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="wareHouseId" />
+    <result column="WAREHOUSE_ID_UP" jdbcType="INTEGER" property="wareHouseIdUp" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="imsi" jdbcType="VARCHAR" property="imsi" />
+    <result column="sim_card_no" jdbcType="VARCHAR" property="simCardNo" />
+    <result column="VCODE" jdbcType="VARCHAR" property="vcode" />
+    
+    <association property="orderInfo" javaType="glsx.com.cn.task.model.OrderInfo">
+    	<id column="ID" jdbcType="INTEGER" property="id" />
+	    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+	    <result column="TOTAL" jdbcType="INTEGER" property="total" />
+	    <result column="STATUS" jdbcType="CHAR" property="status" />
+	    <result column="DEVICE_ID" jdbcType="INTEGER" property="deviceId" />
+	    <result column="DEVICE_NAME" jdbcType="VARCHAR" property="deviceName" />
+	    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+	    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+	    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+	    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+	    <result column="SEND_MERCHANT_NAME" jdbcType="VARCHAR" property="sendMerchantName" />
+	    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+	    <result column="CONTACTS" jdbcType="VARCHAR" property="contacts" />
+	    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+	    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+	    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+	    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+	    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+	    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+	    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+	    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+	    <result column="PACKAGE_TWO" jdbcType="VARCHAR" property="packageTwo" />
+	    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    </association >
+    
+  </resultMap>
+
+	<sql id="Base_Column_List">
+		d.ID,d.ICCID,d.IMEI,d.SN,d.STATUS,d.ORDER_CODE,d.ATTRIB_CODE,d.CREATED_DATE,d.UPDATED_DATE,d.WAREHOUSE_ID,d.WAREHOUSE_ID_UP,
+		d.VCODE,d.imsi,d.sim_card_no,o.ORDER_CODE,o.DEVICE_ID,o.OPERATOR_MERCHANT_NO,o.SEND_MERCHANT_NO,o.BATCH,o.PACKAGE_ONE,o.PACKAGE_TWO
+	</sql>
+	
+	<sql id="Card_Column_List">
+		ID,ICCID,IMEI,SN,STATUS,VCODE
+	</sql>
+	
+	<select id="getDeviceInfoUserInSyncPhicalDevice" parameterType="glsx.com.cn.task.model.DeviceInfo" resultMap="BaseResultMap">
+		select 
+    	<include refid="Base_Column_List" />
+    	from device_info d left join order_info o on(d.ORDER_CODE=o.ORDER_CODE) where d.DELETED_FLAG='N' 
+    	<if test="status != null">
+    		and d.STATUS = #{status,jdbcType=VARCHAR}
+    	</if>
+    	<if test="updatedDate != null">
+    		and DATE_FORMAT(d.`UPDATED_DATE`,'%Y-%m-%d %H:%i:%s') > DATE_FORMAT(#{updatedDate},'%Y-%m-%d %H:%i:%s')
+    	</if>
+    	 order by d.`UPDATED_DATE` asc 
+	</select>
+	
+	<!--  
+	<select id="getDeviceInfoUserInSyncPhicalDevice" parameterType="glsx.com.cn.task.model.DeviceInfo" resultMap="BaseResultMap">
+		select 
+    	<include refid="Base_Column_List" />
+    	from device_info d left join order_info o on(d.ORDER_CODE=o.ORDER_CODE) where 1=1 
+    	<if test="id != null">
+    		and d.ID > #{id,jdbcType=INTEGER}
+    	</if>
+    	<if test="status != null">
+    		and d.STATUS = #{status,jdbcType=VARCHAR}
+    	</if>
+    	 order by d.`ID` asc limit 100	
+	</select>
+	-->
+	
+	<select id="getDeviceInfoUsedInSyncCardFlow" parameterType="glsx.com.cn.task.model.DeviceInfo" resultMap="BaseResultMap">
+		select
+		<include refid="Card_Column_List"/>
+		from device_info where DELETED_FLAG='N'
+		<if test="id != null">
+			and ID > #{id,jdbcType=INTEGER}
+		</if>
+		<if test="status != null">
+    		and STATUS = #{status,jdbcType=VARCHAR}
+    	</if>
+    	<!-- 这个条件是把老数据隔开 另行处理 -->
+    	<if test="wareHouseId != null">
+    		and WAREHOUSE_ID != #{wareHouseId,jdbcType=INTEGER}
+    	</if>
+			order by ID asc limit 100	
+	</select>
+	
+	<select id="getDeviceInfo" parameterType="glsx.com.cn.task.model.DeviceInfo" resultMap="BaseResultMap">
+		select ID,ICCID,IMEI,ATTRIB_CODE,VCODE from device_info where imei = #{imei}
+	</select>
+	
+</mapper>

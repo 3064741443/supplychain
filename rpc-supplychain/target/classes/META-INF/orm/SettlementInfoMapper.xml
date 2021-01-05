@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.SettlementInfoMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.SettlementInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR" />
+    <result column="CUSTOMER_ORDER_NUM" property="customerOrderNum" jdbcType="VARCHAR" />
+    <result column="DELIVERY_ORDER_NUM" property="deliveryOrderNum" jdbcType="VARCHAR" />
+    <result column="SALES_ID" property="salesId" jdbcType="BIGINT"/>
+    <result column="LOGISTICS_ID" property="logisticsId" jdbcType="BIGINT"/>
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PRODUCT_CODE, CUSTOMER_ORDER_NUM, DELIVERY_ORDER_NUM,SALES_ID,LOGISTICS_ID, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,DELETED_FLAG
+  </sql>
+
+  <select id="SettlementInfoList" parameterType="cn.com.glsx.supplychain.model.SettlementInfo" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM bs_settlement_info  WHERE id &gt;#{id,jdbcType=BIGINT}
+  </select>
+
+  <insert id="insertSettlementInfoList" parameterType="cn.com.glsx.supplychain.model.SettlementInfo">
+  <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    SELECT LAST_INSERT_ID()
+  </selectKey>
+  insert into bs_settlement_info (PRODUCT_CODE, CUSTOMER_ORDER_NUM, DELIVERY_ORDER_NUM,SALES_ID,LOGISTICS_ID,CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+  values
+  <foreach collection="list" item="item" index="index" separator=",">
+    (#{item.productCode,jdbcType=VARCHAR},#{item.customerOrderNum,jdbcType=VARCHAR},#{item.deliveryOrderNum,jdbcType=VARCHAR}, #{item.salesId,jdbcType=BIGINT},#{item.logisticsId,jdbcType=BIGINT},
+    #{item.createdBy,jdbcType=VARCHAR},#{item.createdDate,jdbcType=TIMESTAMP},#{item.updatedBy,jdbcType=VARCHAR}, #{item.updatedDate,jdbcType=TIMESTAMP},#{item.deletedFlag,jdbcType=VARCHAR})
+  </foreach>
+</insert>
+
+</mapper>

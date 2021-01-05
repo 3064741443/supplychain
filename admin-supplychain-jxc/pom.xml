@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>cn.com.glsx.framework</groupId>
+		<artifactId>framework-admin</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>cn.com.glsx.bizName.modelName</groupId>
+	<artifactId>admin-supplychain-jxc</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>admin-supplychain-jxc</name>
+	<packaging>war</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>org.oreframework.boot</groupId>
+			<artifactId>ore-boot-starter-datasource</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+		</dependency>
+	</dependencies>
+</project>

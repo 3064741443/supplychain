@@ -1,0 +1,52 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">签收单查看</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="upload_signPice_form"
+              method="post" enctype="multipart/form-data" style="height:520px;">
+
+            <div class="operate-line"  >
+                <div class="operate-upload" style="position: absolute;top: 87px;left: 30px;">
+                    <div class="operate-files one" ng-repeat = "i in uploadSignPiceData">
+                    <img src={{i.src}}  style ="width:500px;height:300px;" class="del-img">
+                    <button type="button" style="margin-top: -275px;margin-left: -12px;" class="btn btn-primary" ng-click="downloadImage(i.src)">下载</button>
+                    </div>
+             </div>
+
+            </div>
+        </form>
+
+        <a ng-show="false" href="" download="">
+            <img src="" alt="">
+        </a>
+    </div>
+</div>
+<style>
+    .del-img:nth-child(1) {
+        margin: 0 10px 10px 0;
+    }
+    .del-img:nth-child(2) {
+        margin: 0 0 10px 10px;
+    }
+    .del-img:nth-child(3) {
+        margin: 10px 10px 0 0;
+    }
+    .del-img:nth-child(4) {
+        margin: 10px 0 0 10px;
+    }
+    .one {
+        position: relative;
+        display: inline-block;
+    }
+    .one .submitOne {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        width: 50px;
+        height: 50px;
+    }
+</style>

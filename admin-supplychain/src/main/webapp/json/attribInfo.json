@@ -1,0 +1,62 @@
+{
+  "returnCode": "0",
+  "message": null,
+  "errId": null,
+  "data": {
+    "pageNum": 1,
+    "pageSize": 10,
+    "startRow": 0,
+    "endRow": 10,
+    "total": 1,
+    "pages": 1,
+    "list": [
+      {
+        "attribCode": "1111",
+        "modelName":"车载wifi",
+        "typeName": "车载wifi",
+        "configureName":"深圳广联赛讯",
+        "boardVersionName":"入库激活",
+        "softVersion":"234",
+        "fastenerVersion":"20180413"
+      },
+      {
+        "attribCode": "1111",
+        "modelName":"车载wifi",
+        "typeName": "车载wifi",
+        "configureName":"深圳广联赛讯",
+        "boardVersionName":"入库激活",
+        "softVersion":"234",
+        "fastenerVersion":"20180413"
+      },
+      {
+        "attribCode": "1111",
+        "modelName":"车载wifi",
+        "typeName": "车载wifi",
+        "configureName":"深圳广联赛讯",
+        "boardVersionName":"入库激活",
+        "softVersion":"234",
+        "fastenerVersion":"20180413"
+      },
+      {
+        "attribCode": "1111",
+        "modelName":"车载wifi",
+        "typeName": "车载wifi",
+        "configureName":"深圳广联赛讯",
+        "boardVersionName":"入库激活",
+        "softVersion":"234",
+        "fastenerVersion":"20180413"
+      },
+      {
+        "attribCode": "1111",
+        "modelName":"车载wifi",
+        "typeName": "车载wifi",
+        "configureName":"深圳广联赛讯",
+        "boardVersionName":"入库激活",
+        "softVersion":"234",
+        "fastenerVersion":"20180413"
+      }
+    ],
+    "condition": null
+  }
+}
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.rpc.supplychain.rdn.mapper.STKMerchantWarningDevicesnMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.STKMerchantWarningDevicesn">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="warning_code" jdbcType="VARCHAR" property="warningCode" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="to_merchant_code" jdbcType="VARCHAR" property="toMerchantCode" />
+    <result column="to_merchant_name" jdbcType="VARCHAR" property="toMerchantName" />
+    <result column="cur_merchant_code" jdbcType="VARCHAR" property="curMerchantCode" />
+    <result column="cur_merchant_name" jdbcType="VARCHAR" property="curMerchantName" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="active_time" jdbcType="VARCHAR" property="activeTime" />
+    <result column="send_time" jdbcType="VARCHAR" property="sendTime" />
+    <result column="transfer_time" jdbcType="VARCHAR" property="transferTime" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, warning_code, sn, to_merchant_code, to_merchant_name, cur_merchant_code, cur_merchant_name, 
+    device_type, material_code, material_name, active_time, send_time, transfer_time, 
+    created_by, created_date, updated_by, updated_date, deleted_flag
+  </sql>
+
+	<select id="exportWarningDevicesn" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.STKMerchantWarningDevicesn"
+			resultType="cn.com.glsx.supplychain.jxc.dto.STKWarningDevicesnDTO">
+		select
+		smwd.warning_code as warningCode,
+		smwd.sn as sn,
+		smwd.to_merchant_code as toMerchantCode,
+		smwd.to_merchant_name as toMerchantName,
+		smwd.cur_merchant_code as curMerchantCode,
+		smwd.cur_merchant_name as curMerchantName,
+		smwd.device_type as deviceType,
+		dt.name as deviceTypeName,
+		smwd.material_code as materialCode,
+		smwd.material_name as materialName,
+		smwd.active_time as activeTime,
+		smwd.send_time as sendTime,
+		smwd.transfer_time as transferTime
+		from stk_merchant_warning_devicesn as smwd
+		left join device_type as dt on(smwd.device_type=dt.id)
+		<where>
+			<if test="toMerchantCode != null">
+				and (smwd.to_merchant_code like concat('%',#{toMerchantCode,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="toMerchantName != null">
+				or smwd.to_merchant_name like concat('%',#{toMerchantName,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="curMerchantCode != null">
+				and (smwd.cur_merchant_code like concat('%',#{curMerchantCode,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="curMerchantName != null">
+				or smwd.cur_merchant_name like concat('%',#{curMerchantName,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="deviceType != null">
+				and smwd.device_type = #{deviceType,jdbcType=INTEGER}
+			</if>
+			<if test="materialCode != null">
+				and (smwd.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="materialName != null">
+				or smwd.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="warningCode != null">
+				and smwd.warning_code = #{warningCode,jdbcType=VARCHAR}
+			</if>
+		</where>
+		order by smwd.id desc
+	</select>
+</mapper>

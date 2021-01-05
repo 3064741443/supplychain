@@ -1,0 +1,125 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">发起对账</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="launchRec_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">渠道类型:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="channel"  ng-model="launchData.channel" ng-init="launchData.channel" ng-required="true" ng-change="channelChange(launchData.channel)"
+                              theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in channelList" >
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="launchRec_form.channel.$invalid && launchRec_form.submitted">
+                                <small class="text-danger" ng-show="launchRec_form.channel.$error.required">请选择渠道类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">对账商户:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="merchant" ng-disabled="alreadyShipped" ng-required="true" ng-model="launchData.merchant" ng-init="launchData.merchant"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in merchantList | filter: $select.search">
+                                    <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="launchRec_form.merchant.$invalid && launchRec_form.submitted">
+                                <small class="text-danger" ng-show="launchRec_form.merchant.$error.required">请选择对账商户</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">销售组／名称 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="saleGroup" ng-model="launchData.saleGroup"  ng-required="true" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in saleGroupList">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                ng-show="launchRec_form.saleGroup.$invalid && launchRec_form.submitted">
+                                <small class="text-danger" ng-show="launchRec_form.saleGroup.$error.required">请选择销售组</small>
+                            </div>	 			                                              
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-1 control-label required">结算客户编码／名称:</label>
+                <div class="control-content">
+                    <div class="row"  style="margin-left:5%">
+                        <div class="col-lg-10">
+                            <ui-select name="customer" ng-required="true" ng-model="launchData.customer" theme="bootstrap" ng-keyup="customerKeyUp()">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in customerList">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                ng-show="launchRec_form.customer.$invalid && launchRec_form.submitted">
+                                <small class="text-danger" ng-show="launchRec_form.customer.$error.required">请选择客户</small>
+                            </div>			                            	
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">对账时间:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <input date-range-picker options="singleDateSettings"  name="dateRange1Start" max="launchData.endDate.startDate"
+                                   class="form-control date-picker" type="text" ng-model="launchData.startDate" ng-init="launchData.startDate"  ng-required="true"/>
+                        </div>
+                        <label class="pull-left control-label">至</label>
+                        <div class="col-sm-5">
+                            <input date-range-picker options="singleDateSettings"  name="dateRange1End" min="launchData.startDate.startDate"
+                                   class="form-control date-picker" type="text" ng-model="launchData.endDate" ng-init="launchData.endDate" ng-required="true"/>
+                        </div>
+                    </div>
+                    <!-- <div class="m-t-xs"
+                                 ng-show="launchRec_form.dateRange1Start.$invalid && launchRec_form.dateRange1End.$invalid && launchRec_form.submitted">
+                                <small class="text-danger" ng-show="launchRec_form.dateRange1Start.$error.required && launchRec_form.dateRange1End.$error.required">请选择时间</small>
+                    </div> -->
+                    <div class="m-t-xs"
+                                 ng-show="timeErrShow">
+                                <small class="text-danger" ng-show="timeErrShow">请选择时间</small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">生成对账单</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

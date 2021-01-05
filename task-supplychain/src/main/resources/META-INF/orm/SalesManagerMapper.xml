@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.SalesManagerMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.Sales">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="LOGISTICS_ID" property="logisticsId" jdbcType="BIGINT"/>
+        <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="DISPATCH_TIME" property="dispatchTime" jdbcType="TIMESTAMP"/>
+        <result column="QUANTITY" property="quantity" jdbcType="INTEGER"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+        <association property="productInfo" resultMap="productInfoMap"/>
+    </resultMap>
+
+    <resultMap id="productInfoMap" type="cn.com.glsx.supplychain.model.bs.Product">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="CODE" property="code" jdbcType="VARCHAR"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="SPECIFICATION" property="specification" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="VARCHAR"/>
+        <result column="AMOUNT" property="amount" jdbcType="DOUBLE"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, MERCHANT_CODE, PRODUCT_CODE, ORDER_NUMBER, STATUS, DISPATCH_TIME,QUANTITY, CREATED_BY, CREATED_DATE,LOGISTICS_ID,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <sql id="S_Base_Column_List">
+    s.ID, s.MERCHANT_CODE, s.PRODUCT_CODE, p.NAME,p.SPECIFICATION,p.TYPE, s.ORDER_NUMBER, s.STATUS, s.DISPATCH_TIME,s.LOGISTICS_ID,
+    s.QUANTITY,s.CREATED_BY,s.CREATED_DATE,s.UPDATED_BY, s.UPDATED_DATE, s.DELETED_FLAG
+  </sql>
+
+    <insert id="insertList" parameterType="cn.com.glsx.supplychain.model.bs.Sales">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_sales (MERCHANT_CODE, PRODUCT_CODE, ORDER_NUMBER,LOGISTICS_ID,
+        STATUS,DISPATCH_TIME,QUANTITY, CREATED_BY, CREATED_DATE,
+        UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.merchantCode,jdbcType=VARCHAR}, #{item.productCode,jdbcType=VARCHAR},
+            #{item.orderNumber,jdbcType=VARCHAR}, #{item.logisticsId,jdbcType=BIGINT},
+            #{item.status,jdbcType=TINYINT},#{item.dispatchTime,jdbcType=TIMESTAMP},#{item.quantity,jdbcType=INTEGER},#{item.createdBy,jdbcType=VARCHAR},#{item.createdDate,jdbcType=TIMESTAMP},
+            #{item.updatedBy,jdbcType=VARCHAR},
+            #{item.updatedDate,jdbcType=TIMESTAMP},#{item.deletedFlag,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.GhProductConfigMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.GhProductConfig">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="product_config_code" jdbcType="VARCHAR" property="productConfigCode" />
+    <result column="parent_brand_id" jdbcType="INTEGER" property="parentBrandId" />
+    <result column="sub_brand_id" jdbcType="INTEGER" property="subBrandId" />
+    <result column="audi_id" jdbcType="INTEGER" property="audiId" />
+    <result column="motorcycle" jdbcType="VARCHAR" property="motorcycle" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="model_year_id" jdbcType="INTEGER" property="modelYearId" />
+    <result column="spa_product_code" jdbcType="VARCHAR" property="spaProductCode" />
+    <result column="spa_product_name" jdbcType="VARCHAR" property="spaProductName" />
+    <result column="glsx_product_code" jdbcType="VARCHAR" property="glsxProductCode" />
+    <result column="glsx_product_name" jdbcType="VARCHAR" property="glsxProductName" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, product_config_code, parent_brand_id, sub_brand_id, audi_id, motorcycle, category_id,model_year_id, 
+    spa_product_code, spa_product_name, glsx_product_code, glsx_product_name, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+    
+  <select id="pageProductConfigBySubBrands" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from gh_product_config
+  	
+  	where deleted_flag='N' and (sub_brand_id in
+  		<foreach collection="list" item="subBrandId" open="(" close=")" separator=",">
+  			#{subBrandId}
+  		</foreach>
+  		 or sub_brand_id=1009)
+  </select>
+
+  
+  <select id="pageProductConfigByParentBrands" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from gh_product_config
+  	where deleted_flag='N' and (parent_brand_id in
+  		<foreach collection="list" item="parentBrandId" open="(" close=")" separator=",">
+  			#{parentBrandId}
+  		</foreach>
+  		or parent_brand_id=1003)
+  </select>
+  
+  <select id="pageProductConfig" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from gh_product_config
+  	where deleted_flag='N' 
+  </select>
+  
+  <select id="listDistinctParentBrands" resultMap="BaseResultMap">
+  	select distinct parent_brand_id from gh_product_config
+  </select>
+  
+  <select id="listDistinctSubBrands" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct sub_brand_id from gh_product_config 
+  	<where>
+  		<if test="parentBrandId != null">
+  			and (parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or parent_brand_id=1003)
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="listDistinctAudis" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct audi_id from gh_product_config 
+  	<where>
+  		<if test="parentBrandId != null">
+  			and (parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or parent_brand_id=1003)
+  		</if>
+  		<if test="subBrandId != null">
+  			and (sub_brand_id = #{subBrandId,jdbcType=INTEGER} or sub_brand_id=1009)
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="listDistinctMotorcyles" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct motorcycle from gh_product_config 
+  	<where>
+  		<if test="parentBrandId != null">
+  			and (parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or parent_brand_id=1003)
+  		</if>
+  		<if test="subBrandId != null">
+  			and (sub_brand_id = #{subBrandId,jdbcType=INTEGER} or sub_brand_id=1009)
+  		</if>
+  		<if test="audiId != null">
+  			and (audi_id = #{audiId,jdbcType=INTEGER} or audi_id=1048)
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="pageGhProductConfigWithDistinctProductCodeWithMerchantCode" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct c.spa_product_code, c.glsx_product_code,c.id, c.product_config_code, c.parent_brand_id, c.sub_brand_id, c.audi_id, c.motorcycle, c.category_id, c.model_year_id, 
+    c.spa_product_name, c.glsx_product_name, c.created_by, 
+    c.created_date, c.updated_by, c.updated_date, c.deleted_flag from gh_product_config as c 
+    left join gh_merchant_brand as b on(c.parent_brand_id=b.parent_brand_id)
+    <where>
+    	<if test="merchantCode != null">
+    		and (b.merchant_code = #{merchantCode,jdbcType=VARCHAR} or c.parent_brand_id=1003)
+    	</if>
+    	<if test="spaProductCode != null">
+    		and c.spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<if test="parentBrandId != null">
+    		and (c.parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or c.parent_brand_id=1003) 
+    	</if>
+    	<if test="subBrandId != null">
+    		and (c.sub_brand_id = #{subBrandId,jdbcType=INTEGER} or c.sub_brand_id=1009)
+    	</if>
+    	<if test="audiId != null">
+    		and (c.audi_id = #{audiId,jdbcType=INTEGER} or c.audi_id=1048)
+    	</if>
+    	<if test="motorcycle != null">
+    		and (c.motorcycle = #{motorcycle,jdbcType=VARCHAR} or c.motorcycle='通用')
+    	</if>
+    	<if test="categoryId != null">
+    		and c.category_id = #{categoryId,jdbcType=VARCHAR}
+    	</if> 	
+    </where>
+    group by spa_product_code
+  </select>
+  
+  
+  <select id="pageGhProductConfigWithDistinctProductCode" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct spa_product_code, glsx_product_code,id, product_config_code, parent_brand_id, sub_brand_id, audi_id, motorcycle, category_id,model_year_id, 
+    spa_product_name, glsx_product_name, created_by, 
+    created_date, updated_by, updated_date, deleted_flag from gh_product_config
+    <where>
+    	<if test="spaProductCode != null">
+    		and spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<!--  
+    	<if test="parentBrandId != null">
+    		and (parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or parent_brand_id=1003) 
+    	</if>
+    	<if test="subBrandId != null">
+    		and (sub_brand_id = #{subBrandId,jdbcType=INTEGER} or sub_brand_id=1009)
+    	</if>
+    	-->
+    	<if test="audiId != null">
+    		and (audi_id = #{audiId,jdbcType=INTEGER} or audi_id=1048)
+    	</if>
+    	<if test="motorcycle != null">
+    		and (motorcycle = #{motorcycle,jdbcType=VARCHAR} or motorcycle='通用')
+    	</if>
+    	<if test="categoryId != null">
+    		and category_id = #{categoryId,jdbcType=VARCHAR}
+    	</if> 	
+    	<if test="listParentBrandIds != null">
+    		and parent_brand_id in
+    		<foreach collection="listParentBrandIds" item="parentBrandId" open="(" close=")" separator=",">
+  				#{parentBrandId}
+  			</foreach>
+    	</if>
+    	<if test="listSubBrandIds != null">
+    		and sub_brand_id in
+    		<foreach collection="listSubBrandIds" item="subBrandId" open="(" close=")" separator=",">
+  				#{subBrandId}
+  			</foreach>
+    	</if>
+    </where>
+    group by spa_product_code
+  </select>
+  
+  <select id="listGhProductConfigModeYearsWithMerchantCode" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct c.model_year_id from gh_product_config as c left join gh_merchant_brand as b on(c.parent_brand_id=b.parent_brand_id)
+  	<where>
+  		<if test="merchantCode != null">
+    		and (b.merchant_code = #{merchantCode,jdbcType=VARCHAR} or c.parent_brand_id=1003)
+    	</if>
+  		<if test="spaProductCode != null">
+    		and c.spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+	   	<if test="parentBrandId != null">
+	   		and (c.parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or c.parent_brand_id=1003)
+	   	</if>
+	   	<if test="subBrandId != null">
+	   		and (c.sub_brand_id = #{subBrandId,jdbcType=INTEGER} or c.sub_brand_id=1009)
+	   	</if>
+	   	<if test="audiId != null">
+	   		and (c.audi_id = #{audiId,jdbcType=INTEGER} or c.audi_id=1048)
+	   	</if>
+	   	<if test="motorcycle != null">
+	   		and (c.motorcycle = #{motorcycle,jdbcType=VARCHAR} or c.motorcycle='通用')
+	   	</if>
+	   	<if test="categoryId != null">
+	   		and c.category_id = #{categoryId,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="glsxProductCode != null">
+	   		and c.glsx_product_code = #{glsxProductCode,jdbcType=VARCHAR}
+	   	</if>
+  	</where> 
+  </select>
+  
+  <select id="listGhProductConfigModeYears" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct model_year_id from gh_product_config 
+  	<where>
+  		<if test="spaProductCode != null">
+    		and spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<!--  
+	   	<if test="parentBrandId != null">
+	   		and (parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or parent_brand_id=1003)
+	   	</if>
+	   	<if test="subBrandId != null">
+	   		and (sub_brand_id = #{subBrandId,jdbcType=INTEGER} or sub_brand_id=1009)
+	   	</if>
+	   	-->
+	   	<if test="audiId != null">
+	   		and (audi_id = #{audiId,jdbcType=INTEGER} or audi_id=1048)
+	   	</if>
+	   	<if test="motorcycle != null">
+	   		and (motorcycle = #{motorcycle,jdbcType=VARCHAR} or motorcycle='通用')
+	   	</if>
+	   	<if test="categoryId != null">
+	   		and category_id = #{categoryId,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="glsxProductCode != null">
+	   		and glsx_product_code = #{glsxProductCode,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="listParentBrandIds != null">
+    		and parent_brand_id in
+    		<foreach collection="listParentBrandIds" item="parentBrandId" open="(" close=")" separator=",">
+  				#{parentBrandId}
+  			</foreach>
+    	</if>
+    	<if test="listSubBrandIds != null">
+    		and sub_brand_id in
+    		<foreach collection="listSubBrandIds" item="subBrandId" open="(" close=")" separator=",">
+  				#{subBrandId}
+  			</foreach>
+    	</if>
+  	</where> 
+  </select>
+  
+  <select id="listGhProductConfigAudisWithMerchantCode" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct c.audi_id from gh_product_config as c left join gh_merchant_brand as b on(c.parent_brand_id=b.parent_brand_id)
+  	<where>
+  		<if test="merchantCode != null">
+    		and (b.merchant_code = #{merchantCode,jdbcType=VARCHAR} or c.parent_brand_id=1003)
+    	</if>
+  		<if test="spaProductCode != null">
+    		and c.spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+	   	<if test="parentBrandId != null">
+	   		and (c.parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or c.parent_brand_id=1003)
+	   	</if>
+	   	<if test="subBrandId != null">
+	   		and (c.sub_brand_id = #{subBrandId,jdbcType=INTEGER} or c.sub_brand_id=1009)
+	   	</if>
+	   	<if test="audiId != null">
+	   		and (c.audi_id = #{audiId,jdbcType=INTEGER} or c.audi_id=1048)
+	   	</if>
+	   	<if test="motorcycle != null">
+	   		and (c.motorcycle = #{motorcycle,jdbcType=VARCHAR} or c.motorcycle='通用')
+	   	</if>
+	   	<if test="categoryId != null">
+	   		and c.category_id = #{categoryId,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="glsxProductCode != null">
+	   		and c.glsx_product_code = #{glsxProductCode,jdbcType=VARCHAR}
+	   	</if> 	
+  	</where> 
+  </select>
+  
+  <select id="listGhProductConfigAudis" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select distinct audi_id from gh_product_config 
+  	<where>
+  		<if test="spaProductCode != null">
+    		and spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<!--  
+	   	<if test="parentBrandId != null">
+	   		and (parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or parent_brand_id=1003)
+	   	</if>
+	   	<if test="subBrandId != null">
+	   		and (sub_brand_id = #{subBrandId,jdbcType=INTEGER} or sub_brand_id=1009)
+	   	</if>
+	   	-->
+	   	<if test="audiId != null">
+	   		and (audi_id = #{audiId,jdbcType=INTEGER} or audi_id=1048)
+	   	</if>
+	   	<if test="motorcycle != null">
+	   		and (motorcycle = #{motorcycle,jdbcType=VARCHAR} or motorcycle='通用')
+	   	</if>
+	   	<if test="categoryId != null">
+	   		and category_id = #{categoryId,jdbcType=VARCHAR}
+	   	</if>
+	   	<if test="glsxProductCode != null">
+	   		and glsx_product_code = #{glsxProductCode,jdbcType=VARCHAR}
+	   	</if> 	
+	   	<if test="listParentBrandIds != null">
+    		and parent_brand_id in
+    		<foreach collection="listParentBrandIds" item="parentBrandId" open="(" close=")" separator=",">
+  				#{parentBrandId}
+  			</foreach>
+    	</if>
+    	<if test="listSubBrandIds != null">
+    		and sub_brand_id in
+    		<foreach collection="listSubBrandIds" item="subBrandId" open="(" close=")" separator=",">
+  				#{subBrandId}
+  			</foreach>
+    	</if>
+  	</where> 
+  </select>
+  
+  <select id="pageGhProductConfigMotorcycleWithMerchantCode" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select c.glsx_product_code,c.id, c.product_config_code, c.parent_brand_id, c.sub_brand_id, c.audi_id, c.motorcycle, c.category_id,c.model_year_id, 
+    c.spa_product_code, c.spa_product_name, c.glsx_product_name, c.created_by, 
+    c.created_date, c.updated_by, c.updated_date, c.deleted_flag from gh_product_config as c left join gh_merchant_brand as b on(c.parent_brand_id=b.parent_brand_id)
+    left join attrib_info as a on(c.model_year_id = a.id)
+    <where>
+    	<if test="merchantCode != null">
+    		and (b.merchant_code = #{merchantCode,jdbcType=VARCHAR} or c.parent_brand_id=1003)
+    	</if>
+    	<if test="spaProductCode != null">
+    		and c.spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<if test="parentBrandId != null">
+    		and (c.parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or c.parent_brand_id=1003)
+    	</if>
+    	<if test="subBrandId != null">
+    		and (c.sub_brand_id = #{subBrandId,jdbcType=INTEGER} or c.sub_brand_id=1009)
+    	</if>
+    	<if test="audiId != null">
+    		and (c.audi_id = #{audiId,jdbcType=INTEGER} or c.audi_id=1048)
+    	</if>
+    	<if test="motorcycle != null">
+    		and (c.motorcycle = #{motorcycle,jdbcType=VARCHAR} or c.motorcycle='通用')
+    	</if>
+    	<if test="categoryId != null">
+    		and c.category_id = #{categoryId,jdbcType=INTEGER}
+    	</if>
+    	<if test="glsxProductCode != null">
+    		and c.glsx_product_code = #{glsxProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<if test="modelYearId != null">
+    		and (c.model_year_id = #{modelYearId,jdbcType=INTEGER} or c.model_year_id=1053)
+    	</if>
+    	<if test="glsxProductName != null">
+    		and c.glsx_product_name like CONCAT('%',#{glsxProductName},'%')
+    	</if>  	
+    </where>
+    order by a.value desc
+  </select>
+  
+  <select id="pageGhProductConfigMotorcycle" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfig" resultMap="BaseResultMap">
+  	select c.glsx_product_code,c.id, c.product_config_code, c.parent_brand_id, c.sub_brand_id, c.audi_id, c.motorcycle, c.category_id,c.model_year_id, 
+    c.spa_product_code, c.spa_product_name, c.glsx_product_name, c.created_by, 
+    c.created_date, c.updated_by, c.updated_date, c.deleted_flag from gh_product_config as c
+     left join attrib_info as a on(c.model_year_id = a.id)
+    <where>
+    	<if test="spaProductCode != null">
+    		and c.spa_product_code = #{spaProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<!--  
+    	<if test="parentBrandId != null">
+    		and (c.parent_brand_id = #{parentBrandId,jdbcType=INTEGER} or c.parent_brand_id=1003)
+    	</if>
+    	<if test="subBrandId != null">
+    		and (c.sub_brand_id = #{subBrandId,jdbcType=INTEGER} or c.sub_brand_id=1009)
+    	</if>
+    	-->
+    	<if test="audiId != null">
+    		and (c.audi_id = #{audiId,jdbcType=INTEGER} or c.audi_id=1048)
+    	</if>
+    	<if test="motorcycle != null">
+    		and (c.motorcycle = #{motorcycle,jdbcType=VARCHAR} or c.motorcycle='通用')
+    	</if>
+    	<if test="categoryId != null">
+    		and c.category_id = #{categoryId,jdbcType=INTEGER}
+    	</if>
+    	<if test="glsxProductCode != null">
+    		and c.glsx_product_code = #{glsxProductCode,jdbcType=VARCHAR}
+    	</if>
+    	<if test="modelYearId != null">
+    		and (c.model_year_id = #{modelYearId,jdbcType=INTEGER} or c.model_year_id=1053)
+    	</if>
+    	<if test="glsxProductName != null">
+    		and c.glsx_product_name like CONCAT('%',#{glsxProductName},'%')
+    	</if> 
+    	<if test="listParentBrandIds != null">
+    		and parent_brand_id in
+    		<foreach collection="listParentBrandIds" item="parentBrandId" open="(" close=")" separator=",">
+  				#{parentBrandId}
+  			</foreach>
+    	</if>
+    	<if test="listSubBrandIds != null">
+    		and sub_brand_id in
+    		<foreach collection="listSubBrandIds" item="subBrandId" open="(" close=")" separator=",">
+  				#{subBrandId}
+  			</foreach>
+    	</if> 	
+    </where>
+    order by a.value desc
+  </select>
+  
+</mapper>

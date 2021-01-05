@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.rpc.supplychain.rdn.mapper.STKMerchantStockMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.STKMerchantStock">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="stock_month" jdbcType="VARCHAR" property="stockMonth" />
+    <result column="opening_inventory" jdbcType="INTEGER" property="openingInventory" />
+    <result column="ending_inventory" jdbcType="INTEGER" property="endingInventory" />
+    <result column="month_sales" jdbcType="INTEGER" property="monthSales" />
+    <result column="month_receives" jdbcType="INTEGER" property="monthReceives" />
+    <result column="month_callin" jdbcType="INTEGER" property="monthCallin" />
+    <result column="month_callout" jdbcType="INTEGER" property="monthCallout" />
+    <result column="month_rets" jdbcType="INTEGER" property="monthRets" />
+    <result column="month_losses" jdbcType="INTEGER" property="monthLosses" />
+    <result column="month_actives" jdbcType="INTEGER" property="monthActives" />
+    <result column="opening_unat_inv" jdbcType="INTEGER" property="openingUnatInv" />
+    <result column="ending_unat_inv" jdbcType="INTEGER" property="endingUnatInv" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, merchant_code, device_type, material_code, stock_month, opening_inventory, ending_inventory, 
+    month_sales, month_receives, month_callin, month_callout, month_rets, month_losses, 
+    month_actives, opening_unat_inv, ending_unat_inv, created_by, created_date, updated_by, 
+    updated_date, deleted_flag
+  </sql>
+
+	<select id="exportMerchantStock" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.STKMerchantStock"
+			resultType="cn.com.glsx.supplychain.jxc.dto.STKMerchantStockDTO">
+		SELECT
+		bdui.merchant_code AS merchantCode,
+		bdui.name AS merchantName,
+		bdui.channel AS channelId,
+		dt.name as deviceTypeName,
+		sms.device_type AS deviceType,
+		sms.stock_month AS stockMonth,
+		SUM(sms.opening_inventory) AS openingInventory,
+		SUM(sms.ending_inventory) AS endingInventory,
+		SUM(sms.month_sales) AS monthSales,
+		SUM(sms.month_receives) AS monthReceives,
+		SUM(sms.month_callin) AS monthCallin,
+		SUM(sms.month_callout) AS monthCallout,
+		SUM(sms.month_rets) AS monthRets,
+		SUM(sms.month_losses) AS monthLosses,
+		SUM(sms.month_actives) AS monthActives,
+		SUM(sms.opening_unat_inv) AS openingUnatInv,
+		SUM(sms.ending_unat_inv) AS endingUnatInv
+		FROM stk_merchant_stock AS sms
+		LEFT JOIN bs_dealer_user_info AS bdui ON(sms.merchant_code=bdui.MERCHANT_CODE)
+		LEFT JOIN device_type AS dt on(dt.id=sms.device_type)
+		<where>
+			<if test="merchantChannelId != null">
+				and bdui.channel = #{merchantChannelId,jdbcType=TINYINT}
+			</if>
+			<if test="deviceType != null">
+				and sms.device_type = #{deviceType,jdbcType=INTEGER}
+			</if>
+			<if test="stockMonth != null">
+				and sms.stock_month = #{stockMonth,jdbcType=VARCHAR}
+			</if>
+			<if test="merchantCode != null">
+				and (bdui.merchant_code like concat('%',#{merchantCode,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="merchantName != null">
+				or bdui.name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+			</if>
+			GROUP BY sms.merchant_code,sms.device_type,sms.stock_month
+			order by sms.id desc
+		</where>
+	</select>
+</mapper>

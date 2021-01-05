@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCFactoryMaterialTranMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCFactoryMaterialTran">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="fact_material_code" jdbcType="VARCHAR" property="factMaterialCode" />
+    <result column="fact_material_name" jdbcType="VARCHAR" property="factMaterialName" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="warehouse_id" jdbcType="INTEGER" property="warehouseId" />
+    <result column="bs_parent_brand_id" jdbcType="INTEGER" property="bsParentBrandId"/>
+    <result column="bs_parent_brand_name" jdbcType="VARCHAR" property="bsParentBrandName"/>
+    <result column="bs_sub_brand_id" jdbcType="INTEGER" property="bsSubBrandId"/>
+    <result column="bs_sub_brand_name" jdbcType="VARCHAR" property="bsSubBrandName"/>
+    <result column="bs_audi_id" jdbcType="INTEGER" property="bsAudiId"/>
+    <result column="bs_audi_name" jdbcType="VARCHAR" property="bsAudiName"/>
+    <result column="bs_motorcycle" jdbcType="VARCHAR" property="bsMotorcycle"/>
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, fact_material_code, fact_material_name, material_code, material_name, warehouse_id,bs_parent_brand_id, 
+    bs_parent_brand_name,bs_sub_brand_id,bs_sub_brand_name,bs_audi_id,bs_audi_name,bs_motorcycle,CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+</mapper>

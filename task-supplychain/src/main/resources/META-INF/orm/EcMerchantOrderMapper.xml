@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.EcMerchantOrderMapper" >
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.EcMerchantOrder" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="CHANNEL" property="channel" jdbcType="VARCHAR" />
+    <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR" />
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR" />
+    <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR" />
+    <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR" />
+    <result column="DEVICE_TYPE" property="deviceType" jdbcType="VARCHAR" />
+    <result column="PRICE" property="price" jdbcType="DOUBLE" />
+    <result column="ORDER_QUANTITY" property="orderQuantity" jdbcType="INTEGER" />
+    <result column="CHECK_QUANTITY" property="checkQuantity" jdbcType="INTEGER" />
+    <result column="DISPATCH_ORDER_NUMBER" property="dispatchOrderNumber" jdbcType="VARCHAR" />
+    <result column="ALREADY_SHIPMENT_QUANTITY" property="alreadyShipmentQuantity" jdbcType="INTEGER" />
+    <result column="SHIPMENT_TIME" property="shipmentTime" jdbcType="VARCHAR" />
+    <result column="SHIPMENT_QUANTITY" property="shipmentQuantity" jdbcType="VARCHAR" />
+    <result column="SIGN_QUANTITY" property="signQuantity" jdbcType="INTEGER" />
+    <result column="OWE_QUANTITY" property="oweQuantity" jdbcType="INTEGER" />
+    <result column="TOTAL_AMOUNT" property="totalAmount" jdbcType="DOUBLE" />
+    <result column="ORDER_TIME" property="orderTime" jdbcType="VARCHAR" />
+    <result column="PRODUCT_REMARKS" property="productRemarks" jdbcType="VARCHAR" />
+    <result column="CHECK_BY" property="checkBy" jdbcType="VARCHAR" />
+    <result column="CHECK_TIME" property="checkTime" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="ADDRESSEE" property="addressee" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="ADDRESS_DETAIL" property="addressDetail" jdbcType="VARCHAR" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    <result column="sign_status" property="signStatus" jdbcType="VARCHAR"/>
+    <result column="reback_reason" property="rebackReason" jdbcType="VARCHAR"/>
+    <result column="finish_reason" property="finishReason" jdbcType="VARCHAR"/>
+    <result column="recall_reason" property="recallReason" jdbcType="VARCHAR"/>
+    <result column="order_material_code" property="orderMaterialCode" jdbcType="VARCHAR"/>
+    <result column="order_material_name" property="orderMaterialName" jdbcType="VARCHAR"/>
+    <result column="product_total" property="productTotal" jdbcType="INTEGER"/>
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    ID, CHANNEL, MERCHANT_CODE, MERCHANT_NAME, ORDER_NUMBER, PRODUCT_NAME, PRODUCT_CODE, DEVICE_TYPE,
+    PRICE, ORDER_QUANTITY, CHECK_QUANTITY, DISPATCH_ORDER_NUMBER, ALREADY_SHIPMENT_QUANTITY, 
+    SHIPMENT_TIME, SHIPMENT_QUANTITY, SIGN_QUANTITY, OWE_QUANTITY, TOTAL_AMOUNT, ORDER_TIME, 
+    PRODUCT_REMARKS, CHECK_BY, CHECK_TIME, STATUS, ADDRESSEE, MOBILE, ADDRESS_DETAIL, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,DELETED_FLAG,sign_status,reback_reason,finish_reason,
+    recall_reason,order_material_code,order_material_name,product_total
+  </sql>
+
+  <insert id="insertEcMerchantOrder" parameterType="java.util.List" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ec_merchant_order (CHANNEL, MERCHANT_CODE, MERCHANT_NAME, ORDER_NUMBER,
+      PRODUCT_NAME, PRODUCT_CODE, DEVICE_TYPE, 
+      PRICE, ORDER_QUANTITY, CHECK_QUANTITY, 
+      DISPATCH_ORDER_NUMBER, ALREADY_SHIPMENT_QUANTITY, 
+      SHIPMENT_TIME, SHIPMENT_QUANTITY, SIGN_QUANTITY, 
+      OWE_QUANTITY, TOTAL_AMOUNT, ORDER_TIME, 
+      PRODUCT_REMARKS, CHECK_BY, CHECK_TIME, 
+      STATUS, ADDRESSEE, MOBILE, 
+      ADDRESS_DETAIL, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG,sign_status,reback_reason,finish_reason,
+    recall_reason,order_material_code,order_material_name,product_total)
+    values
+    <foreach collection="ecMerchantOrderList" item="item" index="index" separator=",">
+      (#{item.channel,jdbcType=VARCHAR}, #{item.merchantCode,jdbcType=VARCHAR}, #{item.merchantName,jdbcType=VARCHAR}, #{item.orderNumber,jdbcType=VARCHAR},
+      #{item.productName,jdbcType=VARCHAR}, #{item.productCode,jdbcType=VARCHAR}, #{item.deviceType,jdbcType=VARCHAR},
+      #{item.price,jdbcType=DOUBLE}, #{item.orderQuantity,jdbcType=INTEGER}, #{item.checkQuantity,jdbcType=INTEGER},
+      #{item.dispatchOrderNumber,jdbcType=VARCHAR}, #{item.alreadyShipmentQuantity,jdbcType=INTEGER},
+      #{item.shipmentTime,jdbcType=VARCHAR}, #{item.shipmentQuantity,jdbcType=VARCHAR}, #{item.signQuantity,jdbcType=INTEGER},
+      #{item.oweQuantity,jdbcType=INTEGER}, #{item.totalAmount,jdbcType=DOUBLE}, #{item.orderTime,jdbcType=VARCHAR},
+      #{item.productRemarks,jdbcType=VARCHAR}, #{item.checkBy,jdbcType=VARCHAR}, #{item.checkTime,jdbcType=VARCHAR},
+      #{item.status,jdbcType=VARCHAR}, #{item.addressee,jdbcType=VARCHAR}, #{item.mobile,jdbcType=VARCHAR},
+      #{item.addressDetail,jdbcType=VARCHAR}, #{item.createdBy,jdbcType=VARCHAR}, #{item.createdDate,jdbcType=TIMESTAMP},
+      #{item.updatedBy,jdbcType=VARCHAR}, #{item.updatedDate,jdbcType=TIMESTAMP},#{item.deletedFlag,jdbcType=VARCHAR},
+      #{item.signStatus,jdbcType=VARCHAR},#{item.reback_reason,jdbcType=VARCHAR},#{item.finish_reason,jdbcType=VARCHAR},
+      #{item.recall_reason,jdbcType=VARCHAR},#{item.order_material_code,jdbcType=VARCHAR},#{item.order_material_name,jdbcType=VARCHAR},
+      #{item.product_total,jdbcType=INTEGER})
+    </foreach>
+    on duplicate key update
+    CHANNEL = values(CHANNEL),
+    MERCHANT_CODE = values(MERCHANT_CODE),
+    MERCHANT_NAME = values(MERCHANT_NAME),
+    ORDER_NUMBER = values(ORDER_NUMBER),
+    PRODUCT_NAME = values(PRODUCT_NAME),
+    PRODUCT_CODE = values(PRODUCT_CODE),
+    DEVICE_TYPE =values(DEVICE_TYPE),
+    PRICE =values(PRICE),
+    ORDER_QUANTITY = values(ORDER_QUANTITY),
+    CHECK_QUANTITY = values(CHECK_QUANTITY),
+    DISPATCH_ORDER_NUMBER = values(DISPATCH_ORDER_NUMBER),
+    ALREADY_SHIPMENT_QUANTITY = values(ALREADY_SHIPMENT_QUANTITY),
+    SHIPMENT_TIME = values(SHIPMENT_TIME),
+    SHIPMENT_QUANTITY = values(SHIPMENT_QUANTITY),
+    SIGN_QUANTITY = values(SIGN_QUANTITY),
+    OWE_QUANTITY = values(OWE_QUANTITY),
+    TOTAL_AMOUNT = values(TOTAL_AMOUNT),
+    ORDER_TIME = values(ORDER_TIME),
+    PRODUCT_REMARKS = values(PRODUCT_REMARKS),
+    CHECK_BY = values(CHECK_BY),
+    CHECK_TIME = values(CHECK_TIME),
+    STATUS = values(STATUS),
+    ADDRESSEE = values(ADDRESSEE),
+    MOBILE = values(MOBILE),
+    ADDRESS_DETAIL = values(ADDRESS_DETAIL),
+    CREATED_BY=values(CREATED_BY),
+    CREATED_DATE=values(CREATED_DATE),
+    UPDATED_BY=values(UPDATED_BY),
+    UPDATED_DATE=values(UPDATED_DATE),
+    DELETED_FLAG = values(DELETED_FLAG),
+    sign_status=values(sign_status),
+    reback_reason=values(reback_reason),
+    finish_reason=values(finish_reason),
+    recall_reason=values(recall_reason),
+    order_material_code=values(order_material_code),
+    order_material_name=values(order_material_name),
+    product_total=values(product_total)
+  </insert>
+
+  <insert id="add" parameterType="glsx.com.cn.task.model.EcMerchantOrder" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ec_merchant_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="channel != null" >
+        CHANNEL,
+      </if>
+      <if test="merchantCode != null" >
+        MERCHANT_CODE,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="orderNumber != null" >
+        ORDER_NUMBER,
+      </if>
+      <if test="productName != null" >
+        PRODUCT_NAME,
+      </if>
+      <if test="productCode != null" >
+        PRODUCT_CODE,
+      </if>
+      <if test="deviceType != null" >
+        DEVICE_TYPE,
+      </if>
+      <if test="price != null" >
+        PRICE,
+      </if>
+      <if test="orderQuantity != null" >
+        ORDER_QUANTITY,
+      </if>
+      <if test="checkQuantity != null" >
+        CHECK_QUANTITY,
+      </if>
+      <if test="dispatchOrderNumber != null" >
+        DISPATCH_ORDER_NUMBER,
+      </if>
+      <if test="alreadyShipmentQuantity != null" >
+        ALREADY_SHIPMENT_QUANTITY,
+      </if>
+      <if test="shipmentTime != null" >
+        SHIPMENT_TIME,
+      </if>
+      <if test="shipmentQuantity != null" >
+        SHIPMENT_QUANTITY,
+      </if>
+      <if test="signQuantity != null" >
+        SIGN_QUANTITY,
+      </if>
+      <if test="oweQuantity != null" >
+        OWE_QUANTITY,
+      </if>
+      <if test="totalAmount != null" >
+        TOTAL_AMOUNT,
+      </if>
+      <if test="orderTime != null" >
+        ORDER_TIME,
+      </if>
+      <if test="productRemarks != null" >
+        PRODUCT_REMARKS,
+      </if>
+      <if test="checkBy != null" >
+        CHECK_BY,
+      </if>
+      <if test="checkTime != null" >
+        CHECK_TIME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="addressee != null" >
+        ADDRESSEE,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="addressDetail != null" >
+        ADDRESS_DETAIL,
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG,
+      </if>
+      <if test="signStatus != null">
+      	sign_status,
+      </if>
+      <if test="rebackReason != null">
+      	reback_reason,
+      </if>
+      <if test="finishReason != null">
+      	finish_reason,
+      </if>
+      <if test="recallReason != null">
+      	recall_reason,
+      </if>
+      <if test="orderMaterialCode != null">
+      	order_material_code,
+      </if>
+      <if test="orderMaterialName != null">
+      	order_material_name,
+      </if>
+      <if test="productTotal != null">
+      	product_total,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="channel != null" >
+        #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null" >
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null" >
+        #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="orderQuantity != null" >
+        #{orderQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="checkQuantity != null" >
+        #{checkQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchOrderNumber != null" >
+        #{dispatchOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="alreadyShipmentQuantity != null" >
+        #{alreadyShipmentQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="shipmentTime != null" >
+        #{shipmentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentQuantity != null" >
+        #{shipmentQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="signQuantity != null" >
+        #{signQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="oweQuantity != null" >
+        #{oweQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="productRemarks != null" >
+        #{productRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="checkBy != null" >
+        #{checkBy,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null" >
+        #{checkTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="addressee != null" >
+        #{addressee,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null" >
+        #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="signStatus != null">
+      	#{signStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="rebackReason != null">
+      	#{rebackReason,jdbcType=VARCHAR},
+      </if>
+      <if test="finishReason != null">
+      	#{finishReason,jdbcType=VARCHAR},
+      </if>
+      <if test="recallReason != null">
+      	#{recallReason,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMaterialCode != null">
+      	#{orderMaterialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMaterialName != null">
+      	#{orderMaterialName,jdbcType=VARCHAR},
+      </if>
+      <if test="productTotal != null">
+      	#{productTotal,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByOrderNumber" parameterType="glsx.com.cn.task.model.EcMerchantOrder" >
+    update ec_merchant_order
+    <set >
+      <if test="channel != null" >
+        CHANNEL = #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantCode != null" >
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productCode != null" >
+        PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceType != null" >
+        DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        PRICE = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="orderQuantity != null" >
+        ORDER_QUANTITY = #{orderQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="checkQuantity != null" >
+        CHECK_QUANTITY = #{checkQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="dispatchOrderNumber != null" >
+        DISPATCH_ORDER_NUMBER = #{dispatchOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="alreadyShipmentQuantity != null" >
+        ALREADY_SHIPMENT_QUANTITY = #{alreadyShipmentQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="shipmentTime != null" >
+        SHIPMENT_TIME = #{shipmentTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentQuantity != null" >
+        SHIPMENT_QUANTITY = #{shipmentQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="signQuantity != null" >
+        SIGN_QUANTITY = #{signQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="oweQuantity != null" >
+        OWE_QUANTITY = #{oweQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null" >
+        TOTAL_AMOUNT = #{totalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="orderTime != null" >
+        ORDER_TIME = #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="productRemarks != null" >
+        PRODUCT_REMARKS = #{productRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="checkBy != null" >
+        CHECK_BY = #{checkBy,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null" >
+        CHECK_TIME = #{checkTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="addressee != null" >
+        ADDRESSEE = #{addressee,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="addressDetail != null" >
+        ADDRESS_DETAIL = #{addressDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="signStatus != null">
+      	sign_status = #{signStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="rebackReason != null">
+      	reback_reason = #{rebackReason,jdbcType=VARCHAR},
+      </if>
+      <if test="finishReason != null">
+      	finish_reason = #{finishReason,jdbcType=VARCHAR},
+      </if>
+      <if test="recallReason != null">
+      	recall_reason = #{recallReason,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMaterialCode != null">
+      	order_material_code = #{orderMaterialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMaterialName != null">
+      	order_material_name = #{orderMaterialName,jdbcType=VARCHAR},
+      </if>
+      <if test="productTotal != null">
+      	product_total = #{productTotal,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

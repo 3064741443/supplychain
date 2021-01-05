@@ -1,0 +1,89 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">修改价格</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="update_ProductManage_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">产品名称 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input  ng-required="true" class="form-control" type="text" disabled="disabled"  ng-model="updateProductData.name"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">产品规格 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input class="form-control" type="text" disabled="disabled" ng-model="updateProductData.specification"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">产品类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="typeId" ng-required="true" disabled="disabled" ng-model="updateProductData.type" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in typeIdList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_ProductManage_form.typeId.$invalid && add_ProductManage_form.submitted">
+                                <small class="text-danger" ng-show="add_ProductManage_form.typeId.$error.required">请选择产品类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">含税单价 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="amount" ng-required="true" class="form-control" type="text"
+                                   check-length="9" maxlength="9"
+                                   onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,''),this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"  ng-model="updateProductData.amount"/>
+                            <div class="m-t-xs" ng-show="update_ProductManage_form.amount.$invalid && update_ProductManage_form.submitted">
+                                <small class="text-danger" ng-show="update_ProductManage_form.amount.$error.required">请输入含税单价</small>
+                            </div>
+                            <small class="text-danger" ng-show="updateAmountKey">价格没有变动</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-1 control-label required">启动时间 :</label>
+                <div class="col-sm-8">
+                    <input date-range-picker options="singleDateSettings" name="dateRange1Start" max="dateRange1End.endDate" class="form-control date-picker" type="text" ng-model="updateProductData.date" />
+                    <!--<input readonly="readonly" date-range-picker max="singleDateSettings.minDate"  options="singleDateSettings" name="date" ng-required="true"-->
+                           <!--class="form-control date-picker" type="text" ng-model="updateProductData.date"/>-->
+                    <div class="m-t-xs" ng-show="update_ProductManage_form.date.$invalid && update_ProductManage_form.submitted">
+                        <small class="text-danger" ng-show="update_ProductManage_form.date.$error.required">请选择启动时间</small>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

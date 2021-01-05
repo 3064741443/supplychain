@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.am.MaterialInfoMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.MaterialInfo">
+        <id column="material_id" property="materialId" jdbcType="INTEGER"/>
+        <result column="material_code" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="material_name" property="materialName" jdbcType="VARCHAR"/>
+        <result column="term" property="term" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+        <result column="tax_rate" property="taxRate" jdbcType="DOUBLE"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="product_name" property="productName" jdbcType="VARCHAR"/>
+        <result column="product_type_name" property="productTypeName" jdbcType="VARCHAR"/>
+        <result column="material_type_id" property="materialTypeId" jdbcType="INTEGER"/>
+        <result column="material_type_name" property="materialTypeName" jdbcType="VARCHAR"/>
+        <result column="device_type_id" property="deviceTypeId" jdbcType="INTEGER"/>
+        <result column="device_type" property="deviceType" jdbcType="VARCHAR"/>
+        <result column="first_level_id" property="firstLevelId" jdbcType="INTEGER"/>
+        <result column="first_level_name" property="firstLevelName" jdbcType="VARCHAR"/>
+        <result column="second_level_id" property="secondLevelId" jdbcType="INTEGER"/>
+        <result column="second_level_name" property="secondLevelName" jdbcType="VARCHAR"/>
+        <result column="last_operator_id" property="lastOperatorId" jdbcType="INTEGER"/>
+        <result column="last_operator_name" property="lastOperatorName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="nd_scan" property="ndScan" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    material_id, material_code, material_name, term, price, tax_rate, product_id, product_name,
+    product_type_name, material_type_id, material_type_name, device_type_id, device_type,
+    first_level_id, first_level_name, second_level_id, second_level_name, last_operator_id,
+    last_operator_name, create_time, update_time,nd_scan
+  </sql>
+
+
+    <insert id="batchInsertOnDuplicateKeyUpdate" parameterType="java.util.List">
+        insert into am_material_info(material_code,material_name,term,price, tax_rate, product_id,
+        product_name,product_type_name,material_type_id,material_type_name,device_type_id,device_type,first_level_id,
+        first_level_name,second_level_id,second_level_name,last_operator_id,last_operator_name,create_time,update_time,nd_scan)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.materialCode,jdbcType=VARCHAR},
+            #{item.materialName,jdbcType=VARCHAR},
+            #{item.term,jdbcType=INTEGER},
+            #{item.price,jdbcType=DOUBLE},
+            #{item.taxRate,jdbcType=DOUBLE},
+            #{item.productId,jdbcType=INTEGER},
+            #{item.productName,jdbcType=VARCHAR},
+            #{item.productTypeName,jdbcType=VARCHAR},
+            #{item.materialTypeId,jdbcType=INTEGER},
+            #{item.materialTypeName,jdbcType=VARCHAR},
+            #{item.deviceTypeId,jdbcType=INTEGER},
+            #{item.deviceType,jdbcType=VARCHAR},
+            #{item.firstLevelId,jdbcType=INTEGER},
+            #{item.firstLevelName,jdbcType=VARCHAR},
+            #{item.secondLevelId,jdbcType=INTEGER},
+            #{item.secondLevelName,jdbcType=VARCHAR},
+            #{item.lastOperatorId,jdbcType=INTEGER},
+            #{item.lastOperatorName,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.updateTime,jdbcType=TIMESTAMP},
+            #{item.ndScan,jdbcType=VARCHAR})
+        </foreach>
+        on duplicate key update
+        material_code=values(material_code),
+        material_name=values(material_name),
+        term=values(term),
+        price=values(price),
+        tax_rate=values(tax_rate),
+        product_id=values(product_id),
+        product_name=values(product_name),
+        product_type_name=values(product_type_name),
+        material_type_id=values(material_type_id),
+        material_type_name=values(material_type_name),
+        device_type_id=values(device_type_id),
+        device_type=values(device_type),
+        first_level_id=values(first_level_id),
+        first_level_name=values(first_level_name),
+        second_level_id=values(second_level_id),
+        second_level_name=values(second_level_name),
+        last_operator_id=values(last_operator_id),
+        last_operator_name=values(last_operator_name),
+        create_time=values(create_time),
+        update_time=values(update_time),
+        nd_scan=values(nd_scan)
+    </insert>
+
+
+    <select id="getMaxTime" resultMap="BaseResultMap" parameterType="cn.com.glsx.supplychain.model.am.MaterialInfo">
+        select 
+        <include refid="Base_Column_List"/>
+        from am_material_info
+        order by update_time desc limit 1;
+    </select>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.MaterialInfo">
+        insert into am_material_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialCode != null">
+                material_code,
+            </if>
+            <if test="materialName != null">
+                material_name,
+            </if>
+            <if test="term != null">
+                term,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="taxRate != null">
+                tax_rate,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="productName != null">
+                product_name,
+            </if>
+            <if test="productTypeName != null">
+                product_type_name,
+            </if>
+            <if test="materialTypeId != null">
+                material_type_id,
+            </if>
+            <if test="materialTypeName != null">
+                material_type_name,
+            </if>
+            <if test="deviceTypeId != null">
+                device_type_id,
+            </if>
+            <if test="deviceType != null">
+                device_type,
+            </if>
+            <if test="firstLevelId != null">
+                first_level_id,
+            </if>
+            <if test="firstLevelName != null">
+                first_level_name,
+            </if>
+            <if test="secondLevelId != null">
+                second_level_id,
+            </if>
+            <if test="secondLevelName != null">
+                second_level_name,
+            </if>
+            <if test="lastOperatorId != null">
+                last_operator_id,
+            </if>
+            <if test="lastOperatorName != null">
+                last_operator_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="ndScan != null">
+                nd_scan,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialCode != null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="term != null">
+                #{term,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="taxRate != null">
+                #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productTypeName != null">
+                #{productTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialTypeId != null">
+                #{materialTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="materialTypeName != null">
+                #{materialTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceTypeId != null">
+                #{deviceTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceType != null">
+                #{deviceType,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLevelId != null">
+                #{firstLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="firstLevelName != null">
+                #{firstLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="secondLevelId != null">
+                #{secondLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="secondLevelName != null">
+                #{secondLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="lastOperatorId != null">
+                #{lastOperatorId,jdbcType=INTEGER},
+            </if>
+            <if test="lastOperatorName != null">
+                #{lastOperatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ndScan != null">
+               #{ndScan,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateBymaterialCode" parameterType="cn.com.glsx.supplychain.model.am.MaterialInfo">
+        update am_material_info
+        <set>
+            <if test="materialCode != null">
+                material_code = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                material_name = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="term != null">
+                term = #{term,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="taxRate != null">
+                tax_rate = #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="productName != null">
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="productTypeName != null">
+                product_type_name = #{productTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialTypeId != null">
+                material_type_id = #{materialTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="materialTypeName != null">
+                material_type_name = #{materialTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceTypeId != null">
+                device_type_id = #{deviceTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLevelId != null">
+                first_level_id = #{firstLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="firstLevelName != null">
+                first_level_name = #{firstLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="secondLevelId != null">
+                second_level_id = #{secondLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="secondLevelName != null">
+                second_level_name = #{secondLevelName,jdbcType=VARCHAR},
+            </if>
+            <if test="lastOperatorId != null">
+                last_operator_id = #{lastOperatorId,jdbcType=INTEGER},
+            </if>
+            <if test="lastOperatorName != null">
+                last_operator_name = #{lastOperatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ndScan != null">
+               nd_scan = #{ndScan,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where material_code = #{materialCode,jdbcType=INTEGER}
+    </update>
+</mapper>

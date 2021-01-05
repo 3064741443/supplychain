@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: cn.com.glsx.framework:framework-core:1.0.1-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/framework/framework-core/1.0.1-SNAPSHOT/framework-core-1.0.1-20201014.081322-75.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/framework/framework-core/1.0.1-SNAPSHOT/framework-core-1.0.1-20201014.081322-75-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/framework/framework-core/1.0.1-SNAPSHOT/framework-core-1.0.1-20201014.081322-75-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

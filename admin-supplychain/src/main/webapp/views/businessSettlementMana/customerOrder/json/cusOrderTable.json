@@ -1,0 +1,36 @@
+{
+  "condition": null,
+  "draw": 0,
+  "error": null,
+  "total": 5,
+  "recordsFiltered": 5,
+  "recordsTotal": 5,
+  "data": [
+    {
+      "parentBrand": "本田", 
+      "childBrand": "广汽本田", 
+      "vehicleSystem": "奥德赛", 
+      "model": "2009款 2.4L 基本型", 
+      "classification": "车载导航",
+      "sapProductCode": "GLSX10001", 
+      "sapProductName": "嘀嘀虎智能大屏", 
+      "mappingProductCode": "CJYW10001",
+      "mappingProductName": "嘀嘀虎智能大屏", 
+      "fixedConfigure": "导航配置：低配<br />是否带协议：是<br />线束：新丰田低配通用线<br />主机尺寸：10.1寸<br />原车屏尺寸：9寸<br />超薄／单定：超薄", 
+      "chooseConfigure": "接线头：<br />线长：2.5米、6米<br />形状：方形、月牙形<br />颜色：红色、白色、灰色<br />摄像头：通用摄像头、专用摄像头"
+    },
+    {
+      "parentBrand": "本田", 
+      "childBrand": "广汽本田", 
+      "vehicleSystem": "奥德赛", 
+      "model": "2015款 1.5L 手动两驱舒适型", 
+      "classification": "驾宝无忧",
+      "sapProductCode": "GLSX50033", 
+      "sapProductName": "爱车保镖150万以上（不含）", 
+      "mappingProductCode": "CJYW10002",
+      "mappingProductName": "爱车保镖150万以上（不含）", 
+      "fixedConfigure": "导航配置：低配<br />是否带协议：是<br />线束：新丰田低配通用线<br />主机尺寸：10.1寸<br />原车屏尺寸：9寸<br />超薄／单定：超薄", 
+      "chooseConfigure": "接线头：<br />线长：2.5米、6米<br />形状：方形、月牙形<br />颜色：红色、白色、灰色<br />摄像头：通用摄像头、专用摄像头"
+    }
+  ]
+}

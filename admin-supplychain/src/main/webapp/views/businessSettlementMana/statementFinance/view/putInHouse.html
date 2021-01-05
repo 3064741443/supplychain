@@ -1,0 +1,143 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">对账单-金融风控导入</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form name="outerForm" novalidate>   
+            <p>请点击"<a href="javascript:void(0)" ng-click="downloadTemplate()">下载导入对账单-金融风控模版</a>",
+                    并填写导入信息</p>      				  
+                <ng-form class="form-horizontal form-fixed form-fixed-4" name="import_form" role="form" novalidate>		           
+		            <div class="form-group">
+		                <label class="col-lg-3 control-label required">销售组／名称 :</label>
+		                <div class="control-content">
+		                    <div class="row" style="margin-left:10px">
+		                        <div class="col-lg-10">
+		                            <ui-select name="saleGroupName" ng-model="form.saleGroupName" theme="bootstrap">
+		                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+		                                <ui-select-choices repeat="item in saleGroupList">
+		                                    <div ng-bind="item.text"></div>
+		                                </ui-select-choices>
+		                            </ui-select>	
+		                            <div class="m-t-xs" ng-show="import_finance_form.saleGroupName.$invalid && outerForm.import_form.submitted">
+                                		<small class="text-danger"
+                                       		ng-show="import_finance_form.saleGroupName.$error.required">请选择销售组
+                                		</small>
+                            		</div>	                          
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            		            		            
+		            <!--  
+		            <div class="form-group">
+		                <label class="col-lg-3 control-label required">结算客户编码／名称：</label>
+		                <div class="control-content">
+		                    <div class="row" style="margin-left:50px">
+		                        <div class="col-lg-10">
+		                            <ui-select name="customer" ng-required="true" ng-model="form.customerCode" theme="bootstrap" ng-keyup="customerKeyUp()">
+		                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+		                                <ui-select-choices repeat="item in customerList">
+		                                    <div ng-bind="item.text"></div>
+		                                </ui-select-choices>
+		                            </ui-select>
+		                            <div class="m-t-xs" ng-show="import_finance_form.customer.$invalid && outerForm.import_form.submitted">
+                                		<small class="text-danger"
+                                       		ng-show="import_finance_form.customer.$error.required">请选择结算客户
+                                		</small>
+                            		</div>	 	
+                                </ui-select>	                          
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            
+		            
+		            <div class="form-group">
+		                <label class="col-lg-3 control-label required">硬件结算客户编码／名称：</label>
+		                <div class="control-content">
+		                    <div class="row" style="margin-left:75px">
+		                        <div class="col-lg-10">
+		                            <ui-select name="customerHard" ng-required="true" ng-model="form.customerHardCode" theme="bootstrap" ng-keyup="customerHardKeyUp()">
+		                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+		                                <ui-select-choices repeat="item in customerHardList">
+		                                    <div ng-bind="item.text"></div>
+		                                </ui-select-choices>
+		                            </ui-select>
+		                            <div class="m-t-xs" ng-show="import_finance_form.customerHard.$invalid && outerForm.import_form.submitted">
+                                		<small class="text-danger"
+                                       		ng-show="import_finance_form.customerHard.$error.required">请选择硬件结算客户
+                                		</small>
+                            		</div>			                          
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            
+		            <div class="form-group">
+		                <label class="col-lg-3 control-label required">非硬件结算客户编码／名称：</label>
+		                <div class="control-content">
+		                    <div class="row" style="margin-left:90px">
+		                        <div class="col-lg-10">
+		                            <ui-select name="customerSoft" ng-required="true" ng-model="form.customerSoftCode" theme="bootstrap" ng-keyup="customerSoftKeyUp()">
+		                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+		                                <ui-select-choices repeat="item in customerSoftList">
+		                                    <div ng-bind="item.text"></div>
+		                                </ui-select-choices>
+		                            </ui-select>
+		                            <div class="m-t-xs" ng-show="import_finance_form.customerSoft.$invalid && outerForm.import_form.submitted">
+                                		<small class="text-danger"
+                                       		ng-show="import_finance_form.customerSoft.$error.required">请选择非硬件结算客户
+                                		</small>
+                            		</div>			                          
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+                    -->
+                    <div class="form-group">                                                         
+                    	<label class="control-label col-sm-3 submitted">导入Excel:</label>                  
+                        <div class="col-sm-10">
+                            <input type="file" nv-file-select="" uploader="uploaderStatementList" name="fileName"
+                                   ng-model="deviceList.fileName" upload-shell ng-click="clearItems()"/>
+                        </div>                        
+                    </div>
+                    
+                    <div class="form-group" ng-show="importLoadShow">
+                        <div class="sk-spinner sk-spinner-fading-circle">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <div ng-show="importIsShow">检验成功<span>{{importSuccessCount}}</span>条，失败
+                                <b class="">{{importFailCount}}</b>条，请下载<a href="javascript:void(0)" ng-click="downloadFile()">导出失败列表</a></div>
+                        </div>
+                    </div>
+                </ng-form>
+				
+				
+				
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="importStatementFinanceList();">导入</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>

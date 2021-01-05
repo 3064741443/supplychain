@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.BsLogisticsMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.BsLogistics">
+        <id column="ID" jdbcType="BIGINT" property="id"/>
+        <result column="CODE" jdbcType="VARCHAR" property="code"/>
+        <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber"/>
+        <result column="COMPANY" jdbcType="VARCHAR" property="company"/>
+        <result column="TYPE" jdbcType="TINYINT" property="type"/>
+        <result column="SERVICE_CODE" jdbcType="VARCHAR" property="serviceCode"/>
+        <result column="SEND_ID" jdbcType="BIGINT" property="sendId"/>
+        <result column="RECEIVE_ID" jdbcType="BIGINT" property="receiveId"/>
+        <result column="ACCEPT" jdbcType="VARCHAR" property="accept"/>
+        <result column="SHIPMENTS_QUANTITY" jdbcType="INTEGER" property="shipmentsQuantity"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+        <result column="send_time" jdbcType="VARCHAR" property="sendTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, CODE, ORDER_NUMBER, COMPANY, TYPE, SERVICE_CODE, SEND_ID, RECEIVE_ID, ACCEPT, 
+    SHIPMENTS_QUANTITY, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,sendTime
+  </sql>
+
+    <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.BsLogistics">
+    insert into bs_logistics (ID, CODE, ORDER_NUMBER, 
+      COMPANY, TYPE, SERVICE_CODE, 
+      SEND_ID, RECEIVE_ID, ACCEPT, 
+      SHIPMENTS_QUANTITY, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{serviceCode,jdbcType=VARCHAR}, 
+      #{sendId,jdbcType=BIGINT}, #{receiveId,jdbcType=BIGINT}, #{accept,jdbcType=VARCHAR}, 
+      #{shipmentsQuantity,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.BsLogistics">
+        insert into bs_logistics
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="code != null">
+                CODE,
+            </if>
+            <if test="orderNumber != null">
+                ORDER_NUMBER,
+            </if>
+            <if test="company != null">
+                COMPANY,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="serviceCode != null">
+                SERVICE_CODE,
+            </if>
+            <if test="sendId != null">
+                SEND_ID,
+            </if>
+            <if test="receiveId != null">
+                RECEIVE_ID,
+            </if>
+            <if test="accept != null">
+                ACCEPT,
+            </if>
+            <if test="shipmentsQuantity != null">
+                SHIPMENTS_QUANTITY,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="company != null">
+                #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="serviceCode != null">
+                #{serviceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sendId != null">
+                #{sendId,jdbcType=BIGINT},
+            </if>
+            <if test="receiveId != null">
+                #{receiveId,jdbcType=BIGINT},
+            </if>
+            <if test="accept != null">
+                #{accept,jdbcType=VARCHAR},
+            </if>
+            <if test="shipmentsQuantity != null">
+                #{shipmentsQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.BsLogistics">
+        update bs_logistics
+        <set>
+            <if test="code != null">
+                CODE = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNumber != null">
+                ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="company != null">
+                COMPANY = #{company,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="serviceCode != null">
+                SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sendId != null">
+                SEND_ID = #{sendId,jdbcType=BIGINT},
+            </if>
+            <if test="receiveId != null">
+                RECEIVE_ID = #{receiveId,jdbcType=BIGINT},
+            </if>
+            <if test="accept != null">
+                ACCEPT = #{accept,jdbcType=VARCHAR},
+            </if>
+            <if test="shipmentsQuantity != null">
+                SHIPMENTS_QUANTITY = #{shipmentsQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.BsLogistics">
+    update bs_logistics
+    set CODE = #{code,jdbcType=VARCHAR},
+      ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      COMPANY = #{company,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=TINYINT},
+      SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR},
+      SEND_ID = #{sendId,jdbcType=BIGINT},
+      RECEIVE_ID = #{receiveId,jdbcType=BIGINT},
+      ACCEPT = #{accept,jdbcType=VARCHAR},
+      SHIPMENTS_QUANTITY = #{shipmentsQuantity,jdbcType=INTEGER},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+    <sql id="Base_Column_Logistics">
+   b.id id,b.code code,b.order_number orderNumber,b.company,b.type type,b.service_code serviceCode,b.send_id sendId,b.receive_id receiveId,b.accept,
+   b.shipments_quantity shipmentsQuantity,b.send_time sendTime,gmo.spa_product_name spaProductName
+
+  </sql>
+
+    <select id="listLogisticsByGhMerchantOrderCode" parameterType="java.lang.String"
+            resultType="cn.com.glsx.supplychain.jst.dto.BsLogisticsDTO">
+        select
+        <include refid="Base_Column_Logistics"/>
+        from bs_logistics b LEFT JOIN bs_merchant_order_vehicle bv on b.service_code=bv.dispatch_order_code
+        LEFT JOIN bs_merchant_order bmo on bv.merchant_order=bmo.ORDER_NUMBER
+        LEFT JOIN gh_merchant_order_reflect_mcode gm on gm.merchant_order=bmo.ORDER_NUMBER
+        LEFT JOIN gh_merchant_order gmo on gmo.gh_merchant_order_code=gm.gh_merchant_order_code
+        where gmo.deleted_flag = 'N' and (b.type=4 or  b.type=5)
+        <if test="ghMerchantOrderCode != null">
+            and gmo.gh_merchant_order_code = #{ghMerchantOrderCode,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>

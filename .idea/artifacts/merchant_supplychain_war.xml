@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="merchant-supplychain:war">
+    <output-path>$PROJECT_DIR$/merchant-supplychain/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>merchant-supplychain</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="merchant-supplychain.war">
+      <element id="artifact" artifact-name="merchant-supplychain:war exploded" />
+    </root>
+  </artifact>
+</component>

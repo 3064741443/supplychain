@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementFinanceSplitMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementFinanceSplit">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="FINANCE_ID" property="financeId" jdbcType="BIGINT"/>
+        <result column="BILL_TYPE_CODE" property="billTypeCode" jdbcType="VARCHAR"/>
+        <result column="BILL_TYPE_NAME" property="billTypeName" jdbcType="VARCHAR"/>
+        <result column="BILL_NUMBER" property="billNumber" jdbcType="VARCHAR"/>
+        <result column="TIME" property="time" jdbcType="TIMESTAMP"/>
+        <result column="SALES_CODE" property="salesCode" jdbcType="VARCHAR"/>
+        <result column="SALES_NAME" property="salesName" jdbcType="VARCHAR"/>
+        <result column="CUSTOMER_CODE" property="customerCode" jdbcType="VARCHAR"/>
+        <result column="CUSTOMER_NAME" property="customerName" jdbcType="VARCHAR"/>
+        <result column="SALE_GROUP_CODE" property="saleGroupCode" jdbcType="VARCHAR"/>
+        <result column="SALE_GROUP_NAME" property="saleGroupName" jdbcType="VARCHAR"/>
+        <result column="STATEMENT_CURRENCY_CODE" property="statementCurrencyCode" jdbcType="VARCHAR"/>
+        <result column="STATEMENT_CURRENCY_NAME" property="statementCurrencyName" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_NAME" property="materialName" jdbcType="VARCHAR"/>
+        <result column="SALES_UNIT_CODE" property="salesUnitCode" jdbcType="VARCHAR"/>
+        <result column="SALES_UNIT_NAME" property="salesUnitName" jdbcType="VARCHAR"/>
+        <result column="SALES_QUANTITY" property="salesQuantity" jdbcType="INTEGER"/>
+        <result column="PRICE" property="price" jdbcType="DOUBLE"/>
+        <result column="GIFT" property="gift" jdbcType="VARCHAR"/>
+        <result column="TAX_RATE" property="taxRate" jdbcType="DOUBLE"/>
+        <result column="TAKE_GOODS_DATE" property="takeGoodsDate" jdbcType="TIMESTAMP"/>
+        <result column="STATEMENT_ORGANIZE_CODE" property="statementOrganizeCode" jdbcType="VARCHAR"/>
+        <result column="STATEMENT_ORGANIZE_NAME" property="statementOrganizeName" jdbcType="VARCHAR"/>
+        <result column="RESERVE_TYPE" property="reserveType" jdbcType="VARCHAR"/>
+        <result column="WAREHOUSE_CODE" property="warehouseCode" jdbcType="VARCHAR"/>
+        <result column="WAREHOUSE_NAME" property="warehouseName" jdbcType="VARCHAR"/>
+        <result column="QUANTITY" property="quantity" jdbcType="INTEGER"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+        <result column="COMBILE_CODE" property="combileCode" jdbcType="VARCHAR"/>
+        <result column="FINANCE_CUSTOMER_CODE" property="financeCustomerCode" jdbcType="VARCHAR"/>
+        <result column="WORK_TYPE" property="workType" jdbcType="VARCHAR"/>
+        <result column="WORK_ORDER" property="workOrder" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, FINANCE_ID, BILL_TYPE_CODE, BILL_TYPE_NAME, BILL_NUMBER, TIME, SALES_CODE, SALES_NAME, CUSTOMER_CODE,
+    CUSTOMER_NAME, SALE_GROUP_CODE, SALE_GROUP_NAME, STATEMENT_CURRENCY_CODE, STATEMENT_CURRENCY_NAME, 
+    MATERIAL_CODE, MATERIAL_NAME, SALES_UNIT_CODE, SALES_UNIT_NAME, SALES_QUANTITY, PRICE, 
+    GIFT, TAX_RATE, TAKE_GOODS_DATE, STATEMENT_ORGANIZE_CODE, STATEMENT_ORGANIZE_NAME, 
+    RESERVE_TYPE, WAREHOUSE_CODE, WAREHOUSE_NAME, QUANTITY, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,COMBILE_CODE,WORK_TYPE
+  </sql>
+  
+  	<sql id="Conns_Column_List">
+    s.ID as id, s.FINANCE_ID as financeId, s.BILL_TYPE_CODE as billTypeCode, s.BILL_TYPE_NAME as billTypeName, s.BILL_NUMBER as billNumber, s.TIME as time, s.SALES_CODE as salesCode, s.SALES_NAME as salesName, s.CUSTOMER_CODE as customerCode,
+    s.CUSTOMER_NAME as customerName, s.SALE_GROUP_CODE as saleGroupCode, s.SALE_GROUP_NAME as saleGroupName, s.STATEMENT_CURRENCY_CODE as statementCurrencyCode, s.STATEMENT_CURRENCY_NAME as statementCurrencyName, 
+    s.MATERIAL_CODE as materialCode, s.MATERIAL_NAME as materialName, s.SALES_UNIT_CODE as salesUnitCode, s.SALES_UNIT_NAME as salesUnitName, s.SALES_QUANTITY as salesQuantity, s.PRICE as price, 
+    s.GIFT as gift, s.TAX_RATE as taxRate, s.TAKE_GOODS_DATE as takeGoodsDate, s.STATEMENT_ORGANIZE_CODE as statementOrganizeCode, s.STATEMENT_ORGANIZE_NAME as statementOrganizeName, 
+    s.RESERVE_TYPE as reserveType,  s.WAREHOUSE_CODE as warehouseCode, s.WAREHOUSE_NAME as warehouseName, s.QUANTITY as quantity, s.CREATED_BY as createdBy, s.CREATED_DATE as createdDate, s.UPDATED_BY as updatedBy, s.UPDATED_DATE as updatedDate, s.DELETED_FLAG as deletedFlag,s.COMBILE_CODE as combileCode,
+    f.WORK_ORDER as workOrder,s.WORK_TYPE as workType
+  </sql>
+
+    <select id="listStatementFinanceSplit" parameterType="cn.com.glsx.supplychain.model.am.StatementFinanceSplit"
+            resultType="cn.com.glsx.supplychain.model.am.StatementFinanceSplit">
+        select
+        <include refid="Conns_Column_List"/>
+        from am_statement_finance_split as s left join am_statement_finance as f on(s.FINANCE_ID=f.ID)
+        where s.DELETED_FLAG = "N"
+        <if test="customerCode != null and customerCode != ''">
+            AND (s.CUSTOMER_CODE LIKE "%"#{customerCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="customerName != null and customerName !=''">
+            or s.CUSTOMER_NAME LIKE "%"#{customerName,jdbcType=VARCHAR}"%")
+        </if>
+        <if test="materialCode != null and materialCode != ''">
+            AND (s.MATERIAL_CODE LIKE "%"#{materialCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="materialName != null and materialName !=''">
+            or s.MATERIAL_NAME LIKE "%"#{materialName,jdbcType=VARCHAR}"%")
+        </if>
+        <if test="startDate != null">
+            AND s.TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND s.TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="workOrder != null">
+        	AND f.WORK_ORDER LIKE "%"#{workOrder,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="combileCode != null">
+        	AND s.COMBILE_CODE LIKE "%"#{combileCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="workType != null and workType !=''">
+        	AND s.WORK_TYPE = #{workType,jdbcType=VARCHAR} 
+        </if>
+        ORDER BY s.ID DESC
+    </select>
+
+    <select id="exportStatementFinanceSplitExit" parameterType="cn.com.glsx.supplychain.model.am.StatementFinanceSplit"
+            resultType="cn.com.glsx.supplychain.model.am.StatementFinanceSplit">
+        select
+        <include refid="Conns_Column_List"/>
+        from am_statement_finance_split as s left join am_statement_finance as f on(s.FINANCE_ID=f.ID)
+        where s.DELETED_FLAG = "N"
+        <if test="customerCode != null and customerCode != ''">
+            AND (s.CUSTOMER_CODE LIKE "%"#{customerCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="customerName != null and customerName !=''">
+            or s.CUSTOMER_NAME LIKE "%"#{customerName,jdbcType=VARCHAR}"%")
+        </if>
+        <if test="materialCode != null and materialCode != ''">
+            AND (s.MATERIAL_CODE LIKE "%"#{materialCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="materialName != null and materialName !=''">
+            or s.MATERIAL_NAME LIKE "%"#{materialName,jdbcType=VARCHAR}"%")
+        </if>
+        <if test="startDate != null">
+            AND s.TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND s.TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="workOrder != null">
+        	AND f.WORK_ORDER LIKE "%"#{workOrder,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="combileCode != null">
+        	AND s.COMBILE_CODE LIKE "%"#{combileCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="workType != null and workType !=''">
+        	AND s.WORK_TYPE = #{workType,jdbcType=VARCHAR} 
+        </if>
+        ORDER BY s.ID DESC
+    </select>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.StatementFinanceSplit">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into am_statement_finance_split
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="financeId != null">
+                FINANCE_ID,
+            </if>
+            <if test="billTypeCode != null">
+                BILL_TYPE_CODE,
+            </if>
+            <if test="billTypeName != null">
+                BILL_TYPE_NAME,
+            </if>
+            <if test="billNumber != null">
+                BILL_NUMBER,
+            </if>
+            <if test="time != null">
+                TIME,
+            </if>
+            <if test="salesCode != null">
+                SALES_CODE,
+            </if>
+            <if test="salesName != null">
+                SALES_NAME,
+            </if>
+            <if test="customerCode != null">
+                CUSTOMER_CODE,
+            </if>
+            <if test="customerName != null">
+                CUSTOMER_NAME,
+            </if>
+            <if test="saleGroupCode != null">
+                SALE_GROUP_CODE,
+            </if>
+            <if test="saleGroupName != null">
+                SALE_GROUP_NAME,
+            </if>
+            <if test="statementCurrencyCode != null">
+                STATEMENT_CURRENCY_CODE,
+            </if>
+            <if test="statementCurrencyName != null">
+                STATEMENT_CURRENCY_NAME,
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE,
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME,
+            </if>
+            <if test="salesUnitCode != null">
+                SALES_UNIT_CODE,
+            </if>
+            <if test="salesUnitName != null">
+                SALES_UNIT_NAME,
+            </if>
+            <if test="salesQuantity != null">
+                SALES_QUANTITY,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="gift != null">
+                GIFT,
+            </if>
+            <if test="taxRate != null">
+                TAX_RATE,
+            </if>
+            <if test="takeGoodsDate != null">
+                TAKE_GOODS_DATE,
+            </if>
+            <if test="statementOrganizeCode != null">
+                STATEMENT_ORGANIZE_CODE,
+            </if>
+            <if test="statementOrganizeName != null">
+                STATEMENT_ORGANIZE_NAME,
+            </if>
+            <if test="reserveType != null">
+                RESERVE_TYPE,
+            </if>
+            <if test="warehouseCode != null">
+                WAREHOUSE_CODE,
+            </if>
+            <if test="warehouseName != null">
+                WAREHOUSE_NAME,
+            </if>
+            <if test="quantity != null">
+                QUANTITY,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+            <if test="combileCode != null">
+                COMBILE_CODE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="financeId != null">
+                #{financeId,jdbcType=BIGINT},
+            </if>
+            <if test="billTypeCode != null">
+                #{billTypeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="billTypeName != null">
+                #{billTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="billNumber != null">
+                #{billNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="salesCode != null">
+                #{salesCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salesName != null">
+                #{salesName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerCode != null">
+                #{customerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupCode != null">
+                #{saleGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupName != null">
+                #{saleGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="statementCurrencyCode != null">
+                #{statementCurrencyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="statementCurrencyName != null">
+                #{statementCurrencyName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="salesUnitCode != null">
+                #{salesUnitCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salesUnitName != null">
+                #{salesUnitName,jdbcType=VARCHAR},
+            </if>
+            <if test="salesQuantity != null">
+                #{salesQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="gift != null">
+                #{gift,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRate != null">
+                #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="takeGoodsDate != null">
+                #{takeGoodsDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="statementOrganizeCode != null">
+                #{statementOrganizeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="statementOrganizeName != null">
+                #{statementOrganizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="reserveType != null">
+                #{reserveType,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseCode != null">
+                #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseName != null">
+                #{warehouseName,jdbcType=VARCHAR},
+            </if>
+            <if test="quantity != null">
+                #{quantity,jdbcType=INTEGER},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="combileCode != null">
+                #{combileCode,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.StatementFinanceSplit">
+        update am_statement_finance_split
+        <set>
+            <if test="financeId != null">
+                FINANCE_ID = #{financeId,jdbcType=BIGINT},
+            </if>
+            <if test="billTypeCode != null">
+                BILL_TYPE_CODE = #{billTypeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="billTypeName != null">
+                BILL_TYPE_NAME = #{billTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="billNumber != null">
+                BILL_NUMBER = #{billNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                TIME = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="salesCode != null">
+                SALES_CODE = #{salesCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salesName != null">
+                SALES_NAME = #{salesName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerCode != null">
+                CUSTOMER_CODE = #{customerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                CUSTOMER_NAME = #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupCode != null">
+                SALE_GROUP_CODE = #{saleGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupName != null">
+                SALE_GROUP_NAME = #{saleGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="statementCurrencyCode != null">
+                STATEMENT_CURRENCY_CODE = #{statementCurrencyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="statementCurrencyName != null">
+                STATEMENT_CURRENCY_NAME = #{statementCurrencyName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="salesUnitCode != null">
+                SALES_UNIT_CODE = #{salesUnitCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salesUnitName != null">
+                SALES_UNIT_NAME = #{salesUnitName,jdbcType=VARCHAR},
+            </if>
+            <if test="salesQuantity != null">
+                SALES_QUANTITY = #{salesQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="gift != null">
+                GIFT = #{gift,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRate != null">
+                TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="takeGoodsDate != null">
+                TAKE_GOODS_DATE = #{takeGoodsDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="statementOrganizeCode != null">
+                STATEMENT_ORGANIZE_CODE = #{statementOrganizeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="statementOrganizeName != null">
+                STATEMENT_ORGANIZE_NAME = #{statementOrganizeName,jdbcType=VARCHAR},
+            </if>
+            <if test="reserveType != null">
+                RESERVE_TYPE = #{reserveType,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseCode != null">
+                WAREHOUSE_CODE = #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseName != null">
+                WAREHOUSE_NAME = #{warehouseName,jdbcType=VARCHAR},
+            </if>
+            <if test="quantity != null">
+                QUANTITY = #{quantity,jdbcType=INTEGER},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="combileCode != null">
+                COMBILE_CODE = #{combileCode,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteStatementFinanceSplitByDate"
+            parameterType="cn.com.glsx.supplychain.model.am.StatementFinanceSplit">
+        update am_statement_finance_split
+        <set>
+            DELETED_FLAG = "Y",
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>          
+        </set>
+        where DATE_FORMAT(TIME,'%Y%m') = DATE_FORMAT(#{time,jdbcType=TIMESTAMP},'%Y%m') and FINANCE_CUSTOMER_CODE = #{financeCustomerCode,jdbcType=VARCHAR}
+        <if test="workType != null and workType !=''">
+    		and WORK_TYPE = #{workType,jdbcType=VARCHAR}
+    	</if>
+    </update>
+
+</mapper>

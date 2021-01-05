@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Maven: cn.com.glsx:rpc-supplychain-jst-api:0.0.1-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/rpc-supplychain-jst-api/0.0.1-SNAPSHOT/rpc-supplychain-jst-api-0.0.1-20200721.120756-90.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/rpc-supplychain-jst-api/rpc-supplychain-jst-api-0.0.1-SNAPSHOT-javadoc.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/rpc-supplychain-jst-api/0.0.1-SNAPSHOT/rpc-supplychain-jst-api-0.0.1-20200721.120756-90-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/rpc-supplychain-jst-api/rpc-supplychain-jst-api-0.0.1-SNAPSHOT-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/cn/com/glsx/rpc-supplychain-jst-api/0.0.1-SNAPSHOT/rpc-supplychain-jst-api-0.0.1-20200721.120756-90-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

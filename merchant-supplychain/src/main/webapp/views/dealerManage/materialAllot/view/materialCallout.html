@@ -1,0 +1,112 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">调出</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+        	<span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+       	</button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="callout_form"
+              method="post"
+              enctype="multipart/form-data">
+                          
+            <div class="form-group">
+	            <label class="col-lg-3 control-label required">调往商户 :</label>
+	            <div class="control-content">
+	                <div class="row">
+	                    <div class="col-lg-10">
+	                        <ui-select name="merchantCode" ng-disabled="alreadyShipped" uis-open-close="onOpenClose(isOpen)" ng-required="true" ng-model="callout.toMerchantCode"
+	                                   theme="bootstrap" ng-keyup="myKeyUp()" id="sendMerchantNo">
+	                            <ui-select-match placeholder="请输入内容进行查询">{{$select.selected.text}}</ui-select-match>
+	                            <ui-select-choices repeat="item in sendMerchantNoList | filter: $select.search">
+	                                <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search" ng-click="sendMerchantClick(sendMerchantNoList)"></div>
+	                            </ui-select-choices>
+	                            <ui-select-no-choice style="padding: 10px;text-align: center;">
+	                                	没有匹配的数据
+	                            </ui-select-no-choice>
+	                        </ui-select>
+	                        <div class="m-t-xs" ng-show="callout_form.merchantCode.$invalid && callout_form.submitted">
+	                            <small class="text-danger"
+	                                   ng-show="callout_form.merchantCode.$error.required">请选择调往商户
+	                            </small>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">物料编号:</label>
+                <div class="control-content">
+	                <div class="row">
+	                    <div class="col-lg-10">
+	                        <ui-select name="materialCode" ng-disabled="alreadyShipped" uis-open-close="onMaterialOpenClose(isOpen)" ng-required="true" ng-model="callout.materialCode"
+	                                   theme="bootstrap" ng-keyup="myMaterialKeyUp()" id="sendMaterialCode">
+	                            <ui-select-match placeholder="请输入内容进行查询">{{$select.selected.text}}</ui-select-match>
+	                            <ui-select-choices repeat="item in sendMaterialList | filter: $select.search">
+	                                <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search" ng-click="sendMaterialClick(sendMaterialList)"></div>
+	                            </ui-select-choices>
+	                            <ui-select-no-choice style="padding: 10px;text-align: center;">
+	                                	没有匹配的数据
+	                            </ui-select-no-choice>
+	                        </ui-select>
+	                        <div class="m-t-xs" ng-show="callout_form.materialCode.$invalid && callout_form.submitted">
+	                            <small class="text-danger"
+	                                   ng-show="callout_form.materialCode.$error.required">请选择物料
+	                            </small>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label required">调拨数量 :</label>
+                <div class="control-content">
+                    <input name="deliNum" class="form-control" type="number" ng-required="true"
+                             ng-model="callout.deliNum"/>
+                    <div class="m-t-xs"
+                         ng-show="callout_form.deliNum.$invalid && callout_form.submitted">
+                        <small class="text-danger"
+                               ng-show="callout_form.deliNum.$error.required">请输入调拨数量
+                        </small>
+                    </div>
+                </div>
+            </div>
+			
+			<div class="form-group">
+                <label class="col-lg-4 control-label required">物流公司 :</label>
+                <div class="control-content">
+                    <input name="logisticscpy" class="form-control" type="text" ng-required="true"
+                           maxlength="50" ng-model="callout.logisticscpy"/>
+                    <div class="m-t-xs"
+                         ng-show="callout_form.logisticscpy.$invalid && callout_form.submitted">
+                        <small class="text-danger"
+                               ng-show="callout_form.logisticscpy.$error.required">请输入物流公司
+                        </small>
+                    </div>
+                </div>
+            </div>
+			
+			<div class="form-group">
+                <label class="col-lg-4 control-label required">物流单号 :</label>
+                <div class="control-content">
+                    <input name="logisticsno" class="form-control" type="text" ng-required="true"
+                           maxlength="50" ng-model="callout.logisticsno"/>
+                    <div class="m-t-xs"
+                         ng-show="callout_form.logisticsno.$invalid && callout_form.submitted">
+                        <small class="text-danger"
+                               ng-show="callout_form.logisticsno.$error.required">请输入物流单号
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="calloutMaterial()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

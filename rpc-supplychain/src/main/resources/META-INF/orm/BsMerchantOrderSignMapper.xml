@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.BsMerchantOrderSignMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.BsMerchantOrderSign">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="MERCHANT_ORDER_NUMBER" jdbcType="VARCHAR" property="merchantOrderNumber" />
+    <result column="MERCHANT_SIGN_NUMBER" jdbcType="VARCHAR" property="merchantSignNumber" />
+    <result column="SIGN_URL" jdbcType="VARCHAR" property="signUrl" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MERCHANT_ORDER_NUMBER, MERCHANT_SIGN_NUMBER, SIGN_URL, CREATED_BY, CREATED_DATE,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <!--
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from bs_merchant_order_sign
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  -->
+  <select id="listMerchantOrderSignByMerchantOrder" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from bs_merchant_order_sign
+  	where MERCHANT_ORDER_NUMBER in
+  	<foreach collection="list" item="item" open="(" close=")" separator=",">
+  		#{item,jdbcType=VARCHAR}
+  	</foreach>
+  </select>
+  <!--
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bs_merchant_order_sign
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  -->
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantOrderSign">
+    insert into bs_merchant_order_sign (ID, MERCHANT_ORDER_NUMBER, MERCHANT_SIGN_NUMBER,
+      SIGN_URL, CREATED_BY, CREATED_DATE,
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=BIGINT}, #{merchantOrderNumber,jdbcType=VARCHAR}, #{merchantSignNumber,jdbcType=VARCHAR},
+      #{signUrl,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP},
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantOrderSign">
+    insert into bs_merchant_order_sign
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="merchantOrderNumber != null">
+        MERCHANT_ORDER_NUMBER,
+      </if>
+      <if test="merchantSignNumber != null">
+        MERCHANT_SIGN_NUMBER,
+      </if>
+      <if test="signUrl != null">
+        SIGN_URL,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantOrderNumber != null">
+        #{merchantOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantSignNumber != null">
+        #{merchantSignNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="signUrl != null">
+        #{signUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateMerchantOrderSignBySignCode" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantOrderSign">
+  	update bs_merchant_order_sign
+    <set>
+      <if test="merchantOrderNumber != null">
+        MERCHANT_ORDER_NUMBER = #{merchantOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantSignNumber != null">
+        MERCHANT_SIGN_NUMBER = #{merchantSignNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="signUrl != null">
+        SIGN_URL = #{signUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MERCHANT_SIGN_NUMBER = #{merchantSignNumber,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantOrderSign">
+    update bs_merchant_order_sign
+    <set>
+      <if test="merchantOrderNumber != null">
+        MERCHANT_ORDER_NUMBER = #{merchantOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantSignNumber != null">
+        MERCHANT_SIGN_NUMBER = #{merchantSignNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="signUrl != null">
+        SIGN_URL = #{signUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.bs.BsMerchantOrderSign">
+    update bs_merchant_order_sign
+    set MERCHANT_ORDER_NUMBER = #{merchantOrderNumber,jdbcType=VARCHAR},
+      MERCHANT_SIGN_NUMBER = #{merchantSignNumber,jdbcType=VARCHAR},
+      SIGN_URL = #{signUrl,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

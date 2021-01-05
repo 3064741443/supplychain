@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.SalesSummarizingDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.SalesSummarizingDetail">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SALES_ID" property="salesId" jdbcType="BIGINT"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="SALES_QUANTITY" property="salesQuantity" jdbcType="INTEGER"/>
+        <result column="SALES_AMOUNT" property="salesAmount" jdbcType="DOUBLE"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR"/>
+        <result column="SPECIFICATION" property="specification" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, SALES_ID, PRODUCT_CODE, SALES_QUANTITY, SALES_AMOUNT, CREATED_BY,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+    <sql id="sd_Base_Column_List">
+    sd.ID, sd.SALES_ID, sd.PRODUCT_CODE, sd.SALES_QUANTITY, sd.SALES_AMOUNT, sd.CREATED_BY,
+    sd.CREATED_DATE, sd.UPDATED_BY, sd.UPDATED_DATE, sd.DELETED_FLAG
+  </sql>
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizingDetail">
+        update bs_sales_summarizing_detail
+        <set>
+            <if test="salesId != null">
+                SALES_ID = #{salesId,jdbcType=BIGINT},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="salesQuantity != null">
+                SALES_QUANTITY = #{salesQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="salesAmount != null">
+                SALES_AMOUNT = #{salesAmount,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getSalesSummarizingDetailBySalesSummarizingId"
+            parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        sd.SPECIFICATION,sd.PRODUCT_NAME,
+        <include refid="sd_Base_Column_List"/>
+        from bs_sales_summarizing_detail sd
+        left join bs_product p on sd.PRODUCT_CODE = p.CODE
+        where sd.DELETED_FLAG = "N"
+        AND sd.salesId = #{salesSummarizingId,jdbcType=BIGINT}
+    </select>
+</mapper>

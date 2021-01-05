@@ -1,0 +1,54 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">修改物流信息</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="update_logistics_form"
+                  method="post"
+                  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">物流公司 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input  ng-required="true" name="company" placeholder="物流公司"
+                                        maxlength="25" check-length="25" class="form-control" type="text" style="float: left; margin-right: 25px" ng-model="updateLogisticsData.company"/>
+                                <div class="m-t-xs" ng-show="update_logistics_form.company.$invalid && update_logistics_form.submitted">
+                                    <small class="text-danger" ng-show="update_logistics_form.company.$error.required">请输入物流公司</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">物流单号 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input ng-required="true" name="orderNumber" maxlength="18" check-length="18" placeholder="物流单号" class="form-control"
+                                       onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" type="text" style="float: left; margin-right: 25px"
+                                       ng-model="updateLogisticsData.orderNumber"/>
+                                <div class="m-t-xs"
+                                     ng-show="update_logistics_form.orderNumber.$invalid && update_logistics_form.submitted">
+                                    <small class="text-danger" ng-show="update_logistics_form.orderNumber.$error.required">
+                                        请输入物流单号
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="ok();">确认</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: cn.com.glsx.merchant.facade:rpc-merchant-facade-api:2.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../MavenRepository/cn/com/glsx/merchant/facade/rpc-merchant-facade-api/2.0-SNAPSHOT/rpc-merchant-facade-api-2.0-20200227.033259-13.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../MavenRepository/cn/com/glsx/merchant/facade/rpc-merchant-facade-api/2.0-SNAPSHOT/rpc-merchant-facade-api-2.0-20200227.033259-13-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../MavenRepository/cn/com/glsx/merchant/facade/rpc-merchant-facade-api/2.0-SNAPSHOT/rpc-merchant-facade-api-2.0-20200227.033259-13-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

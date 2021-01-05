@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.SplitOrderMapper">
+
+    <select id="selectOrderList" parameterType="cn.com.glsx.supplychain.model.bs.SplitOrder"
+            resultType="cn.com.glsx.supplychain.model.bs.SplitOrder">
+            SELECT
+                mo.ID AS orderId,
+                mo.ORDER_NUMBER AS orderNumber,
+                mo.ORDER_TIME AS orderTime,
+                mo.HOPE_TIME AS hopeTime,
+                mo.MERCHANT_CODE AS merchantCode,
+                mo.TOTAL_ORDER AS totalOrder,
+                mo.TOTAL_CHECK AS totalCheck,
+                mo.TOTAL_AMOUNT AS totalAmount,
+                mo.`STATUS` AS `status`,
+                mo.REMARKS AS remarks,
+                mo.CREATED_BY AS orderCreatedBy,
+                mo.CREATED_DATE AS orderCreatedDate,
+                mo.UPDATED_BY AS orderUpdatedBy,
+                mo.UPDATED_DATE AS orderUpdatedDate,
+                mo.DELETED_FLAG AS orderDeletedFlag,
+                md.ID AS detailId,
+                md.MERCHANT_ORDER_NUMBER AS merchantOrderNumber,
+                md.PRODUCT_CODE AS productCode,
+                md.ORDER_QUANTITY AS orderQuantity,
+                md.CHECK_QUANTITY AS checkQuantity,
+                md.ACCEPT_QUANTITY AS acceptQuantity,
+                md.DISPATCH_ORDER_NUMBER AS dispatchOrderNumber,
+                md.CREATED_BY AS detailCreatedBy,
+                md.CREATED_DATE AS detailCreatedDate,
+                md.UPDATED_BY AS detailUpdatedBy,
+                md.UPDATED_DATE AS detailUpdatedDate,
+                md.DELETED_FLAG AS detailDeletedFlag,
+                md.PRODUCT_REMARKS AS productRemarks
+            FROM
+                bs_merchant_order_detail md
+                LEFT JOIN bs_merchant_order mo ON md.MERCHANT_ORDER_NUMBER = mo.ORDER_NUMBER
+    </select>
+    <select id="selectLogisticsList" parameterType="cn.com.glsx.supplychain.model.bs.Logistics"
+            resultType="cn.com.glsx.supplychain.model.bs.Logistics">
+            SELECT
+                l.ID AS id,
+                l.`CODE` AS `code`,
+                l.ORDER_NUMBER AS orderNumber,
+                l.COMPANY AS company,
+                l.`TYPE` AS `type`,
+                l.SERVICE_CODE AS serviceCode,
+                l.SEND_ID AS sendId,
+                l.RECEIVE_ID AS receiveId,
+                l.ACCEPT AS accept,
+                l.CREATED_BY AS createdBy,
+                l.CREATED_DATE AS createdDate,
+                l.UPDATED_BY AS updatedBy,
+                l.UPDATED_DATE AS updatedDate,
+                l.DELETED_FLAG AS deletedFlag,
+                l.SHIPMENTS_QUANTITY AS shipmentsQuantity
+            FROM
+                bs_logistics l
+                LEFT JOIN bs_merchant_order o ON l.SERVICE_CODE = o.ORDER_NUMBER
+            WHERE
+                l.TYPE = 1;
+    </select>
+    <insert id="insertOrderBatch" parameterType="java.util.List">
+        INSERT INTO bs_merchant_order (
+            ORDER_NUMBER,
+            ORDER_TIME,
+            HOPE_TIME,
+            MERCHANT_CODE,
+            TOTAL_ORDER,
+            TOTAL_CHECK,
+            TOTAL_AMOUNT,
+            `STATUS`,
+            REMARKS,
+            CREATED_BY,
+            CREATED_DATE,
+            UPDATED_BY,
+            UPDATED_DATE,
+            DELETED_FLAG
+        ) VALUES
+        <foreach collection="list" item="order" separator=",">
+            (
+                #{order.orderNumber},
+                #{order.orderTime},
+                #{order.hopeTime},
+                #{order.merchantCode},
+                #{order.totalOrder},
+                #{order.totalCheck},
+                #{order.totalAmount},
+                #{order.status},
+                #{order.remarks},
+                #{order.orderCreatedBy},
+                #{order.orderCreatedDate},
+                #{order.orderUpdatedBy},
+                #{order.orderUpdatedDate},
+                #{order.orderDeletedFlag}
+            )
+        </foreach>
+    </insert>
+    <update id="updateOrderBatch" parameterType="Map">
+        UPDATE bs_merchant_order
+        <set>
+            <if test="orderList != null">
+                TOTAL_ORDER = CASE ID
+                <foreach collection="orderList" item="order">
+                    WHEN #{order.orderId} THEN #{order.orderQuantity}
+                </foreach>
+                END,
+            </if>
+            <if test="orderList != null">
+                TOTAL_CHECK = CASE ID
+                <foreach collection="orderList" item="order">
+                    WHEN #{order.orderId} THEN #{order.checkQuantity}
+                </foreach>
+                END,
+            </if>
+        </set>
+        WHERE  ID in
+        <foreach collection="orderList" item="order" separator="," open="(" close=")">
+            #{order.orderId}
+        </foreach>
+    </update>
+    <update id="updateOrderDetailBatch" parameterType="Map">
+        UPDATE bs_merchant_order_detail
+        <set>
+            <if test="detailList != null">
+                MERCHANT_ORDER_NUMBER = CASE ID
+                <foreach collection="detailList" item="detail">
+                    WHEN #{detail.detailId} THEN #{detail.merchantOrderNumber}
+                </foreach>
+                END,
+            </if>
+        </set>
+        WHERE  ID in
+        <foreach collection="detailList" item="detail" separator="," open="(" close=")">
+            #{detail.detailId}
+        </foreach>
+    </update>
+    <insert id="insertLogisticsBatch" parameterType="java.util.List">
+        INSERT INTO bs_logistics (
+            `CODE`,
+            ORDER_NUMBER,
+            COMPANY,
+            `TYPE`,
+            SERVICE_CODE,
+            SEND_ID,
+            RECEIVE_ID,
+            ACCEPT,
+            CREATED_BY,
+            CREATED_DATE,
+            UPDATED_BY,
+            UPDATED_DATE,
+            DELETED_FLAG,
+            SHIPMENTS_QUANTITY
+        ) VALUES
+        <foreach collection="list" item="logistics" separator=",">
+            (
+                #{logistics.code},
+                #{logistics.orderNumber},
+                #{logistics.company},
+                #{logistics.type},
+                #{logistics.serviceCode},
+                #{logistics.sendId},
+                #{logistics.receiveId},
+                #{logistics.accept},
+                #{logistics.createdBy},
+                #{logistics.createdDate},
+                #{logistics.updatedBy},
+                #{logistics.updatedDate},
+                #{logistics.deletedFlag},
+                #{logistics.shipmentsQuantity}
+            )
+        </foreach>
+    </insert>
+</mapper>

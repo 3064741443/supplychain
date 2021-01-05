@@ -1,0 +1,35 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">确认初始化</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="$dismiss()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body ofy-visible" style="height: 200px">
+        <form class="form-horizontal clearfix" role="form" name="init_deviceDetail_form" enctype="multipart/form-data">
+            <div class="form-group">
+                <h2 style="text-align:center">请确认是否初始化</h2>
+                <h4 style="text-align:center" ><span class="text-danger">＊</span>设备初始化后，设备套餐以及卡套餐全部初始化</h4>
+                <label class="col-sm-3 control-label required" >初始化原因 :</label>
+                <div class="col-sm-4">
+                    <ui-select name="remark" ng-model="initPageData.remark" ng-click="isShow()" ng-required="true" theme="bootstrap">
+                        <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                        <ui-select-choices repeat="item in initResultList" >
+                            <div ng-if="item.text!=0" ng-bind="item.text"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="control-content col-sm-4" ng-show="remark">
+                    <input type="text" class="form-control" name="remarkOther" ng-model="initPageData.remarkOther" maxlength="30"/>
+                    <div class="m-t-xs" ng-show="init_deviceDetail_form.submitted">
+                        <small class="text-danger">请输入其他原因</small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="$dismiss()">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="ok()" data-style="expand-right">确定</button>
+    </div>
+</div>

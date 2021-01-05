@@ -1,0 +1,26 @@
+<div>
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <ol class="breadcrumb">
+                <li>菜单一</li>
+                <li class="active"><strong>菜单二</strong></li>
+            </ol>
+        </div>
+    </div>
+    <div class="row wrapper wrapper-content animated fadeInRight advance-wrapper">
+        <div class="ibox relative">
+            <div class="ibox-title clearfix">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <div class="input-group">
+                            <button class="btn btn-primary" type="button" ng-click="flowCardSearchForm();">搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns" />
+            </div>
+        </div>
+    </div>
+</div>

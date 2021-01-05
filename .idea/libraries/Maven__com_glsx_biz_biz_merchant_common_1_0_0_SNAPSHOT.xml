@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.glsx.biz:biz-merchant-common:1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-merchant-common/1.0.0-SNAPSHOT/biz-merchant-common-1.0.0-20190703.024216-14.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-merchant-common/1.0.0-SNAPSHOT/biz-merchant-common-1.0.0-20190703.024216-14-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-merchant-common/1.0.0-SNAPSHOT/biz-merchant-common-1.0.0-20190703.024216-14-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementSellJbwyMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementSellJbwy">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SETTLE_CUSTOMER_CODE" jdbcType="VARCHAR" property="settleCustomerCode" />
+    <result column="SETTLE_CUSTOMER_NAME" jdbcType="VARCHAR" property="settleCustomerName" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="REASONS" property="reasons" jdbcType="VARCHAR" />
+    <result column="SALE_GROUP_CODE" jdbcType="VARCHAR" property="saleGroupCode" />
+    <result column="SALE_GROUP_NAME" jdbcType="VARCHAR" property="saleGroupName" />
+    <result column="NO" jdbcType="VARCHAR" property="no" />
+    <result column="INSURE_NO" jdbcType="VARCHAR" property="insureNo" />
+    <result column="VECHO_PRICE" jdbcType="VARCHAR" property="vechoPrice" />
+    <result column="VIN_NO" jdbcType="VARCHAR" property="vinNo" />
+    <result column="VECHO_USER_NAME" jdbcType="VARCHAR" property="vechoUserName" />
+    <result column="DEVICE_SN" jdbcType="VARCHAR" property="deviceSn" />
+    <result column="ENGINE_NO" jdbcType="VARCHAR" property="engineNo" />
+    <result column="DEVICE_TYPE" jdbcType="VARCHAR" property="deviceType" />
+    <result column="VERSION" jdbcType="VARCHAR" property="version" />
+    <result column="INSURE_DUE_TIME" jdbcType="VARCHAR" property="insureDueTime" />
+    <result column="MONEY" jdbcType="DOUBLE" property="money" />
+    <result column="INSURE_REPORT_PRACTICE" jdbcType="VARCHAR" property="insureReportPractice" />
+    <result column="INSURE_START_DATE" jdbcType="TIMESTAMP" property="insureStartDate" />
+    <result column="INSURE_END_DATE" jdbcType="TIMESTAMP" property="insureEndDate" />
+    <result column="PRINCE_AGENT" jdbcType="VARCHAR" property="princeAgent" />
+    <result column="CITY_AGENT" jdbcType="VARCHAR" property="cityAgent" />
+    <result column="HAND_IN_MERCHANT" jdbcType="VARCHAR" property="handInMerchant" />
+    <result column="SHOP_NAME" jdbcType="VARCHAR" property="shopName" />
+    <result column="PRE_MERCHANT" jdbcType="VARCHAR" property="preMerchant" />
+    <result column="AREA" jdbcType="VARCHAR" property="area" />
+    <result column="CERTIFI_NO" jdbcType="VARCHAR" property="certifiNo" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="VECHO_BRAND" jdbcType="VARCHAR" property="vechoBrand" />
+    <result column="VECHO_TYPE" jdbcType="VARCHAR" property="vechoType" />
+    <result column="VECHO_SET" jdbcType="VARCHAR" property="vechoSet" />
+    <result column="VECHO_COLOR" jdbcType="VARCHAR" property="vechoColor" />
+    <result column="FIRST_MAN" jdbcType="VARCHAR" property="firstMan" />
+    <result column="INSURE_MATURITY" jdbcType="VARCHAR" property="insureMaturity" />
+    <result column="SELL_SERVER_MANE" jdbcType="VARCHAR" property="sellServerMane" />
+    <result column="JBWY_SERVER_MONEY" jdbcType="DOUBLE" property="jbwyServerMoney" />
+    <result column="MILEAGE" jdbcType="VARCHAR" property="mileage" />
+    <result column="INSURE_COMPANY" jdbcType="VARCHAR" property="insureCompany" />
+    <result column="OPERATOR" jdbcType="VARCHAR" property="operator" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SETTLE_CUSTOMER_CODE,SETTLE_CUSTOMER_NAME,STATUS,REASONS,SALE_GROUP_CODE,SALE_GROUP_NAME,NO, INSURE_NO, VECHO_PRICE, VIN_NO, VECHO_USER_NAME, DEVICE_SN, ENGINE_NO, DEVICE_TYPE, 
+    VERSION, INSURE_DUE_TIME, MONEY, INSURE_REPORT_PRACTICE, INSURE_START_DATE, INSURE_END_DATE, 
+    PRINCE_AGENT, CITY_AGENT, HAND_IN_MERCHANT, SHOP_NAME, PRE_MERCHANT, AREA, CERTIFI_NO, 
+    MOBILE, VECHO_BRAND, VECHO_TYPE, VECHO_SET, VECHO_COLOR, FIRST_MAN, INSURE_MATURITY, 
+    SELL_SERVER_MANE, JBWY_SERVER_MONEY, MILEAGE, INSURE_COMPANY, OPERATOR, WORK_ORDER, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <select id="pageStatementSellJbwy" parameterType="cn.com.glsx.supplychain.model.am.StatementSellJbwy" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from am_statement_sell_jbwy
+  	<where>
+  		<if test="settleCustomerCode != null and settleCustomerCode != ''">
+            AND (SETTLE_CUSTOMER_CODE = #{settleCustomerCode,jdbcType=VARCHAR}
+        </if>
+        <if test="settleCustomerName != null and settleCustomerName !=''">
+            or SETTLE_CUSTOMER_NAME = #{settleCustomerName,jdbcType=VARCHAR})
+        </if>	
+        <if test="status != null">
+        	AND STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="workOrder != null">
+        	AND WORK_ORDER = #{workOrder,jdbcType=VARCHAR}
+        </if>
+  		<if test="startDate != null">
+            AND INSURE_START_DATE &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND INSURE_START_DATE &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="iptStartDate != null">
+            AND CREATED_DATE &gt;= #{iptStartDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="iptEndDate != null">
+            AND CREATED_DATE &lt;= #{iptEndDate,jdbcType=TIMESTAMP}
+        </if>
+  	</where>
+  </select>
+</mapper>

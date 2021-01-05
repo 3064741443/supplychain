@@ -1,0 +1,84 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="list_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">产品名称</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="产品名称" name="searchKey" ng-model="formData.product" />
+                    </div>
+                </div>
+            </div> 
+            
+            <div class="col-lg-6 col-sm-6">
+	            <div class="form-group" style="margin-left: 10%; margin-right:0%">
+	                <label class="col-lg-3 control-label">产品类型</label>
+	                <div class="col-lg-8">
+	                    <ui-select name="proType" ng-model="formData.proType" theme="bootstrap">
+	                        <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+	                        <ui-select-choices repeat="item in proTypeList" >
+	                            <div ng-bind="item.text "></div>
+	                        </ui-select-choices>
+	                    </ui-select>
+	                </div>
+	            </div>
+        	</div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">车辆信息</label>
+                    <div class="col-lg-2">
+                        <ui-select name="brand" ng-model="formData.brand" ng-change="brandChange(formData.brand)" theme="bootstrap">
+	                        <ui-select-match placeholder="请选择品牌">{{$select.selected.text}}</ui-select-match>
+	                        <ui-select-choices repeat="item in brandList" >
+	                            <div ng-bind="item.text "></div>
+	                        </ui-select-choices>
+	                    </ui-select>
+                    </div>
+                    <div class="col-lg-2">
+                        <ui-select name="childBrand" ng-model="formData.childBrand" ng-change="childBrandChange(formData.brand,formData.childBrand)" theme="bootstrap">
+	                        <ui-select-match placeholder="请选择子品牌">{{$select.selected.text}}</ui-select-match>
+	                        <ui-select-choices repeat="item in childBrandList" >
+	                            <div ng-bind="item.text "></div>
+	                        </ui-select-choices>
+	                    </ui-select>
+                    </div>
+                    <div class="col-lg-2">
+                        <ui-select name="vehicleSystem" ng-model="formData.vehicleSystem" ng-change="vehicleChange(formData.brand,formData.childBrand,formData.vehicleSystem)" theme="bootstrap">
+	                        <ui-select-match placeholder="请选择车系">{{$select.selected.text}}</ui-select-match>
+	                        <ui-select-choices repeat="item in vehicleSystemList" >
+	                            <div ng-bind="item.text "></div>
+	                        </ui-select-choices>
+	                    </ui-select>
+                    </div>
+                    <div class="col-lg-3">
+                        <ui-select name="model" ng-model="formData.model" theme="bootstrap">
+	                        <ui-select-match placeholder="请选择车型">{{$select.selected.text}}</ui-select-match>
+	                        <ui-select-choices repeat="item in modelList" >
+	                            <div ng-bind="item.text "></div>
+	                        </ui-select-choices>
+	                    </ui-select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            <button class="btn btn-primary " type="button" ng-click="exportExcel()">导出</button>
+        </div>
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>产品配置</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

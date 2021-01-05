@@ -1,0 +1,83 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="weixin_form">
+    	<div class="col-lg-6 col-sm-6">
+            <div class="form-group" style="margin-left:-3%;">
+                <label class="col-lg-3 control-label" style="margin-left: -3%" >结算客户</label>
+                <div class="col-lg-5">
+                    <input type="text" style="width: 105%;" class="form-control" placeholder="客户编码/客户名称"  ng-model="formData.customerInfo" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-sm-6">
+            <div class="form-group" style="margin-left: -60.5%; margin-right:55%">
+                <label class="col-lg-3 control-label">状态</label>
+                <div class="col-lg-5">
+                    <ui-select name="status" ng-model="formData.status" theme="bootstrap">
+                        <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                        <ui-select-choices repeat="item in statusList" >
+                            <div ng-bind="item.text "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 col-sm-6">
+            <div class="form-group" style="margin-left: -114%">
+                <label class="col-lg-2 control-label" style="margin-left: -3%">系统工单号</label>
+                <div class="col-lg-5">
+                    <input type="text" style="width: 48%;" class="form-control" placeholder="系统工单号"  ng-model="formData.workOrder" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8 col-sm-12">
+            <div class="form-group">
+                <label class="col-lg-2 control-label">交易时间</label>
+                <div class="col-sm-4">
+                    <input date-range-picker options="singleDateSettings"  name="dateRange1Start" max="formData.endDate.startDate"
+                           class="form-control date-picker" type="text" ng-model="formData.startDate" />
+                </div>
+                <label class="pull-left control-label">至</label>
+                <div class="col-sm-4">
+                    <input date-range-picker options="singleDateSettings"  name="dateRange1End" min="formData.startDate.startDate"
+                           class="form-control date-picker" type="text" ng-model="formData.endDate" />
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8 col-sm-12">
+            <div class="form-group">
+                <label class="col-lg-2 control-label">导入时间</label>
+                <div class="col-sm-4">
+                    <input date-range-picker options="singleDateSettings"  name="dateRange1Start" max="formData.iptEndDate.startDate"
+                           class="form-control date-picker" type="text" ng-model="formData.iptStartDate" />
+                </div>
+                <label class="pull-left control-label">至</label>
+                <div class="col-sm-4">
+                    <input date-range-picker options="singleDateSettings"  name="dateRange1End" min="formData.iptStartDate.startDate"
+                           class="form-control date-picker" type="text" ng-model="formData.iptEndDate" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 pull-right">
+        	<button class="btn btn-primary " type="button" ng-click="search()">查询</button>
+            <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="importExcel()">导入</button>
+            <button class="btn btn-primary " type="button" ng-click="del()">删除</button>
+        </div>
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>微信续费对账列表</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

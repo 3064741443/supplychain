@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.AttribInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.AttribInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="VALUE" jdbcType="INTEGER" property="value" />
+    <result column="COMMENT" jdbcType="VARCHAR" property="comment" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, `TYPE`, `NAME`, `COMMENT`, CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, DELETED_FLAG
+  </sql>
+
+</mapper>

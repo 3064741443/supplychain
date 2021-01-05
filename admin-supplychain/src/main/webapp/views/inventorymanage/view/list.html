@@ -1,0 +1,93 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="supplychain_form">
+        <div class="row col-lg-10">
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <div class="col-lg-4 control-label label-dynamic">
+                        <ui-select name="time" ng-model="form.time" theme="bootstrap" class="ui-select-auto">
+                            <ui-select-match placeholder="激活时间">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in timeList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-lg-8">
+                        <input name="startSTime" date-range-picker class="form-control date-picker"
+                               type="text"  ng-model="form.STime"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">设备类型</label>
+                    <div class="col-lg-8">
+                        <ui-select name="type" ng-model="form.type" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in typeList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">状态</label>
+                    <div class="col-lg-8">
+                        <ui-select name="status" ng-model="form.status" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in statusList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">品牌定制商</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入商户号/商户名称" name="merchantName" ng-model="form.merchantName" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-sm-8">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">关键字</label>
+                    <div class="col-lg-4">
+                        <ui-select name="keyWord" ng-model="form.keyWord" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in keyWordList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" placeholder="请输入" name="keyWord" ng-model="form.keyWord" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " type="button" style="margin-right: 15px" ng-click="search()">搜索</button>
+        </div>
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>设备清单列表</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

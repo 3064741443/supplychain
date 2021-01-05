@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="嘀嘀虎进销存系统"/>
+    <meta name="keywords" content="嘀嘀虎进销存系统"/>
+    <link href="images/gh-favicon.ico" rel="icon">
+    <title>嘀嘀虎进销存系统</title>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="login_warp">
+        <div class="login_con">
+            <div class="login_top"><h2 class="login_tit">嘀嘀虎进销存系统</h2></div>
+            <div class="login_mod">
+                <form class="fm-v clearfix login_form">
+                    <p>
+                        <input id="username" name="username" class="in_text" placeholder="请输入用户名"  type="text">
+                    </p>
+                    <p id="usernameError" class="err-msg">请输入用户名</p>
+                    <p>
+                        <input id="password" name="password" class="in_text" placeholder="请输入密码" type="password">
+                    </p>
+                    <p id="passwordError" class="err-msg">请输入密码</p>
+                    <p>
+                        <input class="btn_login" id="submitBtn" type="submit" value="登录">
+                    </p>
+                    <p id="loginError" class="err-msg"></p>
+                </form>
+            </div>
+            <div class="login_bottom"></div>
+        </div>
+    </div>
+    <script src="css/login.css"></script>
+    <script src="js/jquery/jquery-3.1.1.min.js"></script>
+    <script src="js/md5.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

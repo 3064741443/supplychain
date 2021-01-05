@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTGhMerchantOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTGhMerchantOrder">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="gh_merchant_order_code" jdbcType="VARCHAR" property="ghMerchantOrderCode" />
+    <result column="order_time" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="product_config_code" jdbcType="VARCHAR" property="productConfigCode" />
+    <result column="parent_brand_id" jdbcType="INTEGER" property="parentBrandId" />
+    <result column="sub_brand_id" jdbcType="INTEGER" property="subBrandId" />
+    <result column="audi_id" jdbcType="INTEGER" property="audiId" />
+    <result column="motorcycle" jdbcType="VARCHAR" property="motorcycle" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="spa_purchase_code" jdbcType="VARCHAR" property="spaPurchaseCode" />
+    <result column="spa_product_code" jdbcType="VARCHAR" property="spaProductCode" />
+    <result column="spa_product_name" jdbcType="VARCHAR" property="spaProductName" />
+    <result column="glsx_product_code" jdbcType="VARCHAR" property="glsxProductCode" />
+    <result column="glsx_product_name" jdbcType="VARCHAR" property="glsxProductName" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, gh_merchant_order_code, order_time, merchant_code, product_config_code, parent_brand_id, 
+    sub_brand_id, audi_id, motorcycle, category_id, spa_purchase_code, spa_product_code, 
+    spa_product_name, glsx_product_code, glsx_product_name, total, remark, status, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+</mapper>

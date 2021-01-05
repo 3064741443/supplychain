@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.OrderInfoDetailMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.OrderInfoDetail">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+    <result column="WAREHOUSE_ID_UP" jdbcType="INTEGER" property="warehouseIdUp" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="LOGISTICS_ID" jdbcType="INTEGER" property="logisticsId" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_CODE, ICCID, IMEI, ATTRIB_CODE, BATCH, WAREHOUSE_ID, WAREHOUSE_ID_UP, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG, LOGISTICS_ID, SN
+  </sql>
+  <select id="ListCountOrderInfoDetailGroupByLogistics" parameterType="java.util.List" resultType="cn.com.glsx.supplychain.jst.model.OrderInfoDetail">
+  	select o.logistics_id as logisticsId,count(1) as logisticsCount,o.order_code as orderCode,o.created_date as createdDate,l.company as logisticsCompany,l.order_number as logisticsCode,m.merchant_order_number as merchantOrderNumber
+  	from order_info_detail as o left join bs_logistics as l on(o.logistics_id=l.id) 
+  	left join bs_merchant_order_vehicle as bmov on(bmov.dispatch_order_code=o.order_code)
+  	left join bs_merchant_order_detail as m ON(m.MERCHANT_ORDER_NUMBER=bmov.merchant_order) 
+  	where o.order_code in
+  	<foreach collection="list" item="code" index="index" open="(" close=")" separator=",">
+  		#{code}
+  	</foreach>
+  	GROUP BY o.logistics_id,o.order_code
+  </select>
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfoDetail">
+    insert into order_info_detail (ID, ORDER_CODE, ICCID, 
+      IMEI, ATTRIB_CODE, BATCH, 
+      WAREHOUSE_ID, WAREHOUSE_ID_UP, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG, LOGISTICS_ID, SN
+      )
+    values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{iccid,jdbcType=VARCHAR}, 
+      #{imei,jdbcType=VARCHAR}, #{attribCode,jdbcType=VARCHAR}, #{batch,jdbcType=VARCHAR}, 
+      #{warehouseId,jdbcType=INTEGER}, #{warehouseIdUp,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR}, #{logisticsId,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfoDetail">
+    insert into order_info_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE,
+      </if>
+      <if test="iccid != null">
+        ICCID,
+      </if>
+      <if test="imei != null">
+        IMEI,
+      </if>
+      <if test="attribCode != null">
+        ATTRIB_CODE,
+      </if>
+      <if test="batch != null">
+        BATCH,
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID,
+      </if>
+      <if test="warehouseIdUp != null">
+        WAREHOUSE_ID_UP,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="logisticsId != null">
+        LOGISTICS_ID,
+      </if>
+      <if test="sn != null">
+        SN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null">
+        #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseIdUp != null">
+        #{warehouseIdUp,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsId != null">
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfoDetail">
+    update order_info_detail
+    <set>
+      <if test="orderCode != null">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null">
+        ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        BATCH = #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseIdUp != null">
+        WAREHOUSE_ID_UP = #{warehouseIdUp,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsId != null">
+        LOGISTICS_ID = #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        SN = #{sn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfoDetail">
+    update order_info_detail
+    set ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      BATCH = #{batch,jdbcType=VARCHAR},
+      WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      WAREHOUSE_ID_UP = #{warehouseIdUp,jdbcType=INTEGER},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      LOGISTICS_ID = #{logisticsId,jdbcType=INTEGER},
+      SN = #{sn,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getShopOrderDetailNoOrder" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfoDetail" resultType="cn.com.glsx.supplychain.jst.model.OrderInfoDetail">
+  	SELECT d.sn as sn,ap.product_code AS productCode, ap.product_name AS productName, bd.material_code AS materialCode,bd.material_name AS materialName 
+  	FROM order_info_detail AS d 
+  	LEFT JOIN bs_merchant_order_vehicle AS bmov ON(bmov.dispatch_order_code=d.order_code)
+	LEFT JOIN bs_merchant_order_detail AS md ON(md.merchant_order_number = bmov.merchant_order)
+	LEFT JOIN bs_product AS bp ON(bp.code=md.product_code)
+	LEFT JOIN bs_product_detail AS bd ON(bd.product_code = bp.code AND (bd.type = 0 OR bd.TYPE=7))
+	LEFT JOIN am_product_split AS ap ON(bp.product_split_id=ap.id)
+	where d.sn in
+	<foreach collection="list" item="sn" index="index" open=" (" close=")" separator=",">
+		#{sn}
+	</foreach>
+	GROUP BY d.sn
+  </select>
+</mapper>

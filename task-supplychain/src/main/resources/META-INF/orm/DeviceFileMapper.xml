@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.DeviceFileMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.DeviceFile">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="DEVICE_CODE" jdbcType="INTEGER" property="deviceCode" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="VERIF_CODE" jdbcType="VARCHAR" property="verifCode" />
+    <result column="BATCH_NO" jdbcType="VARCHAR" property="batchNo" />
+    <result column="PACKAGE_ID" jdbcType="INTEGER" property="packageId" />
+    <result column="ANDROID_PACKAGE_ID" jdbcType="INTEGER" property="androidPackageId" />
+    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+    <result column="ORDER_MERCHANT_NO" jdbcType="VARCHAR" property="orderMerchantNo" />
+    <result column="IN_STORAGE_TIME" jdbcType="VARCHAR" property="inStorageTime" />
+    <result column="OUT_STORAGE_TIME" jdbcType="VARCHAR" property="outStorageTime" />
+    <result column="OUT_STORAGE_TYPE" jdbcType="VARCHAR" property="outStorageType" />
+    <result column="TERMINAL_DISCODE" jdbcType="VARCHAR" property="terminalDiscode" />
+    <result column="EXTERNAL_FLAG" jdbcType="VARCHAR" property="externalFlag" />
+    <result column="MANUFACTURER_CODE" jdbcType="VARCHAR" property="manufacturerCode" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="FIRMWARE_ID" jdbcType="INTEGER" property="firmwareId" />
+    <result column="CARD_ID" jdbcType="INTEGER" property="cardId" />
+   
+  </resultMap>
+  
+  <sql id="File_Column_List">
+  	f.SN,f.IMEI,f.ID,f.DEVICE_CODE,f.ORDER_CODE, f.VERIF_CODE, f.BATCH_NO,f.PACKAGE_ID,f.OPERATOR_MERCHANT_NO, 
+    f.SEND_MERCHANT_NO,r.ICCID,r.IMSI,a.USER_FLAG,u.USER_FLAG,c.DEVICE_NAME,c.TYPE_ID,f.IN_STORAGE_TIME,f.OUT_STORAGE_TIME,
+  	f.OUT_STORAGE_TYPE,f.TERMINAL_DISCODE,s.PACKAGE_USER_ID, s.PACKAGE_STATU,s.USER_ID,s.CARD_ID, f.FIRMWARE_ID,s.FIRMWARE_ID,
+	s.PACKAGE_USER_TIME,s.USER_TIME,s.VEHICLE_ID,f.EXTERNAL_FLAG,f.ANDROID_PACKAGE_ID,s.PACKAGE_ID,s.ANDROID_PACKAGE_ID,f.CARD_ID
+  </sql>
+  
+  <sql id="Base_Column_List">
+    ID, SN, IMEI, DEVICE_CODE, ORDER_CODE, VERIF_CODE, BATCH_NO, PACKAGE_ID, ANDROID_PACKAGE_ID, 
+    OPERATOR_MERCHANT_NO, SEND_MERCHANT_NO, IN_STORAGE_TIME, OUT_STORAGE_TIME, OUT_STORAGE_TYPE, 
+    TERMINAL_DISCODE, EXTERNAL_FLAG, MANUFACTURER_CODE, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG,FIRMWARE_ID,CARD_ID
+  </sql>
+  
+  <select id="selectDeviceFileInfo" parameterType="glsx.com.cn.task.model.DeviceFile" resultMap="BaseResultMap">
+  	select * from device_file where 1 = 1 
+  	<if test="id != null">
+			and ID > #{id,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+  <select id="findDeviceFileByDeviceSns" parameterType="java.util.List" resultType="java.lang.String">
+  	select `SN` from device_file where 1=1
+  	<if test="list != null and list.size() &gt; 0">
+    AND `SN` IN
+	    <foreach collection="list" item="deviceSn" open="(" close=")" separator=",">
+	    	#{deviceSn}
+	    </foreach>
+	</if>
+  </select>
+  
+  <select id="pageDeviceFile" parameterType="glsx.com.cn.task.model.DeviceFile" resultMap="BaseResultMap">
+  	select 
+  	<include refid="File_Column_List" />
+  	from device_file as f left join device_code as c on(f.DEVICE_CODE=c.DEVICE_CODE)
+  	left join device_file_snapshot as s on(f.SN=s.SN)
+  	left join device_card_manager as r on(s.CARD_ID=r.ID) left join device_user_manager as a 
+  	on(s.PACKAGE_USER_ID=a.ID) left join device_user_manager as u on(s.USER_ID=u.ID)
+  	<where>
+  		<if test="deviceCodeTable != null and deviceCodeTable.typeId != null and deviceCodeTable.typeId != 0">
+  			AND c.TYPE_ID = #{deviceCodeTable.typeId,jdbcType=INTEGER}
+  		</if>
+  		<if test="snapshot != null and snapshot.packageStatu != null and snapshot.packageStatu !=''">
+  			AND s.PACKAGE_STATU = #{snapshot.packageStatu,jdbcType=VARCHAR}
+  		</if>
+  		<if test="deviceCardManager != null and deviceCardManager.iccid !=null and deviceCardManager.iccid != ''">
+  			AND r.ICCID LIKE CONCAT('%',#{deviceCardManager.iccid,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="deviceCardManager != null and deviceCardManager.imsi !=null and deviceCardManager.imsi != ''">
+  			AND r.IMSI LIKE CONCAT('%',#{deviceCardManager.imsi,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="sn != null and sn != ''">
+  			AND f.SN LIKE CONCAT('%',#{sn,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="packageId != null and packageId != 0">
+  			AND f.PACKAGE_ID = #{packageId,jdbcType=INTEGER}
+  		</if>
+  		<if test="sendMerchantNo != null and sendMerchantNo !=0">
+  			AND f.SEND_MERCHANT_NO like #{sendMerchantNo,jdbcType=INTEGER} 	
+  		</if>
+  		<if test="deviceUserManager != null and deviceUserManager.userFlag != null and deviceUserManager.userFlag != ''">
+  			AND u.USER_FLAG LIKE CONCAT('%',#{deviceUserManager.userFlag,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="externalFlag != null and externalFlag !=''">
+  			AND f.EXTERNAL_FLAG = #{externalFlag,jdbcType=VARCHAR}
+  		</if>
+  		<if test="androidPackageId != null and androidPackageId !=''">
+  			AND f.ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER}
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="exportDeviceFile" parameterType="glsx.com.cn.task.model.DeviceFile" resultMap="BaseResultMap">
+  	select
+  	<include refid="File_Column_List" />
+  	from device_file as f left join device_code as c on(f.DEVICE_CODE=c.DEVICE_CODE) 
+  	left join device_file_snapshot as s on(f.SN=s.SN)
+  	left join device_card_manager as r on(s.CARD_ID=r.ID) left join device_user_manager as a 
+  	on(s.PACKAGE_USER_ID=a.ID) left join device_user_manager as u on(s.USER_ID=u.ID)
+  	<where>
+  		<if test="deviceCodeTable != null and deviceCodeTable.typeId != null and deviceCodeTable.typeId != 0">
+  			AND c.TYPE_ID = #{deviceCodeTable.typeId,jdbcType=INTEGER}
+  		</if>
+  		<if test="snapshot != null and snapshot.packageStatu != null and snapshot.packageStatu !=''">
+  			AND s.PACKAGE_STATU = #{snapshot.packageStatu,jdbcType=VARCHAR}
+  		</if>
+  		<if test="deviceCardManager != null and deviceCardManager.iccid !=null and deviceCardManager.iccid != ''">
+  			AND r.ICCID LIKE CONCAT('%',#{deviceCardManager.iccid,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="deviceCardManager != null and deviceCardManager.imsi !=null and deviceCardManager.imsi != ''">
+  			AND r.IMSI LIKE CONCAT('%',#{deviceCardManager.imsi,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="sn != null and sn != ''">
+  			AND f.SN LIKE CONCAT('%',#{sn,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="packageId != null and packageId != 0">
+  			AND f.PACKAGE_ID = #{packageId,jdbcType=INTEGER}
+  		</if>
+  		<if test="sendMerchantNo != null and sendMerchantNo !=0">
+  			AND f.SEND_MERCHANT_NO like #{sendMerchantNo,jdbcType=INTEGER} 	
+  		</if>
+  		<if test="deviceUserManager != null and deviceUserManager.userFlag != null and deviceUserManager.userFlag != ''">
+  			AND u.USER_FLAG LIKE CONCAT('%',#{deviceUserManager.userFlag,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="externalFlag != null and externalFlag !=''">
+  			AND f.EXTERNAL_FLAG = #{externalFlag,jdbcType=VARCHAR}
+  		</if>
+  		<if test="androidPackageId != null and androidPackageId !=''">
+  			AND f.ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER}
+  		</if>
+  	</where>
+  	ORDER BY f.ID DESC LIMIT #{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_file
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUniqueKey" parameterType="glsx.com.cn.task.model.DeviceFile" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from device_file
+  	where SN = #{sn,jdbcType=VARCHAR}
+  </select>
+  <select id="countDeviceFilesByDeviceCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	select count(1) from device_file where DEVICE_CODE=#{_parameter,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_file
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.DeviceFile">
+    insert into device_file (ID, SN,IMEI, DEVICE_CODE, 
+      ORDER_CODE, VERIF_CODE, BATCH_NO, 
+      PACKAGE_ID, ANDROID_PACKAGE_ID, OPERATOR_MERCHANT_NO, 
+      SEND_MERCHANT_NO, ORDER_MERCHANT_NO,IN_STORAGE_TIME, OUT_STORAGE_TIME, 
+      OUT_STORAGE_TYPE, TERMINAL_DISCODE, EXTERNAL_FLAG, 
+      MANUFACTURER_CODE, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG,FIRMWARE_ID,CARD_ID
+      )
+    values (#{id,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR},#{imei,jdbcType=VARCHAR}, #{deviceCode,jdbcType=INTEGER}, 
+      #{orderCode,jdbcType=VARCHAR}, #{verifCode,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, 
+      #{packageId,jdbcType=INTEGER}, #{androidPackageId,jdbcType=INTEGER}, #{operatorMerchantNo,jdbcType=VARCHAR}, 
+      #{sendMerchantNo,jdbcType=VARCHAR}, #{orderMerchantNo,jdbcType=VARCHAR},#{inStorageTime,jdbcType=VARCHAR}, #{outStorageTime,jdbcType=VARCHAR}, 
+      #{outStorageType,jdbcType=VARCHAR}, #{terminalDiscode,jdbcType=VARCHAR}, #{externalFlag,jdbcType=VARCHAR}, 
+      #{manufacturerCode,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR},#{firmwareId,jdbcType=INTEGER},
+      #{cardId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.DeviceFile">
+    insert into device_file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sn != null">
+        SN,
+      </if>
+      <if test="imei != null">
+        IMEI,
+      </if>
+      <if test="deviceCode != null">
+        DEVICE_CODE,
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE,
+      </if>
+      <if test="verifCode != null">
+        VERIF_CODE,
+      </if>
+      <if test="batchNo != null">
+        BATCH_NO,
+      </if>
+      <if test="packageId != null">
+        PACKAGE_ID,
+      </if>
+      <if test="androidPackageId != null">
+        ANDROID_PACKAGE_ID,
+      </if>
+      <if test="operatorMerchantNo != null">
+        OPERATOR_MERCHANT_NO,
+      </if>
+      <if test="sendMerchantNo != null">
+        SEND_MERCHANT_NO,
+      </if>
+      <if test="orderMerchantNo != null">
+        ORDER_MERCHANT_NO,
+      </if>
+      <if test="inStorageTime != null">
+        IN_STORAGE_TIME,
+      </if>
+      <if test="outStorageTime != null">
+        OUT_STORAGE_TIME,
+      </if>
+      <if test="outStorageType != null">
+        OUT_STORAGE_TYPE,
+      </if>
+      <if test="terminalDiscode != null">
+        TERMINAL_DISCODE,
+      </if>
+      <if test="externalFlag != null">
+        EXTERNAL_FLAG,
+      </if>
+      <if test="manufacturerCode != null">
+        MANUFACTURER_CODE,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="firmwareId != null">
+      	FIRMWARE_ID,
+      </if>
+      <if test="cardId != null">
+      	CARD_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        #{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="verifCode != null">
+        #{verifCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null">
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="packageId != null">
+        #{packageId,jdbcType=INTEGER},
+      </if>
+      <if test="androidPackageId != null">
+        #{androidPackageId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorMerchantNo != null">
+        #{operatorMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMerchantNo != null">
+        #{sendMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMerchantNo != null">
+        #{orderMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inStorageTime != null">
+        #{inStorageTime,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageTime != null">
+        #{outStorageTime,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageType != null">
+        #{outStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalDiscode != null">
+        #{terminalDiscode,jdbcType=VARCHAR},
+      </if>
+      <if test="externalFlag != null">
+        #{externalFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerCode != null">
+        #{manufacturerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareId != null">
+      	#{firmwareId,jdbcType=INTEGER},
+      </if>
+      <if test="cardId != null">
+      	#{cardId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.DeviceFile">
+    update device_file
+    <set>
+      <if test="sn != null">
+        SN = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceCode != null">
+        DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="verifCode != null">
+        VERIF_CODE = #{verifCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null">
+        BATCH_NO = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="packageId != null">
+        PACKAGE_ID = #{packageId,jdbcType=INTEGER},
+      </if>
+      <if test="androidPackageId != null">
+        ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER},
+      </if>
+      <if test="operatorMerchantNo != null">
+        OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMerchantNo != null">
+        SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMerchantNo != null">
+        ORDER_MERCHANT_NO = #{orderMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="inStorageTime != null">
+        IN_STORAGE_TIME = #{inStorageTime,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageTime != null">
+        OUT_STORAGE_TIME = #{outStorageTime,jdbcType=VARCHAR},
+      </if>
+      <if test="outStorageType != null">
+        OUT_STORAGE_TYPE = #{outStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalDiscode != null">
+        TERMINAL_DISCODE = #{terminalDiscode,jdbcType=VARCHAR},
+      </if>
+      <if test="externalFlag != null">
+        EXTERNAL_FLAG = #{externalFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturerCode != null">
+        MANUFACTURER_CODE = #{manufacturerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareId != null">
+      	FIRMWARE_ID = #{firmwareId,jdbcType=INTEGER},
+      </if>
+      <if test="cardId != null">
+      	CARD_ID = #{cardId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.DeviceFile">
+    update device_file
+    set SN = #{sn,jdbcType=VARCHAR},
+      IMEI= #{imei,jdbcType=VARCHAR},
+      DEVICE_CODE = #{deviceCode,jdbcType=INTEGER},
+      ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      VERIF_CODE = #{verifCode,jdbcType=VARCHAR},
+      BATCH_NO = #{batchNo,jdbcType=VARCHAR},
+      PACKAGE_ID = #{packageId,jdbcType=INTEGER},
+      ANDROID_PACKAGE_ID = #{androidPackageId,jdbcType=INTEGER},
+      OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      ORDER_MERCHANT_NO = #{orderMerchantNo,jdbcType=VARCHAR},
+      IN_STORAGE_TIME = #{inStorageTime,jdbcType=VARCHAR},
+      OUT_STORAGE_TIME = #{outStorageTime,jdbcType=VARCHAR},
+      OUT_STORAGE_TYPE = #{outStorageType,jdbcType=VARCHAR},
+      TERMINAL_DISCODE = #{terminalDiscode,jdbcType=VARCHAR},
+      EXTERNAL_FLAG = #{externalFlag,jdbcType=VARCHAR},
+      MANUFACTURER_CODE = #{manufacturerCode,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      FIRMWARE_ID = #{firmwareId,jdbcType=INTEGER}
+      CARD_ID = #{cardId,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

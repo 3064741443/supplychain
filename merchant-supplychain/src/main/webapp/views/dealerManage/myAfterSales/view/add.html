@@ -1,0 +1,365 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">新增申请</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_myafter_form"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">设备类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="typeId" style="width: 60%;" ng-required="true"
+                                       ng-model="addMyafterData.typeId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in typeIdList">
+                                    <div ng-click="productNameClick(item.number)" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_myafter_form.typeId.$invalid && add_myafter_form.submitted">
+                                <small class="text-danger" ng-show="add_myafter_form.typeId.$error.required">请选择产品类型
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">产品名称 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="name" ng-required="true" style="width: 60%;" ng-model="addMyafterData.name"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.name}}</ui-select-match>
+                                <ui-select-choices repeat="item in productNameList">
+                                    <div ng-click="productNameChange(item.name)" ng-bind="item.name"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_myafter_form.name.$invalid && add_myafter_form.submitted">
+                                <small class="text-danger" ng-show="add_myafter_form.name.$error.required">请选择产品名称
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">产品规格 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="specification" style="width: 60%;"
+                                       ng-model="addMyafterData.specification" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.specification}}</ui-select-match>
+                                <ui-select-choices repeat="item in productNameList">
+                                    <div ng-bind="item.specification"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_myafter_form.specification.$invalid && add_myafter_form.submitted">
+                                <small class="text-danger" ng-show="add_myafter_form.specification.$error.required">
+                                    请选择产品规格
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">设备数量 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="number" ng-required="true" disabled="disabled" class="form-control" type="text"
+                                   style="width: 40%" ng-model="addMyafterData.number"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">商品SN :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10 addSn">
+                            <div style="display: inline-block;width:80%;position: relative"
+                                 ng-repeat="item in addMyafterData.MerchantSn">
+                                <b class="glyphicon glyphicon-plus icon_add" ng-click="addSn()"></b>
+                                <b class="glyphicon glyphicon-minus clean_add" ng-click="cleanSn($index)"></b>
+                                <input name="sn" ng-required="true" class="form-control  myafterManageSn"
+                                       ng-blur="goodsSnClick(item.goodsSn,$index)" placeholder="商品SN"
+                                       onkeyup="this.value=this.value.replace(/[^\d]/g,'');" type="text"
+                                       style="width: 40%;float: left;margin-right: 20px;" ng-model="item.goodsSn"/>
+                                <input name="warehouse" ng-required="true" class="form-control warehouse" placeholder="工厂"
+                                       type="text" style="width: 40%;display: inline-block;margin-right: 15px;"
+                                       ng-model="item.warehouse"/>
+                                <input name="deviceAfterReason" title={{item.deviceAfterReason}} ng-required="true" maxlength="100" class="form-control deviceAfterReason" placeholder="售后原因"
+                                       type="text" style="width: 84%;display: inline-block;margin-right: 15px;"
+                                       ng-model="item.deviceAfterReason"/>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.sn.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger" ng-show="add_myafter_form.sn.$error.required">请输入正确SN
+                                    </small>
+                                </div>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.warehouse.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger" ng-show="add_myafter_form.warehouse.$error.required">
+                                        请根据SN选择正确工厂
+                                    </small>
+                                </div>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.deviceAfterReason.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger" ng-show="add_myafter_form.deviceAfterReason.$error.required">
+                                        请填写售后原因
+                                    </small>
+                                </div>
+                            </div>
+                            <p style="margin-top: 15px">
+                                <button type="submit" class="btn btn-primary" ng-click="importSn()">批量导入</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">售后类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select ng-required="true" name="type" style="width: 20%" ng-change="showAddress()"
+                                       ng-model="addMyafterData.type" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in aftertypeList">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_myafter_form.type.$invalid && add_myafter_form.submitted">
+                                <small class="text-danger" ng-show="add_myafter_form.type.$error.required">请选择售后类型
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">售后原因 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <textarea class="form-control" check-length="200" ng-model="addMyafterData.reason"
+                                      name="remark" maxlength="200" style="height: 80px"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+            <dev class = "isAddressKey" name="add_myafter_form_address">
+                <div class="addressTip">
+                    <p style="color: #428bca;margin-left: 100px">点击地址簿按钮可以展开历史使用地址和联系人信息,点击地址信息自动填入下方</p>
+                </div>
+                <button type="submit" class="btn btn-primary" ng-click="addressbook(item);" style="margin-left: 13%">
+                    地址簿
+                </button>
+                <div class="form-group" ng-show="isAddress">
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <tbody>
+                                <div class="addressBox">
+                                    <div class="addressBook">
+                                        <div class="addressInfo" ng-repeat="addresslist in addressbookList"
+                                             ng-click="addressChecked($index)">
+                                            <p class="content">
+                                                联系人 :{{addresslist.name}}/{{addresslist.mobile}}
+                                            </p>
+                                            <p>
+                                                收货地址 :{{addresslist.address}}
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                </tbody>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label required" style="width:90px">联系人 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="contacts" ng-required="true" placeholder="联系人姓名" class="form-control"
+                                       type="text" ng-pattern="/^[A-Za-z\u4e00-\u9fa5]+$/"
+                                       style="float: left;width: 30%; margin-right: 25px" ng-model="addOrderData.name"/>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.contacts.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger" ng-show="add_myafter_form.contacts.$error.required">请输入联系人
+                                    </small>
+                                    <small class="text-danger" ng-show="add_myafter_form.contacts.$error.pattern">联系人只能为字母和汉字
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required" style="width:auto">联系电话 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="mobile" ng-required="true" placeholder="联系电话" class="form-control"
+                                       type="text"
+                                       ng-pattern="/^(((0\d{2,3}-?)?\d{7,8})|(1[0-9]{10}))$/"
+                                       style="float: left;width: 50%;" ng-model="addOrderData.mobile"/>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.mobile.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger" ng-show="add_myafter_form.mobile.$error.required">请输入联系电话
+                                    </small>
+                                    <small class="text-danger" ng-show="add_myafter_form.mobile.$error.pattern">
+                                        请输入正确的联系电话
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required" style="width:auto">收货地址 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <p style="margin-right: 1%;float: left">省份:</p>
+                                <ui-select name="province" ng-required="true"
+                                           style="width: 20%;margin-right: 1%;float: left"
+                                           ng-model="addOrderData.province" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.province}}</ui-select-match>
+                                    <ui-select-choices repeat="item in provinceList">
+                                        <div ng-click="provinceClick(item.pid)" ng-bind="item.province"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.province.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger">请选择省份
+                                    </small>
+                                </div>
+                                <p style="margin-right: 1%;float: left">城市:</p>
+                                <ui-select name="city" ng-required="true"
+                                           style="width: 20%;margin-right: 1%;float: left" ng-model="addOrderData.city"
+                                           theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.city}}</ui-select-match>
+                                    <ui-select-choices repeat="item in cityList">
+                                        <div ng-click="cityClick(item.cid)" ng-bind="item.city "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.city.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger">请选择城市
+                                    </small>
+                                </div>
+                                <p style="margin-right: 1%;float: left">地区:</p>
+                                <ui-select name="area" ng-required="true"
+                                           style="width: 20%;margin-right: 1%;float: left" ng-model="addOrderData.area"
+                                           theme="bootstrap">
+                                    <ui-select-match>{{$select.selected.area}}</ui-select-match>
+                                    <ui-select-choices repeat="item in areaList">
+                                        <div ng-bind="item.area"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.area.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger">请选择地区
+                                    </small>
+                                </div>
+                                <input name="particularsAddress" ng-required="true" placeholder="详细地址"
+                                       class="form-control" type="text"
+                                       style="width: 100%;margin-top:40px" ng-model="addOrderData.particularsAddress"/>
+                                <div class="m-t-xs"
+                                     ng-show="add_myafter_form.particularsAddress.$invalid && add_myafter_form.submitted">
+                                    <small class="text-danger">请输入详细地址
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </dev>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">确定</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>
+
+<style>
+    .addressBox {
+        position: relative;
+        padding-top: 10px;
+    }
+
+    .addressBox .addressBook {
+        width: 100%;
+        display: inline-block;
+        border: 1px solid #ddd;
+        height: 120px;
+        overflow-y: auto;
+        margin-left: 85px;
+    }
+
+    .addressBox .addressBook p {
+        margin: 0;
+    }
+
+    .addressBox .addressBook .addressInfo {
+        padding: 10px 10px;
+        /*margin: 10px 0;*/
+        border-bottom: 1px solid #ccc;
+    }
+
+    .addressBox .addressBook .addressInfo:last-child {
+        border-bottom: none;
+    }
+
+    .addressBox .addressTip {
+        display: inline-block;
+        width: 39%;
+        padding: 10px;
+        position: absolute;
+        top: 0;
+    }
+
+    .addSn {
+        position: relative;
+    }
+
+    .addSn .icon_add {
+        position: absolute;
+        right: 50px;
+        line-height: 34px;
+    }
+
+    .addSn .clean_add {
+        position: absolute;
+        right: 20px;
+        line-height: 34px;
+    }
+</style>

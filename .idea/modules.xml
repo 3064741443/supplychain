@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/admin-supplychain/admin-supplychain.iml" filepath="$PROJECT_DIR$/admin-supplychain/admin-supplychain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/admin-supplychain-jxc/admin-supplychain-jxc.iml" filepath="$PROJECT_DIR$/admin-supplychain-jxc/admin-supplychain-jxc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/merchant-supplychain/merchant-supplychain.iml" filepath="$PROJECT_DIR$/merchant-supplychain/merchant-supplychain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain/rpc-supplychain.iml" filepath="$PROJECT_DIR$/rpc-supplychain/rpc-supplychain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain-api/rpc-supplychain-api.iml" filepath="$PROJECT_DIR$/rpc-supplychain-api/rpc-supplychain-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain-jst/rpc-supplychain-jst.iml" filepath="$PROJECT_DIR$/rpc-supplychain-jst/rpc-supplychain-jst.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain-jst-api/rpc-supplychain-jst-api.iml" filepath="$PROJECT_DIR$/rpc-supplychain-jst-api/rpc-supplychain-jst-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain-jxc/rpc-supplychain-jxc.iml" filepath="$PROJECT_DIR$/rpc-supplychain-jxc/rpc-supplychain-jxc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain-jxc-api/rpc-supplychain-jxc-api.iml" filepath="$PROJECT_DIR$/rpc-supplychain-jxc-api/rpc-supplychain-jxc-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain-rdn/rpc-supplychain-rdn.iml" filepath="$PROJECT_DIR$/rpc-supplychain-rdn/rpc-supplychain-rdn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rpc-supplychain-rdn-api/rpc-supplychain-rdn-api.iml" filepath="$PROJECT_DIR$/rpc-supplychain-rdn-api/rpc-supplychain-rdn-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/supplychain.iml" filepath="$PROJECT_DIR$/.idea/supplychain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/task-supplychain/task-supplychain.iml" filepath="$PROJECT_DIR$/task-supplychain/task-supplychain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/web-supplychain/web-supplychain.iml" filepath="$PROJECT_DIR$/web-supplychain/web-supplychain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webapp-supplychain-jst/webapp-supplychain-jst.iml" filepath="$PROJECT_DIR$/webapp-supplychain-jst/webapp-supplychain-jst.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,54 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="deviceFileUnstockForm">
+        <div class="row col-lg-10 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-4 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">IMSI：</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入imsi" name="conditionQuery"
+                               ng-model="formData.imsi"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">SN：</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入SN" name="conditionQuery"
+                               ng-model="formData.sn"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">ICCID：</label>
+                    <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="请输入ICCID" name="conditionQuery"
+                               ng-model="formData.iccid"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <div class="form-group">
+                <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            </div>
+        </div>
+        
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>设备未入库列表</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

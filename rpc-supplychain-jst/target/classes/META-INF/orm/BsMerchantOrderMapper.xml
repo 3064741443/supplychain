@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.BsMerchantOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.BsMerchantOrder">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="ORDER_TIME" jdbcType="TIMESTAMP" property="orderTime" />
+    <result column="HOPE_TIME" jdbcType="TIMESTAMP" property="hopeTime" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="TOTAL_ORDER" jdbcType="INTEGER" property="totalOrder" />
+    <result column="TOTAL_CHECK" jdbcType="INTEGER" property="totalCheck" />
+    <result column="TOTAL_AMOUNT" jdbcType="DOUBLE" property="totalAmount" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="reback_reason" jdbcType="VARCHAR" property="rebackReason"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_NUMBER, ORDER_TIME, HOPE_TIME, MERCHANT_CODE, TOTAL_ORDER, TOTAL_CHECK, 
+    TOTAL_AMOUNT, STATUS, REMARKS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+
+  <sql id="Wx_Page_List">
+  	o.ORDER_NUMBER AS orderNumber,am.PRODUCT_CODE AS bsProductCode,am.product_name AS bsProductName,p.PACKAGE_ONE AS bsPackageOne,p.SERVICE_TIME AS bsServiceTime,
+	o.TOTAL_ORDER AS totalOrder,o.TOTAL_CHECK AS totalCheck,pd.material_code AS bsMaterialCode,pd.material_name AS bsMaterialName,od.DISPATCH_ORDER_NUMBER AS dispatchOrderCode,
+	(SELECT SUM(pr.price) FROM bs_product_history_price AS pr WHERE pr.PRODUCT_CODE = p.CODE) AS bsPrice
+  </sql>
+
+  <select id="countDispatchOrderCode" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder" resultType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder">
+  	SELECT order_code AS dispatchOrderCode, COUNT(order_code) AS sendCount FROM order_info_detail WHERE DELETED_FLAG='N' and order_code in
+  	<foreach collection="list" item="orderCode" index="index" open=" (" close=")" separator=",">
+          #{orderCode}
+    </foreach>
+    GROUP BY order_code
+  </select>
+
+  <select id="pageMerchantOrder" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder" resultType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder">
+  	select
+  	<include refid="Wx_Page_List" />
+  	FROM bs_merchant_order AS o
+	LEFT JOIN bs_merchant_order_detail od ON(o.ORDER_NUMBER=od.MERCHANT_ORDER_NUMBER)
+	LEFT JOIN bs_product AS p ON(od.PRODUCT_CODE=p.CODE)
+	LEFT JOIN am_product_split AS am ON(p.PRODUCT_SPLIT_ID = am.ID)
+	LEFT JOIN bs_product_detail AS pd ON(pd.PRODUCT_CODE=p.CODE)
+	where (pd.TYPE=0 OR pd.TYPE=7)
+	<if test="status != null">
+		<choose>
+			<when test="status == 2">
+				and (o.STATUS = 2 or o.STATUS=3 or o.STATUS=4)
+			</when>
+			<otherwise>
+				and o.STATUS = #{status,jdbcType=TINYINT}
+			</otherwise>
+		</choose>
+	</if>
+	<if test="questOrderTime != null">
+		and o.ORDER_TIME like CONCAT('%',#{questOrderTime},'%')
+	</if>
+	<if test="bsProductName != null">
+		and p.NAME like CONCAT('%',#{bsProductName},'%')
+	</if>
+	<if test="bsServiceType != null">
+		and p.SERVICE_TYPE = #{bsServiceType}
+	</if>
+	<if test="merchantCode != null">
+		and o.MERCHANT_CODE = #{merchantCode}
+	</if>
+	GROUP BY p.CODE ORDER BY o.ID DESC limit #{pageStart},#{pageSize}
+  </select>
+
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder">
+    insert into bs_merchant_order (ID, ORDER_NUMBER, ORDER_TIME, 
+      HOPE_TIME, MERCHANT_CODE, TOTAL_ORDER, 
+      TOTAL_CHECK, TOTAL_AMOUNT, STATUS, 
+      REMARKS, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=BIGINT}, #{orderNumber,jdbcType=VARCHAR}, #{orderTime,jdbcType=TIMESTAMP}, 
+      #{hopeTime,jdbcType=TIMESTAMP}, #{merchantCode,jdbcType=VARCHAR}, #{totalOrder,jdbcType=INTEGER}, 
+      #{totalCheck,jdbcType=INTEGER}, #{totalAmount,jdbcType=DOUBLE}, #{status,jdbcType=TINYINT}, 
+      #{remarks,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder">
+    insert into bs_merchant_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="orderNumber != null">
+        ORDER_NUMBER,
+      </if>
+      <if test="orderTime != null">
+        ORDER_TIME,
+      </if>
+      <if test="hopeTime != null">
+        HOPE_TIME,
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE,
+      </if>
+      <if test="totalOrder != null">
+        TOTAL_ORDER,
+      </if>
+      <if test="totalCheck != null">
+        TOTAL_CHECK,
+      </if>
+      <if test="totalAmount != null">
+        TOTAL_AMOUNT,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="remarks != null">
+        REMARKS,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null">
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hopeTime != null">
+        #{hopeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="totalOrder != null">
+        #{totalOrder,jdbcType=INTEGER},
+      </if>
+      <if test="totalCheck != null">
+        #{totalCheck,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder">
+    update bs_merchant_order
+    <set>
+      <if test="orderNumber != null">
+        ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null">
+        ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hopeTime != null">
+        HOPE_TIME = #{hopeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="totalOrder != null">
+        TOTAL_ORDER = #{totalOrder,jdbcType=INTEGER},
+      </if>
+      <if test="totalCheck != null">
+        TOTAL_CHECK = #{totalCheck,jdbcType=INTEGER},
+      </if>
+      <if test="totalAmount != null">
+        TOTAL_AMOUNT = #{totalAmount,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remarks != null">
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.BsMerchantOrder">
+    update bs_merchant_order
+    set ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+      HOPE_TIME = #{hopeTime,jdbcType=TIMESTAMP},
+      MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      TOTAL_ORDER = #{totalOrder,jdbcType=INTEGER},
+      TOTAL_CHECK = #{totalCheck,jdbcType=INTEGER},
+      TOTAL_AMOUNT = #{totalAmount,jdbcType=DOUBLE},
+      STATUS = #{status,jdbcType=TINYINT},
+      REMARKS = #{remarks,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listGhMerchantOrderReflectMcodeAndBsMerchantOrder"  resultType="cn.com.glsx.supplychain.jst.model.GhMerchantOrderReflectMcode">
+    SELECT gm.merchant_order merchantOrder,bmo.STATUS bsStatus,gmo.gh_merchant_order_code ghMerchantOrderCode,gmo.status ghStatus from bs_merchant_order bmo LEFT JOIN  gh_merchant_order_reflect_mcode gm on gm.merchant_order = bmo.order_number
+ LEFT JOIN  gh_merchant_order gmo on gm.gh_merchant_order_code=gmo.gh_merchant_order_code WHERE bmo.`STATUS` not in(1) and bmo.status!=gmo.status
+
+  </select>
+
+ <!-- <update id="batchUpdateGhMerchantOrder" parameterType="cn.com.glsx.supplychain.jst.model.GhMerchantOrderReflectMcode">
+     update gh_merchant_order set `STATUS`=  WHERE gh_merchant_order_code=''
+  </update>-->
+
+  <update id="batchUpdateGhMerchantOrder" parameterType="java.util.List">
+    UPDATE gh_merchant_order
+    <set>
+        status = CASE gh_merchant_order_code
+        <foreach collection="list" item="ghMerchantOrderReflectMcode">
+          WHEN #{ghMerchantOrderReflectMcode.ghMerchantOrderCode} THEN #{ghMerchantOrderReflectMcode.bsStatus}
+        </foreach>
+        END,
+      updated_date = NOW()
+    </set>
+    WHERE gh_merchant_order_code in
+    <foreach collection="list" item="ghMerchantOrderReflectMcode" separator="," open="(" close=")">
+      #{ghMerchantOrderReflectMcode.ghMerchantOrderCode}
+    </foreach>
+  </update>
+</mapper>

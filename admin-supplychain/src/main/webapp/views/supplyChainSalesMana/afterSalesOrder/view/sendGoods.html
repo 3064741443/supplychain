@@ -1,0 +1,70 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">维修产品发货</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="add_sendgoods_form"
+                  method="post"
+                  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">物流公司 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input  ng-required="true" name="company" placeholder="物流公司"
+                                        maxlength="25" check-length="25" class="form-control" type="text" style="float: left; margin-right: 25px" ng-model="sendGoodsData.company"/>
+                                <div class="m-t-xs" ng-show="add_sendgoods_form.company.$invalid && add_sendgoods_form.submitted">
+                                    <small class="text-danger" ng-show="add_sendgoods_form.company.$error.required">请输入物流公司</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">物流单号 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input ng-required="true" name="orderNumber" maxlength="18" check-length="18" placeholder="物流单号" class="form-control"
+                                       onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" type="text" style="float: left; margin-right: 25px"
+                                       ng-model="logistics.orderNumber"/>
+                                <div class="m-t-xs"
+                                     ng-show="add_sendgoods_form.orderNumber.$invalid && add_sendgoods_form.submitted">
+                                    <small class="text-danger" ng-show="add_sendgoods_form.orderNumber.$error.required">
+                                        请输入物流单号
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">发货SN :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10" style="margin-top: 8px;">
+                                <input ng-click="selectAll(all)" type="checkbox" ng-model="all"><span style="color: #007FBB">全选</span>
+                                <div class="form-group">
+                                    <p ng-repeat="item in afterChangeSnList" style="margin-left: 15px;">
+                                        <input id="all" type="checkbox" name="sn" ng-click="selectChange($index ,item)"
+                                         ng-checked="item.checked" name="checkbox"/>{{item.sn==null?item.imei:item.sn}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="ok();">确认</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>

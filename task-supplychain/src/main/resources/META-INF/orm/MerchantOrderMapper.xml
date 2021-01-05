@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.MerchantOrderMapper">
+    <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.MerchantOrder">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR"/>
+        <result column="ORDER_TIME" property="orderTime" jdbcType="TIMESTAMP"/>
+        <result column="HOPE_TIME" property="hopeTime" jdbcType="TIMESTAMP"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR"/>
+        <result column="TOTAL_ORDER" property="totalOrder" jdbcType="INTEGER"/>
+        <result column="TOTAL_CHECK" property="totalCheck" jdbcType="INTEGER"/>
+        <result column="TOTAL_AMOUNT" property="totalAmount" jdbcType="DOUBLE"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="REMARKS" property="remarks" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+        <result column="AMOUNT" property="amount" jdbcType="DOUBLE"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="channel" property="channel" jdbcType="TINYINT"/>
+        <result column="sign_status" property="signStatus" jdbcType="TINYINT"/>
+
+        <association property="merchantOrderDetailInfo" resultMap="merchantOrderDetailInfoMap"/>
+    </resultMap>
+
+    <resultMap id="merchantOrderDetailInfoMap" type="glsx.com.cn.task.model.MerchantOrderDetail">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="MERCHANT_ORDER_NUMBER" property="merchantOrderNumber" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="ORDER_QUANTITY" property="orderQuantity" jdbcType="INTEGER"/>
+        <result column="CHECK_QUANTITY" property="checkQuantity" jdbcType="INTEGER"/>
+        <result column="ACCEPT_QUANTITY" property="acceptQuantity" jdbcType="INTEGER"/>
+        <result column="CHECK_BY" property="checkBy" jdbcType="VARCHAR"/>
+        <result column="CHECK_TIME" property="checkTime" jdbcType="TIMESTAMP"/>
+        <result column="DISPATCH_ORDER_NUMBER" property="dispatchOrderNumber" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    ID, ORDER_NUMBER, ORDER_TIME, HOPE_TIME, MERCHANT_CODE, TOTAL_ORDER, TOTAL_CHECK,
+    TOTAL_AMOUNT, STATUS, REMARKS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE,
+    DELETED_FLAG
+  </sql>
+
+    <sql id="Mo_Base_Column_List">
+    mo.ID, mo.ORDER_NUMBER, mo.ORDER_TIME, mo.HOPE_TIME, mo.MERCHANT_CODE, mo.TOTAL_ORDER, mo.TOTAL_CHECK,
+    mo.TOTAL_AMOUNT, mo.STATUS, mo.REMARKS, mo.CREATED_BY, mo.CREATED_DATE, mo.UPDATED_BY, mo.UPDATED_DATE,
+    mo.DELETED_FLAG,md.MERCHANT_ORDER_NUMBER,md.DISPATCH_ORDER_NUMBER
+  </sql>
+	
+    <select id="listMerchantOrder" parameterType="glsx.com.cn.task.model.MerchantOrder"
+            resultMap="BaseResultMap">
+        select
+        ui.MERCHANT_NAME,ui.CHANNEL as channel,md.PRODUCT_CODE as code,
+        <include refid="Mo_Base_Column_List"/>
+        from bs_merchant_order mo
+        left join bs_dealer_user_info ui on mo.MERCHANT_CODE = ui.MERCHANT_CODE
+        left join bs_merchant_order_detail md on mo.ORDER_NUMBER = md.MERCHANT_ORDER_NUMBER
+        left join bs_product bp on md.PRODUCT_CODE = bp.CODE
+        where mo.DELETED_FLAG="N"
+        AND ui.DELETED_FLAG="N"
+        <if test="orderNumber != null">
+            AND mo.ORDER_NUMBER like "%"#{orderNumber,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="orderTime != null">
+            AND mo.ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="code != null and code != ''">
+            AND md.PRODUCT_CODE LIKE "%"#{code,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="productName != null and productName !=''">
+            or bp.NAME LIKE "%"#{productName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="type != null and type !=''">
+            AND bp.TYPE =#{type,jdbcType=VARCHAR}
+        </if>
+        <if test="channel != null">
+            AND ui.CHANNEL =#{channel,jdbcType=TINYINT}
+        </if>
+        <if test="hopeStartDate != null">
+            AND mo.HOPE_TIME &gt;= #{hopeStartDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="hopeEndDate != null">
+            AND mo.HOPE_TIME &lt;= #{hopeEndDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="merchantName != null">
+            AND ui.MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="merchantCode != null">
+            AND mo.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            AND mo.STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="merchantCode != null">
+            AND ui.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="totalAmount != null">
+            AND mo.TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null">
+            AND mo.ORDER_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND mo.ORDER_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        ORDER BY mo.CREATED_DATE desc
+    </select>
+
+    <select id="exportMerchantOrderExit" parameterType="cn.com.glsx.supplychain.model.bs.MerchantOrder" resultMap="BaseResultMap">
+        select
+        ui.MERCHANT_NAME,ui.CHANNEL as channel,md.PRODUCT_CODE as code,
+        <include refid="Mo_Base_Column_List"/>
+        from bs_merchant_order mo
+        left join bs_dealer_user_info ui on mo.MERCHANT_CODE = ui.MERCHANT_CODE
+        left join bs_merchant_order_detail md on mo.ORDER_NUMBER = md.MERCHANT_ORDER_NUMBER
+        left join bs_product bp on md.PRODUCT_CODE = bp.CODE
+        where mo.DELETED_FLAG="N"
+        AND ui.DELETED_FLAG="N"
+        <if test="orderNumber != null">
+            AND mo.ORDER_NUMBER like "%"#{orderNumber,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="materialCode != null and materialCode != ''">
+            AND bp.`CODE` IN (SELECT DISTINCT PRODUCT_CODE FROM bs_product_detail WHERE MATERIAL_CODE =  #{materialCode,jdbcType=VARCHAR})
+        </if>
+        <if test="orderTime != null">
+            AND mo.ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="code != null and code != ''">
+            AND (md.PRODUCT_CODE LIKE "%"#{code,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="productName != null and productName !=''">
+            or bp.NAME LIKE "%"#{productName,jdbcType=VARCHAR}"%")
+        </if>
+        <if test="type != null and type !=''">
+            AND bp.TYPE =#{type,jdbcType=VARCHAR}
+        </if>
+        <if test="channel != null">
+            AND ui.CHANNEL =#{channel,jdbcType=TINYINT}
+        </if>
+        <if test="hopeStartDate != null">
+            AND mo.HOPE_TIME &gt;= #{hopeStartDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="hopeEndDate != null">
+            AND mo.HOPE_TIME &lt;= #{hopeEndDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="merchantName != null">
+            AND ui.MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="merchantCode != null">
+            AND mo.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null">
+            AND mo.STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="merchantCode != null">
+            AND ui.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="totalAmount != null">
+            AND mo.TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR}
+        </if>
+        <if test="startDate != null">
+            AND mo.ORDER_TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND mo.ORDER_TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        ORDER BY mo.CREATED_DATE desc
+    </select>
+
+    <select id="getMerchantOrderListByDate" parameterType="java.util.Date" resultMap="BaseResultMap">
+        ui.MERCHANT_NAME,
+        <include refid="Mo_Base_Column_List"/>
+        from bs_merchant_order mo
+        left join bs_dealer_user_info ui on mo.MERCHANT_CODE = ui.MERCHANT_CODE
+        where mo.DELETED_FLAG="N"
+        AND ui.DELETED_FLAG="N"
+        <if test="startTime != null">
+            AND mo.ORDER_TIME &gt;= #{startTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endTime != null">
+            AND mo.ORDER_TIME &lt;= #{endTime,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+    
+    <select id="listMerchantOrderStatementForPeiJianFromDB" parameterType="glsx.com.cn.task.model.MerchantOrder" resultType="glsx.com.cn.task.vo.MerchantOrderStatement">
+    	select 
+    	bmov.dispatch_order_code as dispatchOrderNumber,
+    	md.updated_date as updateDate,
+		mo.merchant_code as merchantCode,
+		bui.merchant_name as merchantName,
+		mo.order_number as merchantOrderCode,
+		mo.order_time as merchantOrderTime,
+		amp.product_code as productCode,
+		amp.product_name as productName,
+		bspd.material_code as materialCode,
+		bspd.material_name as materialName,
+		bspd.type as productType
+		from bs_merchant_order_detail AS md
+		LEFT JOIN bs_merchant_order_vehicle AS bmov on(bmov.merchant_order=md.MERCHANT_ORDER_NUMBER)
+		LEFT JOIN bs_merchant_order AS mo ON(mo.order_number = md.MERCHANT_ORDER_NUMBER) 
+		LEFT JOIN bs_product AS bsp ON(bsp.code=md.product_code)
+		LEFT JOIN bs_product_detail AS bspd ON(bspd.product_code=md.product_code AND bspd.type=7)
+		LEFT JOIN am_product_split AS amp ON(amp.id = bsp.PRODUCT_SPLIT_ID)
+		LEFT JOIN bs_dealer_user_info AS bui ON(bui.merchant_code=mo.merchant_code)
+		where bsp.type=10 and bmov.dispatch_order_code IS NOT NULL and DATE_FORMAT(#{updatedDate},'%Y-%m-%d %H:%i:%s') &lt; DATE_FORMAT(md.updated_date,'%Y-%m-%d %H:%i:%s')
+		ORDER BY md.updated_date ASC LIMIT #{totalOrder}
+    </select>
+	
+	<select id="listMerchantOrderStatementForSn" parameterType="java.util.List" resultType="glsx.com.cn.task.vo.MerchantOrderStatement">
+		select 
+		bmov.dispatch_order_code as dispatchOrderNumber,
+		mo.merchant_code as merchantCode,
+		bui.merchant_name as merchantName,
+		mo.order_number as merchantOrderCode,
+		mo.order_time as merchantOrderTime,
+		amp.product_code as productCode,
+		amp.product_name as productName,
+		bspd.material_code as materialCode,
+		bspd.material_name as materialName,
+		bspd.type as productType
+		from bs_merchant_order_detail AS md
+		LEFT JOIN bs_merchant_order_vehicle AS bmov on(bmov.merchant_order=md.MERCHANT_ORDER_NUMBER)
+		LEFT JOIN bs_merchant_order AS mo ON(mo.order_number = md.MERCHANT_ORDER_NUMBER) 
+		LEFT JOIN bs_product AS bsp ON(bsp.code=md.product_code)
+		LEFT JOIN bs_product_detail AS bspd ON(bspd.product_code=md.product_code AND bspd.type=0)
+		LEFT JOIN am_product_split AS amp ON(amp.id = bsp.PRODUCT_SPLIT_ID)
+		LEFT JOIN bs_dealer_user_info AS bui ON(bui.merchant_code=mo.merchant_code)
+		WHERE bmov.dispatch_order_code in
+		<foreach collection="list" item="orderCode" index="index" open=" (" close=")" separator=",">
+			#{orderCode}
+		</foreach>
+		and bspd.type=0
+	</select>
+	
+    <update id="updateByOrderNumber" parameterType="glsx.com.cn.task.model.MerchantOrder" >
+        update bs_merchant_order
+        <set >
+            <if test="orderNumber != null" >
+                ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderTime != null" >
+                ORDER_TIME = #{orderTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="hopeTime != null" >
+                HOPE_TIME = #{hopeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="merchantCode != null" >
+                MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="totalOrder != null" >
+                TOTAL_ORDER = #{totalOrder,jdbcType=INTEGER},
+            </if>
+            <if test="totalCheck != null" >
+                TOTAL_CHECK = #{totalCheck,jdbcType=INTEGER},
+            </if>
+            <if test="totalAmount != null" >
+                TOTAL_AMOUNT = #{totalAmount,jdbcType=DOUBLE},
+            </if>
+            <if test="status != null" >
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="remarks != null" >
+                REMARKS = #{remarks,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null" >
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null" >
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null" >
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null" >
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null" >
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR}
+    </update>
+</mapper>

@@ -1,0 +1,36 @@
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <span minimaliza-sidebar></span>
+            <h2 class="pull-left system-title font-bold">{{omsSettings.omsName}}</h2>
+        </div>
+
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+
+                <a href="#" onclick="logout">
+                    <i class="fa fa-sign-out"></i> 退出
+                </a>
+            </li>
+        </ul>
+        <div style="float: right; padding: 20px 10px;">
+            <h3 style="content: normal;margin: 0;" >{{omsSettings.userName}}</h3>
+        </div>
+        <!-- 屏蔽搜索框 -->
+        <!-- <form role="search" class="navbar-form-custom pull-right" method="post" action="">
+            <div class="form-group">
+                <div class="circle-search">
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                </div>
+            </div>
+        </form> -->
+    </nav>
+</div>
+<script>
+</script>
+<script>
+    $(".nav.navbar-right").on('click',function(){
+        window.location.href=`${omssupplychainAdminHost}/login`;
+    });
+</script>

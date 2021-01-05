@@ -1,0 +1,143 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">创建固件版本</h4>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_firmwareInfo_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">机型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="device_model" ng-required="true" ng-model="firmwareInfo.model" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in device_models">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_firmwareInfo_form.device_model.$invalid && add_firmwareInfo_form.submitted">
+                                <small class="text-danger" ng-show="add_firmwareInfo_form.device_model.$error.required">请选择机型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">配置 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="configure_type" ng-required="true" ng-model="firmwareInfo.configure" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in configure_types">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs" ng-show="add_firmwareInfo_form.configure_type.$invalid && add_firmwareInfo_form.submitted">
+                                <small class="text-danger" ng-show="add_firmwareInfo_form.configure_type.$error.required">请选择配置</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">裸机/套机 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <ui-select name="machine_type" ng-required="true" ng-model="firmwareInfo.type" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in machine_types">
+                                    <div ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs" ng-show="add_firmwareInfo_form.machine_type.$invalid && add_firmwareInfo_form.submitted">
+                                <small class="text-danger" ng-show="add_firmwareInfo_form.machine_type.$error.required">请选择机器类型</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+             <div class="form-group">
+                <label class="col-lg-3 control-label">主板版本号 :</label>
+                <div class="control-content">
+                    <input name="board_version" class="form-control" type="text" maxlength="50" ng-model="firmwareInfo.boardVersion"/>
+                    <div class="m-t-xs" ng-show="add_firmwareInfo_form.board_version.$invalid && add_firmwareInfo_form.submitted">
+                        <small class="text-danger" ng-show="add_firmwareInfo_form.board_version.$error.required">请输入固件版本号</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">芯片版本号 :</label>
+                <div class="control-content">
+                    <input name="mcu_version" class="form-control" type="text" maxlength="50" ng-model="firmwareInfo.mcuVersion"/>
+                    <div class="m-t-xs" ng-show="add_firmwareInfo_form.mcu_version.$invalid && add_firmwareInfo_form.submitted">
+                        <small class="text-danger" ng-show="add_firmwareInfo_form.mcu_version.$error.required">请输入芯片版本号</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">固件版本号 :</label>
+                <div class="control-content">
+                    <input name="fastener_version" class="form-control" type="text"
+                           maxlength="50" ng-model="firmwareInfo.fastenerVersion"/>
+                    <div class="m-t-xs"
+                         ng-show="add_firmwareInfo_form.fastener_version.$invalid && add_firmwareInfo_form.submitted">
+                        <small class="text-danger"
+                               ng-show="add_firmwareInfo_form.fastener_version.$error.required">请输入固件版本号</small>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">软件版本号 :</label>
+                <div class="control-content">
+                    <input name="soft_version" class="form-control" type="text"
+                           maxlength="50" ng-model="firmwareInfo.softVersion"/>
+                    <div class="m-t-xs"
+                         ng-show="add_firmwareInfo_form.soft_version.$invalid && add_firmwareInfo_form.submitted">
+                        <small class="text-danger"
+                               ng-show="add_firmwareInfo_form.soft_version.$error.required">请输入固件版本号</small>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">厂商码 :</label>
+                <div class="control-content">
+                    <input name="vendor_code" class="form-control" type="text" maxlength="50"
+                           ng-model="firmwareInfo.vendorCode"/>
+                    <div class="m-t-xs" ng-show="add_firmwareInfo_form.vendor_code.$invalid && add_firmwareInfo_form.submitted">
+                        <small class="text-danger" ng-show="add_firmwareInfo_form.vendor_code.$error.required">请输入厂商码</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">SVN地址 :</label>
+                <div class="control-content">
+                    <input name="svn_address"  class="form-control" type="text" maxlength="50" ng-model="firmwareInfo.svnAddress"/>
+                    <div class="m-t-xs" ng-show="add_firmwareInfo_form.svn_address.$invalid && add_firmwareInfo_form.submitted">
+                        <small class="text-danger" ng-show="add_firmwareInfo_form.svn_address.$error.required">请输入SVN地址</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-4 control-label">更新内容 :</label>
+                <div class="col-lg-10 control-content">
+                    <textarea class="form-control" ng-model="firmwareInfo.updateContent" name="updateContent" maxlength="255" style="height: 80px;width: 435px"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="state==undefined" type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

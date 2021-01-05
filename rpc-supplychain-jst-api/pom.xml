@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.com.glsx.framework</groupId>
+        <artifactId>framework-rpc-api</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+    </parent>
+    <groupId>cn.com.glsx</groupId>
+    <artifactId>rpc-supplychain-jst-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>rpc-supplychain-jst-api</name>
+    <properties>
+        <deploy.scanPackage>cn.com.glsx.supplychain.jst.remote</deploy.scanPackage>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.oreframework.boot</groupId>
+            <artifactId>ore-boot-starter-office</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>2.2.6</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>cn.com.glsx.framework</groupId>
+                <artifactId>rpc-api-deploy-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>cn.com.glsx</groupId>
+                        <artifactId>rpc-supplychain-jst-api</artifactId>
+                        <version>0.0.1-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>

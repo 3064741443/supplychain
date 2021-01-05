@@ -1,0 +1,174 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">修改设备配置信息</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="update_DeviceInfo_form" method="post"
+              enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">ICCID :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input  class="form-control" type="text" disabled="disabled"  ng-model="updateDeviceInfoData.iccid"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">IMEI :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input  class="form-control" type="text" disabled="disabled"  ng-model="updateDeviceInfoData.imei"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">SN :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input  class="form-control" type="text" disabled="disabled"  ng-model="updateDeviceInfoData.sn"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label" required>设备类型编号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select ng-required="true" name="attribCode" ng-change="attribCodeChange(updateDeviceInfoData.attribCode)"
+                                       ng-init="updateDeviceInfoData.attribCode" ng-model="updateDeviceInfoData.attribCode" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices  repeat="item in attribCodes | filter: $select.search">
+                                    <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="update_DeviceInfo_form.attribCode.$invalid && update_DeviceInfo_form.submitted">
+                                <small class="text-danger" ng-show="update_DeviceInfo_form.attribCode.$error.required">请选择设备类型编号</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label ">选择仓库 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="warehouseId" ng-disabled="alreadyShipped" ng-required="true" ng-model="updateDeviceInfoData.wareHouseInfo"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in warehouseIdList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="update_DeviceInfo_form.warehouseId.$invalid && update_DeviceInfo_form.submitted">
+                                <small class="text-danger" ng-show="update_DeviceInfo_form.warehouseId.$error.required">
+                                    请选择仓库
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">设备型号 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="devMnumId"disabled="disabled" class="form-control" type="text" ng-model="updateDeviceInfoData.devMnumName"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">是否联网 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="orNetId" disabled="disabled" class="form-control" type="text" ng-model="updateDeviceInfoData.orNetName"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">卡类型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="cardSelfId" disabled="disabled" class="form-control" type="text" ng-model="updateDeviceInfoData.cardSelfName"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">裸机/整机 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="typeName" disabled="disabled" class="form-control" type="text" ng-model="updateDeviceInfoData.typeName"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">机型 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="modelName" disabled="disabled" class="form-control" type="text" ng-model="updateDeviceInfoData.modelName"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">配置 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="configureName"  disabled="disabled" class="form-control" type="text" ng-model="updateDeviceInfoData.configureName"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">尺寸 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="msizeName"  disabled="disabled" class="form-control" type="text" ng-model="updateDeviceInfoData.msizeName"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

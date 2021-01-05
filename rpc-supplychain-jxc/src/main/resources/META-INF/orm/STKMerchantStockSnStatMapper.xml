@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.STKMerchantStockSnStatMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.STKMerchantStockSnStat">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="device_type" jdbcType="INTEGER" property="deviceType" />
+    <result column="to_merchant_code" jdbcType="VARCHAR" property="toMerchantCode" />
+    <result column="to_merchant_name" jdbcType="VARCHAR" property="toMerchantName" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="un_active_days" jdbcType="INTEGER" property="unActiveDays" />
+    <result column="active_or_not" jdbcType="VARCHAR" property="activeOrNot" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, device_type, to_merchant_code, to_merchant_name, total, un_active_days, active_or_not, 
+    created_by, created_date, updated_by, updated_date, deleted_flag
+  </sql>
+
+  <select id="getMerchantStockSnStatByDeviceType" parameterType="cn.com.glsx.supplychain.jxc.model.STKMerchantStockSnStat"
+  			resultType="cn.com.glsx.supplychain.jxc.dto.STKMerchantStockSnStatDTO">
+  	SELECT
+	DISTINCT smsss.device_type AS deviceType,
+	dt.name AS deviceTypeName,
+	SUM(smsss.total) AS tradeTotal,
+	smsss.un_active_days as unActiveDays,
+	smsss.active_or_not as activeOrNot,
+	smsss.created_date as statTime
+	FROM stk_merchant_stock_sn_stat AS smsss
+	LEFT JOIN device_type AS dt ON(smsss.device_type = dt.ID)
+	<where>
+		<if test="unActiveDays != null">
+			and smsss.un_active_days = #{unActiveDays,jdbcType=INTEGER}
+		</if>
+		<if test="activeOrNot != null">
+			and smsss.active_or_not = #{activeOrNot,jdbcType=VARCHAR}
+		</if>
+	</where>
+	group by smsss.device_type order by smsss.id desc
+  </select>
+
+  <select id="pageMerchantStockSnStatByToMerchantCode" parameterType="cn.com.glsx.supplychain.jxc.model.STKMerchantStockSnStat"
+  			resultType="cn.com.glsx.supplychain.jxc.dto.STKMerchantStockSnStatDTO">
+  	select
+  	smsss.device_type as deviceType,
+  	dt.name AS deviceTypeName,
+  	smsss.to_merchant_code as toMerchantCode,
+  	smsss.to_merchant_name as toMerchantName,
+  	smsss.total as tradeTotal,
+  	smsss.un_active_days as unActiveDays,
+	smsss.active_or_not as activeOrNot,
+	smsss.created_date as statTime
+  	FROM stk_merchant_stock_sn_stat AS smsss
+	LEFT JOIN device_type AS dt ON(smsss.device_type = dt.ID)
+	<where>
+		<if test="unActiveDays != null">
+			and smsss.un_active_days = #{unActiveDays,jdbcType=INTEGER}
+		</if>
+		<if test="activeOrNot != null">
+			and smsss.active_or_not = #{activeOrNot,jdbcType=VARCHAR}
+		</if>
+	</where>
+	order by smsss.id desc
+  </select>
+
+    <select id="exportMerchantStockSnStatByToMerchantCode" parameterType="cn.com.glsx.supplychain.jxc.model.STKMerchantStockSnStat"
+            resultType="cn.com.glsx.supplychain.jxc.dto.STKMerchantStockSnStatDTO">
+        select
+        smsss.device_type as deviceType,
+        dt.name AS deviceTypeName,
+        smsss.to_merchant_code as toMerchantCode,
+        smsss.to_merchant_name as toMerchantName,
+        smsss.total as tradeTotal,
+        smsss.un_active_days as unActiveDays,
+        smsss.active_or_not as activeOrNot,
+        smsss.created_date as statTime
+        FROM stk_merchant_stock_sn_stat AS smsss
+        LEFT JOIN device_type AS dt ON(smsss.device_type = dt.ID)
+        <where>
+            <if test="unActiveDays != null">
+                and smsss.un_active_days = #{unActiveDays,jdbcType=INTEGER}
+            </if>
+            <if test="activeOrNot != null">
+                and smsss.active_or_not = #{activeOrNot,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by smsss.id desc
+    </select>
+
+</mapper>

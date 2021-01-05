@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.DeviceImeiStockMapper">
+    <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.DeviceImeiStock">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="IMEI" jdbcType="VARCHAR" property="imei"/>
+        <result column="EXTERNAL_FLAG" jdbcType="VARCHAR" property="externalFlag"/>
+        <result column="DEV_TYPE" jdbcType="INTEGER" property="devType"/>
+        <result column="MERCHANT_NO" jdbcType="VARCHAR" property="merchantNo"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+     ID, IMEI, EXTERNAL_FLAG,DEV_TYPE,MERCHANT_NO, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from device_imei_stock
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectdeviceImeiStock" parameterType="glsx.com.cn.task.model.DeviceImeiStock" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from device_imei_stock
+        where 1 = 1
+        <if test="imei != null and imei != '' ">
+            AND(IMEI LIKE CONCAT('%',#{imei},'%'))
+        </if>
+    </select>
+
+    <select id="selectDeviceImeiStockList" parameterType="glsx.com.cn.task.model.DeviceImeiStock" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from device_imei_stock
+        where 1 = 1
+        and ID > #{id,jdbcType=INTEGER}
+        limit 500
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device_imei_stock
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="glsx.com.cn.task.model.DeviceImeiStock">
+    insert into device_imei_stock (ID, IMEI, EXTERNAL_FLAG, 
+      CREATED_BY, CREATED_DATE, UPDATED_BY, 
+      UPDATED_DATE)
+    values (#{id,jdbcType=INTEGER}, #{imei,jdbcType=VARCHAR}, #{externalFlag,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{updatedDate,jdbcType=TIMESTAMP})
+  </insert>
+
+    <insert id="batchInsertOnDuplicateKeyUpdate" parameterType="java.util.List">
+        insert into device_imei_stock(IMEI,EXTERNAL_FLAG,DEV_TYPE,MERCHANT_NO,CREATED_BY, CREATED_DATE, UPDATED_BY,
+        UPDATED_DATE)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.imei,jdbcType=VARCHAR},
+            #{item.externalFlag,jdbcType=VARCHAR},
+            #{item.devType,jdbcType=INTEGER},
+            #{item.merchantNo,jdbcType=VARCHAR},
+            #{item.createdBy,jdbcType=VARCHAR},
+            #{item.createdDate,jdbcType=VARCHAR},
+            #{item.updatedBy,jdbcType=VARCHAR},
+            #{item.updatedDate,jdbcType=VARCHAR}
+            )
+        </foreach>
+        on duplicate key update
+        IMEI=values(IMEI),
+        EXTERNAL_FLAG=values(EXTERNAL_FLAG),
+        DEV_TYPE=values(DEV_TYPE),
+        MERCHANT_NO=values(MERCHANT_NO),
+        CREATED_BY=values(CREATED_BY),
+        CREATED_DATE=values(CREATED_DATE),
+        UPDATED_BY=values(UPDATED_BY),
+        UPDATED_DATE=values(UPDATED_DATE)
+    </insert>
+
+    <insert id="insertSelective" parameterType="glsx.com.cn.task.model.DeviceImeiStock">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into device_imei_stock
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="imei != null">
+                IMEI,
+            </if>
+            <if test="externalFlag != null">
+                EXTERNAL_FLAG,
+            </if>
+            <if test="devType != null">
+                DEV_TYPE,
+            </if>
+            <if test="merchantNo != null">
+                MERCHANT_NO,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="imei != null">
+                #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="externalFlag != null">
+                #{externalFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="devType != null">
+                #{devType,jdbcType=INTEGER},
+            </if>
+            <if test="merchantNo != null">
+                #{merchantNo,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.DeviceImeiStock">
+        update device_imei_stock
+        <set>
+            <if test="imei != null">
+                IMEI = #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="externalFlag != null">
+                EXTERNAL_FLAG = #{externalFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="devType != null">
+                DEV_TYPE = #{devType,jdbcType=INTEGER},
+            </if>
+            <if test="merchantNo != null">
+                MERCHANT_NO = #{merchantNo,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

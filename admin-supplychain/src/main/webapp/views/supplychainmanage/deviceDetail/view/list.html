@@ -1,0 +1,398 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="supplychain_form">
+
+        <div class="search_box">
+
+            <div class="left_box">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">设备类型</label>
+                        <div class="col-lg-8">
+                            <ui-select name="typeId" ng-model="form.typeId" id="typeId" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in typeIdList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">商品状态</label>
+                        <div class="col-lg-8">
+                            <ui-select name="packageStatu" ng-model="form.packageStatu" id="packageStatu" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in statusList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-6">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">选择条件</label>
+                        <div class="col-lg-4">
+                            <ui-select name="condition" ng-model="form.condition" ng-click="isShow()" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in conditionList">
+                                    <div ng-if="item.text!=0" ng-bind="item.text"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="searchKey" ng-show="conditionOld" style="width:32rem"
+                                   ng-model="form.searchKey"/>
+                        </div>
+                        <!--{{$select.selected.number +'/'+'('+$select.selected.text + ')'}}-->
+                        <div class="col-lg-5" ng-show="conditionNew">
+                            <!--<ui-select name="sendMerchantNo" ng-model="form.sendMerchantNo" theme="bootstrap">-->
+                            <!--<ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>-->
+                            <!--<ui-select-choices repeat="item in sendMerchantNoList | filter: $select.search">-->
+                            <!--<div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search "></div>-->
+                            <!--</ui-select-choices>-->
+                            <!--</ui-select>-->
+                            <ui-select name="sendMerchantNo" uis-open-close="onOpenClose(isOpen)"
+                                       ng-model="form.sendMerchantNo"
+                                       theme="bootstrap" ng-keyup="myKeyUp()">
+                                <ui-select-match placeholder="请输入内容进行查询">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in sendMerchantNoList">
+                                    <div ng-if="item.text!=0" ng-bind-html="item.text"
+                                         ng-click="sendMerchantClick(sendMerchantNoList)"></div>
+                                </ui-select-choices>
+                                <ui-select-no-choice style="padding: 10px;text-align: center;">
+                                    没有匹配的数据
+                                </ui-select-no-choice>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-sm-10">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">入库时间</label>
+                        <div class="col-sm-4">
+                            <input date-range-picker options="singleDateSettings"  name="dateRange1Start" max="form.outStorageEndDate.startDate"
+                                   class="form-control date-picker" type="text" ng-model="form.outStorageStartDate" />
+                        </div>
+                        <label class="pull-left control-label">至</label>
+                        <div class="col-sm-4">
+                            <input date-range-picker options="singleDateSettings"  name="dateRange1End" min="form.outStorageStartDate.startDate"
+                                   class="form-control date-picker" type="text" ng-model="form.outStorageEndDate" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9 col-sm-10">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">激活时间</label>
+                        <div class="col-sm-4">
+                            <input date-range-picker options="singleDateSettings"  name="dateRange1Start" max="form.packageUserEndDate.startDate"
+                                   class="form-control date-picker" type="text" ng-model="form.packageUserStartDate" />
+                        </div>
+                        <label class="pull-left control-label">至</label>
+                        <div class="col-sm-4">
+                            <input date-range-picker options="singleDateSettings"  name="dateRange1End" min="form.packageUserStartDate.startDate"
+                                   class="form-control date-picker" type="text" ng-model="form.packageUserEndDate" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right_box">
+                <div class="btn_position">
+                    <div class="form-group">
+                        <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询
+                        </button>
+<!--                        <button class="btn btn-primary " type="button" ng-click="exportExcel()">导出</button>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+       <!-- <div class="row col-lg-10 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">设备类型</label>
+                    <div class="col-lg-8">
+                        <ui-select name="typeId" ng-model="form.typeId" id="typeId" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in typeIdList">
+                                <div ng-if="item.text!=0" ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">商品状态</label>
+                    <div class="col-lg-8">
+                        <ui-select name="packageStatu" ng-model="form.packageStatu" id="packageStatu" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in statusList">
+                                <div ng-if="item.text!=0" ng-bind="item.text"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">选择条件</label>
+                    <div class="col-lg-4">
+                        <ui-select name="condition" ng-model="form.condition" ng-click="isShow()" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in conditionList">
+                                <div ng-if="item.text!=0" ng-bind="item.text"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" name="searchKey" ng-show="conditionOld" style="width:32rem"
+                               ng-model="form.searchKey"/>
+                    </div>
+                    &lt;!&ndash;{{$select.selected.number +'/'+'('+$select.selected.text + ')'}}&ndash;&gt;
+                    <div class="col-lg-5" ng-show="conditionNew">
+                        &lt;!&ndash;<ui-select name="sendMerchantNo" ng-model="form.sendMerchantNo" theme="bootstrap">&ndash;&gt;
+                        &lt;!&ndash;<ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>&ndash;&gt;
+                        &lt;!&ndash;<ui-select-choices repeat="item in sendMerchantNoList | filter: $select.search">&ndash;&gt;
+                        &lt;!&ndash;<div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search "></div>&ndash;&gt;
+                        &lt;!&ndash;</ui-select-choices>&ndash;&gt;
+                        &lt;!&ndash;</ui-select>&ndash;&gt;
+                        <ui-select name="sendMerchantNo" uis-open-close="onOpenClose(isOpen)"
+                                   ng-model="form.sendMerchantNo"
+                                   theme="bootstrap" ng-keyup="myKeyUp()">
+                            <ui-select-match placeholder="请输入内容进行查询">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in sendMerchantNoList">
+                                <div ng-if="item.text!=0" ng-bind-html="item.text"
+                                     ng-click="sendMerchantClick(sendMerchantNoList)"></div>
+                            </ui-select-choices>
+                            <ui-select-no-choice style="padding: 10px;text-align: center;">
+                                没有匹配的数据
+                            </ui-select-no-choice>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-sm-10">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">出库时间</label>
+                    <div class="col-sm-4">
+                        <input date-range-picker options="singleDateSettings"  name="dateRange1Start" max="form.outStorageEndDate.startDate"
+                               class="form-control date-picker" type="text" ng-model="form.outStorageStartDate" />
+                    </div>
+                    <label class="pull-left control-label">至</label>
+                    <div class="col-sm-4">
+                        <input date-range-picker options="singleDateSettings"  name="dateRange1End" min="form.outStorageStartDate.startDate"
+                               class="form-control date-picker" type="text" ng-model="form.outStorageEndDate" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-2 pull-right btn_position">
+            <div class="form-group">
+                <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询
+                </button>
+                <button class="btn btn-primary " type="button" ng-click="exportExcel()">导出</button>
+            </div>
+        </div>-->
+
+    </form>
+    <div class="c_tipsA" style="margin-bottom:10px;">截止到昨日：设备总数为
+        <span ng-model="deviceTotal" style="color:red">{{deviceTotal}}</span> 个，其中设备初始化数为：
+        <span ng-model="deviceIn" style="color:red">{{deviceIn}}</span> 个，设备激活数为：
+        <span ng-model="deviceAl" style="color:red">{{deviceAl}}</span> 个，设备未激活数为:
+        <span ng-model="deviceUa" style="color:red">{{deviceUa}}</span>个
+    </div>
+
+        <div class="ibox float-e-margins relative">
+            <div class="ibox-title">
+                <h5>设备关系列表</h5>
+            </div>
+            <div class="ibox-content">
+                <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+                </div>
+            </div>
+        </div>
+
+<!--    <div  class="clearfix">
+        <div class="ibox float-e-margins relative">
+            <div class="ibox-title">
+                <h5>设备关系列表</h5>
+            </div>
+            <div class="ibox-content" style="overflow: auto;width: 100%;">
+                <table style="table-layout: fixed; width: 1500px">
+                    <colgroup>
+                        <col width="170px">
+                        <col width="250px">
+                        <col width="250px">
+                        <col width="150px">
+                        <col width="150px">
+                        <col width="150px">
+                        <col width="150px">
+                        <col width="250px">
+                        <col width="130px">
+                        <col width="130px">
+                        <col width="100px">
+                        <col width="120px">
+                        <col width="150px">
+                        <col width="150px">
+                    </colgroup>
+                    <thead>
+                    <tr style="height: 5%">
+                        <th>IMEI</th>
+                        <th>当前ICCID</th>
+                        <th>当前IMSI</th>
+                        <th>是否绑定用户</th>
+                        <th>当前用户</th>
+                        <th>设备类型</th>
+                        <th>设备编号/名称</th>
+                        <th>入库商品名称</th>
+                        <th>入库商品状态</th>
+                        <th>发往商户</th>
+                        <th>商户类型</th>
+                        <th>操作</th>
+                        <th>入库时间</th>
+                        <th>出库时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-show="showHint"><td colspan="14" >无数据</td></tr>
+                    <tr ng-show="formKey" ng-repeat='item in deviceDetailList'>
+                        <td>{{item.sn}}</td>
+                        <td>{{item.deviceCardManager ? (item.deviceCardManager.iccid ? item.deviceCardManager.iccid :
+                            "") : ""}}
+                        </td>
+                        <td>{{item.deviceCardManager ? (item.deviceCardManager.imsi ? item.deviceCardManager.imsi : "")
+                            : ""}}
+                        </td>
+                        <td>{{isBundUser(null,null,item)}}</td>
+                        <td>{{rdBundUser(null,null,item)}}</td>
+                        <td>{{item.deviceTypeName}}</td>
+                        <td>{{rdDeviceCodeAndName(null,null,item)}}</td>
+                        <td>{{item.packageName}}</td>
+                        <td>{{rdPackageStatus(null,null,item)}}</td>
+                        <td>{{rdSendMerchant(null,null,item)}}</td>
+                        <td>{{item.sendMerchantType}}</td>
+                        <td><a href="javascript:;" class="text-info" ng-click="detail(item)" style="margin-left: 10px">详情</a>
+                            <a href="javascript:;" class="text-danger" ng-click="Initialization(item)"
+                               style="margin-left: 10px">初始化</a></td>
+                        <td>{{item.inStorageTime}}</td>
+                        <td>{{item.outStorageTime}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div ng-show="formKey" class="col-lg-2 col-sm-2">
+            <div class="form-group">
+                <label class="control-label" style="line-height: 33px;width: 30px;float: left">显示</label>
+                <div class="" style="padding: 0;float: left">
+                    <ui-select ng-model="form.quantityList" theme="bootstrap">
+                        <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                        <ui-select-choices repeat="item in quantityList">
+                            <div ng-bind="item.text"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <label class="control-label" style="line-height: 33px;padding-left: 4px;float: left">条</label>
+            </div>
+        </div>
+        <div ng-show="formKey" class="pag">
+            <input id="before" class="pag_item" ng-show="beforeKey" ng-click="before()" type="button" value="前一页">
+            <input class="pag_item pitch-on pagination_input" site="1" type="button" ng-click="skip(1)" value="1">
+            <input class="pag_item pagination_input" site="2" type="button" ng-click="skip(2)" value="2">
+            <input class="pag_item pagination_input" site="3" type="button" ng-click="skip(3)" value="3">
+            <input class="pag_item pagination_input" site="4" type="button" ng-click="skip(4)" value="4">
+            <input class="pag_item pagination_input" site="5" type="button" ng-click="skip(5)" value="5">
+            <input id="six" class="pag_item pagination_input" site="6" type="button" ng-click="skip(6)" value="6">
+            <input class="pag_item pagination_input" site="7" type="button" ng-click="skip(7)" value="7">
+            <input class="pag_item pagination_input" site="8" type="button" ng-click="skip(8)" value="8">
+            <input class="pag_item pagination_input" site="9" type="button" ng-click="skip(9)" value="9">
+            <input class="pag_item pagination_input" site="10" type="button" ng-click="skip(10)" value="10">
+            <input class="pag_item" id="back" ng-show="backKey" ng-click="back()" type="button" value="后一页">
+        </div>
+    </div>-->
+</div>
+<style>
+    .pitch-on {
+        background-color: #e2e2e2!important;
+        color: #fff;
+    }
+    .pag {
+        float: right;
+        display: inline-block;
+    }
+    .pag_item {
+        background-color: #fff;
+        border: 1px solid #e2e2e2;
+        line-height: 26px;
+        float: left;
+        border-right: none;
+        padding: 0 15px;
+    }
+    .pag .pag_item:last-child {
+        border-right: 1px solid #e2e2e2;
+    }
+    table{
+        border: 1px solid #ccc;
+    }
+
+    tr {
+        border-bottom: 1px solid #ccc;
+    }
+    th, td {
+        padding: 5px 10px;
+        text-align: center;
+        border-right: 1px solid #ccc;
+    }
+    thead {
+        background-color: #f5f5f6;
+    }
+    .clearfix:after{
+        content: '';
+        display: block;
+        clear: both;
+    }
+    .c_tipsA {
+        background-position: -135px 10px;
+        display: block;
+        /*height: 80px;*/
+        line-height: 43px;
+        overflow: hidden;
+        padding: 0 15px 0 50px;
+        background-color: #ffedad;
+        border: 1px solid #e5d266;
+    }
+    .search_box{
+        position: relative;
+        height:100%;
+        display:flex;
+    }
+    .left_box{
+        flex:1;
+    }
+    .right_box{
+        width:120px;
+    }
+    .btn_position{
+        position:absolute;
+        bottom:0;
+    }
+    /*.btn_position .form-group{
+        position:absolute;
+        bottom:0px;
+    }*/
+
+</style>
+</div>

@@ -1,0 +1,113 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">设备详情</h4>
+    </div>
+    <div class="modal-body">
+    <div style="margin-left: 20px;">
+        <h5>出库详情</h5>
+    </div>
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <tr>
+            <td class="text-right">IMEI :</td>
+            <td class="text-left">{{ deviceFile.sn }}</td>
+            <td class="text-right">流量卡ICCID :</td>
+            <td class="text-left">{{ deviceFile.initialCardManager.iccid }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">流量卡IMSI :</td>
+            <td class="text-left">{{ deviceFile.initialCardManager.imsi }}</td>
+            <td class="text-right">流量卡网卡号 :</td>
+            <td class="text-left">{{ deviceFile.initialCardManager.cardNo }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">验证码 :</td>
+            <td class="text-left">{{ deviceFile.verifCode }}</td>
+            <td class="text-right">批次号 :</td>
+            <td class="text-left">{{ deviceFile.batchNo }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">设备类型 :</td>
+            <td class="text-left">{{ deviceFile.deviceTypeName }}</td>
+            <td class="text-right">设备编号/名称 :</td>
+            <td class="text-left">{{ deviceFile.deviceCodeTable.deviceCode }}/{{ deviceFile.deviceCodeTable.deviceName }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">商品编号／名称 :</td>
+            <td class="text-left">{{ deviceFile.packageId }}/{{ deviceFile.packageName }}</td>
+            <td class="text-right">运营商 :</td>
+            <td class="text-left">{{ deviceFile.operatorMerchantName }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">发往商户 :</td>
+            <td class="text-left">{{ deviceFile.sendMerchantName }}</td>
+            <td class="text-right">品牌定制商 :</td>
+            <td class="text-left">{{ deviceFile.deviceCodeTable.merchantName }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">导入时间 :</td>
+            <td class="text-left">{{ deviceFile.inStorageTime }}</td>
+            <td class="text-right">出库时间 :</td>
+            <td class="text-left">{{ deviceFile.outStorageTime }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <hr style="margin: 20px -30px;">
+
+    <div style="margin-left: 20px;">
+        <h5>当前绑定详情</h5>
+    </div>
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <tr>
+            <td class="text-right">流量卡ICCID :</td>
+            <td class="text-left">{{ deviceFile.deviceCardManager.iccid }}</td>
+            <td class="text-right">流量卡IMSI :</td>
+            <td class="text-left">{{ deviceFile.deviceCardManager.imsi }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">商品激活用户 :</td>
+            <td class="text-left">{{ deviceFile.deviceActiveUserManager.userFlag }}</td>
+            <td class="text-right">商品激活时间 :</td>
+            <td class="text-left">{{ deviceFile.snapshot.packageUserTime }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">当前用户 :</td>
+            <td class="text-left">{{ deviceFile.deviceUserManager.userFlag }}</td>
+            <td class="text-right">绑定时间 :</td>
+            <td class="text-left">{{ deviceFile.snapshot.userTime }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">终端显示码 :</td>
+            <td class="text-left">{{ deviceFile.terminalDiscode }}</td>
+            <td class="text-right">模块类型 :</td>
+            <td class="text-left">{{ deviceFile.modelName }}</td>
+        </tr>
+        <tr>
+            <td class="text-right">模块版本 :</td>
+            <td class="text-left">{{ deviceFile.softVersion }}</td>
+            <td class="text-right"></td>
+            <td class="text-left"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="cancel()">关闭</button>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.MerchantOrderDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.MerchantOrderDetail">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="MERCHANT_ORDER_NUMBER" property="merchantOrderNumber" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="ORDER_QUANTITY" property="orderQuantity" jdbcType="INTEGER"/>
+        <result column="CHECK_QUANTITY" property="checkQuantity" jdbcType="INTEGER"/>
+        <result column="ACCEPT_QUANTITY" property="acceptQuantity" jdbcType="INTEGER"/>
+        <result column="CHECK_BY" property="checkBy" jdbcType="VARCHAR"/>
+        <result column="CHECK_TIME" property="checkTime" jdbcType="TIMESTAMP"/>
+        <result column="DISPATCH_ORDER_NUMBER" property="dispatchOrderNumber" jdbcType="VARCHAR"/>
+        <result column="SUBJECT_ID" property="subjectId" jdbcType="INTEGER"/>
+        <result column="INSURE" property="insure" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_REMARKS" property="productRemarks" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, MERCHANT_ORDER_NUMBER, PRODUCT_CODE, ORDER_QUANTITY, CHECK_QUANTITY, ACCEPT_QUANTITY,CHECK_BY,CHECK_TIME,SUBJECT_ID,INSURE,
+    DISPATCH_ORDER_NUMBER, PRODUCT_REMARKS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+    </sql>
+    
+    <sql id="JxcBase_Column_List">
+    bmod.ID as id, 
+    bmov.dispatch_order_code as dispatchOrderNumber, 
+    bmod.PRODUCT_CODE as productCode, 
+    bmod.ORDER_QUANTITY as orderQuantity, 
+    bmod.CHECK_QUANTITY as checkQuantity, 
+    bmod.ACCEPT_QUANTITY as acceptQuantity,
+    bmod.CHECK_BY as checkBy,
+    bmod.CHECK_TIME as checkTime,
+    bmod.SUBJECT_ID as subjectId,
+    bmod.INSURE as insure,
+    bmod.PRODUCT_REMARKS as productRemarks, 
+    bmod.CREATED_BY as createdBy, 
+    bmod.CREATED_DATE as createdDate, 
+    bmod.UPDATED_BY as updatedBy, 
+    bmod.UPDATED_DATE as updatedDate, 
+    bmod.DELETED_FLAG as deletedFlag
+    </sql>
+    
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.bs.MerchantOrderDetail">
+        update bs_merchant_order_detail
+        <set>
+            <if test="merchantOrderNumber != null">
+                MERCHANT_ORDER_NUMBER = #{merchantOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderQuantity != null">
+                ORDER_QUANTITY = #{orderQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="checkQuantity != null">
+                CHECK_QUANTITY = #{checkQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="acceptQuantity != null">
+                ACCEPT_QUANTITY = #{acceptQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="checkBy != null">
+                CHECK_BY = #{checkBy,jdbcType=VARCHAR},
+            </if>
+            <if test="checkTime != null">
+                CHECK_TIME = #{checkTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dispatchOrderNumber != null">
+                DISPATCH_ORDER_NUMBER = #{dispatchOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectId != null">
+                SUBJECT_ID = #{subjectId,jdbcType=INTEGER},
+            </if>
+            <if test="insure != null">
+                INSURE = #{insure,jdbcType=VARCHAR},
+            </if>
+            <if test="productRemarks != null">
+                PRODUCT_REMARKS = #{productRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getMerchantOrderDetailListByDispatchOrderNumberList" resultType="cn.com.glsx.supplychain.model.bs.MerchantOrderDetail"
+            parameterType="cn.com.glsx.supplychain.model.bs.MerchantOrderDetail">
+        select
+        <include refid="JxcBase_Column_List"/>
+        from
+        bs_merchant_order_detail as bmod
+        left join bs_merchant_order_vehicle as bmov on(bmod.MERCHANT_ORDER_NUMBER = bmov.merchant_order)
+        where
+        bmod.DELETED_FLAG = 'N'
+        AND bmov.dispatch_order_code in
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item.dispatchOrderNumber,jdbcType=VARCHAR}
+            </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.oreframework.boot:ore-boot-web:1.0.10-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../MavenRepository/org/oreframework/boot/ore-boot-web/1.0.10-SNAPSHOT/ore-boot-web-1.0.10-20171118.060538-9.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../MavenRepository/org/oreframework/boot/ore-boot-web/1.0.10-SNAPSHOT/ore-boot-web-1.0.10-20171118.060538-9-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../MavenRepository/org/oreframework/boot/ore-boot-web/1.0.10-SNAPSHOT/ore-boot-web-1.0.10-20171118.060538-9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

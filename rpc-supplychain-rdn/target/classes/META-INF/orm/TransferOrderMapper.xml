@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.rpc.supplychain.rdn.mapper.TransferOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMdbTransferOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tran_order_code" jdbcType="VARCHAR" property="tranOrderCode" />
+    <result column="out_merchant_code" jdbcType="VARCHAR" property="outMerchantCode" />
+    <result column="out_merchant_name" jdbcType="VARCHAR" property="outMerchantName" />
+    <result column="in_merchant_code" jdbcType="VARCHAR" property="inMerchantCode" />
+    <result column="in_merchant_name" jdbcType="VARCHAR" property="inMerchantName" />
+    <result column="order_source" jdbcType="VARCHAR" property="orderSource" />
+    <result column="material_code" jdbcType="VARCHAR" property="materialCode" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="check_by" jdbcType="VARCHAR" property="checkBy" />
+    <result column="order_total" jdbcType="INTEGER" property="orderTotal" />
+    <result column="check_total" jdbcType="INTEGER" property="checkTotal" />
+    <result column="send_total" jdbcType="INTEGER" property="sendTotal" />
+    <result column="back_remark" jdbcType="VARCHAR" property="backRemark" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, tran_order_code, out_merchant_code, out_merchant_name, in_merchant_code, in_merchant_name,
+    order_source, material_code, material_name, order_status, check_by, order_total,check_total,
+    send_total, back_remark,created_by, created_date, updated_by, updated_date, deleted_flag
+  </sql>
+
+  <select id="exportBsTransferOrder" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MdbTransferOrder"
+          resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.BsTransferOrderBssVo">
+    SELECT m.tran_order_code tranOrderCode,m.order_source orderSource,m.in_merchant_name inServiceProviderName,m.out_merchant_name outServiceProviderName,
+    m.material_code materialCode,m.material_name materialName,m.order_status orderStatus,m.order_total orderTotal,m.send_total sendTotal,m.created_date createdDate,
+    m.back_remark rebackReason,b.code code,b.order_number logisticsNumber,b.company company,b.shipments_quantity shipmentsQuantity,b.send_time sendTime,m.created_by initiateAccount
+    FROM mdb_transfer_order m left join bs_logistics b on m.TRAN_ORDER_CODE=b.SERVICE_CODE
+    WHERE m.DELETED_FLAG='N' and (b.type=9 or m.order_status in('WC','WS','RB'))
+    <if test="inMerchantName != null and inMerchantName !=''">
+      and (m.in_merchant_name like concat('%',#{inMerchantName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="outMerchantName != null and outMerchantName !=''">
+      or m.out_merchant_name like concat('%',#{outMerchantName,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="outMerchantCode != null and outMerchantCode !=''">
+      and (m.out_merchant_code = #{outMerchantCode}
+    </if>
+    <if test="inMerchantCode != null and inMerchantCode !=''">
+      or m.in_merchant_code = #{inMerchantCode})
+    </if>
+    <if test="transferType != null and transferType =='IN'">
+      and m.in_merchant_name is not null and m.in_merchant_name=#{merchantName}
+    </if>
+    <if test="transferType != null and transferType =='OUT'">
+      and m.in_merchant_name is not null and m.in_merchant_name!=#{merchantName}
+    </if>
+    <if test="orderSource != null and orderSource !=''">
+      and m.order_source like concat('%',#{orderSource,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="materialCode != null and materialCode !=''">
+      and (m.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="materialName != null and materialName !=''">
+      or m.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="tranOrderCode != null and tranOrderCode !=''">
+      and m.tran_order_code like concat('%',#{tranOrderCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="orderStatus != null and orderStatus !=''">
+      and m.order_status=#{orderStatus}
+    </if>
+    <if test="startTime != null">
+      and m.created_date &gt;= #{startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime != null">
+      and m.created_date &lt;= #{endTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="inServiceProviderName != null and inServiceProviderName !=''">
+      and m.in_merchant_name like concat('%',#{inServiceProviderName,jdbcType=VARCHAR},'%')
+    </if>
+    order by m.CREATED_DATE desc
+  </select>
+
+
+  <select id="exportJXCTransferOrder" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.MdbTransferOrder"
+          resultType="cn.com.glsx.rpc.supplychain.rdn.model.tmp.JxcTransferOrderVo">
+    SELECT m.tran_order_code tranOrderCode,m.order_source orderSource,m.in_merchant_name inServiceProviderName,m.out_merchant_name outServiceProviderName,
+    m.material_code materialCode,m.material_name materialName,m.order_status orderStatus,m.order_total orderTotal,m.send_total sendTotal,m.created_date createdDate,
+    m.back_remark rebackReason,b.code code,b.order_number logisticsNumber,b.company company,b.shipments_quantity shipmentsQuantity,b.send_time sendTime
+    FROM mdb_transfer_order m left join bs_logistics b on m.TRAN_ORDER_CODE=b.SERVICE_CODE
+    WHERE m.DELETED_FLAG='N' and (b.type=9 or m.order_status in('WC','WS','RB'))
+    <if test="inMerchantName != null and inMerchantName !=''">
+      and (m.in_merchant_name like concat('%',#{inMerchantName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="outMerchantName != null and outMerchantName !=''">
+      or m.out_merchant_name like concat('%',#{outMerchantName,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="outMerchantCode != null and outMerchantCode !=''">
+      and (m.out_merchant_code = #{outMerchantCode}
+    </if>
+    <if test="inMerchantCode != null and inMerchantCode !=''">
+      or m.in_merchant_code = #{inMerchantCode})
+    </if>
+    <if test="transferType != null and transferType =='IN'">
+      and m.in_merchant_name is not null and m.in_merchant_name=#{merchantName}
+    </if>
+    <if test="transferType != null and transferType =='OUT'">
+      and m.in_merchant_name is not null and m.in_merchant_name!=#{merchantName}
+    </if>
+    <if test="orderSource != null and orderSource !=''">
+      and m.order_source like concat('%',#{orderSource,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="materialCode != null and materialCode !=''">
+      and (m.material_code like concat('%',#{materialCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="materialName != null and materialName !=''">
+      or m.material_name like concat('%',#{materialName,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="tranOrderCode != null and tranOrderCode !=''">
+      and m.tran_order_code like concat('%',#{tranOrderCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="orderStatus != null and orderStatus !=''">
+      and m.order_status=#{orderStatus}
+    </if>
+    <if test="startTime != null">
+      and m.created_date &gt;= #{startTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime != null">
+      and m.created_date &lt;= #{endTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="inServiceProviderName != null and inServiceProviderName !=''">
+      and m.in_merchant_name like concat('%',#{inServiceProviderName,jdbcType=VARCHAR},'%')
+    </if>
+    order by m.CREATED_DATE desc
+  </select>
+</mapper>

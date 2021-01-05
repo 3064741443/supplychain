@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.rpc.supplychain.rdn.mapper.GhMerchantOrderConfigMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.rpc.supplychain.rdn.model.pojo.GhMerchantOrderConfig">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="gh_merchant_order_code" jdbcType="VARCHAR" property="ghMerchantOrderCode" />
+    <result column="attrib_info_id" jdbcType="INTEGER" property="attribInfoId" />
+    <result column="option" jdbcType="VARCHAR" property="option" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, gh_merchant_order_code, attrib_info_id, `option`, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <sql id="Comm_Column_List">
+  	gmoc.ID as id, 
+  	gmoc.gh_merchant_order_code as ghMerchantOrderCode, 
+  	gmoc.attrib_info_id as attribInfoId, 
+  	gmoc.`option` as strOption, 
+  	gmoc.CREATED_BY as createdBy, 
+  	gmoc.CREATED_DATE as createdDate, 
+  	gmoc.UPDATED_BY as updatedBy, 
+    gmoc.UPDATED_DATE as updatedDate, 
+    gmoc.DELETED_FLAG as deletedFlag,
+    gmorm.merchant_order as merchantOrder
+  </sql>
+  
+  
+  <select id="selectGhMerchantOrderConfig" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.GhMerchantOrderConfig"
+  		resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from gh_merchant_order_config
+  	<where>
+  		<if test="ghMerchantOrderCode != null">
+  			and gh_merchant_order_code = #{ghMerchantOrderCode}
+  		</if>
+  		<if test="deletedFlag != null">
+  			and DELETED_FLAG = #{deletedFlag}
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="listGhMerchantOrderConfig" parameterType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.GhMerchantOrderConfig"
+  		resultType="cn.com.glsx.rpc.supplychain.rdn.model.pojo.GhMerchantOrderConfig">
+  	select
+  	<include refid="Comm_Column_List" />
+  	from gh_merchant_order_config as gmoc
+  	left join gh_merchant_order_reflect_mcode as gmorm on(gmoc.gh_merchant_order_code=gmorm.gh_merchant_order_code)
+  	<where>
+  		<if test="listMerchantOrder != null">
+  			and gmorm.merchant_order in
+  			<foreach collection="listMerchantOrder" item="item" index="index" open="(" close=")" separator=",">
+  				#{item,jdbcType=VARCHAR}
+  			</foreach>
+  		</if>
+  		<if test="deletedFlag != null">
+  			and gmorm.DELETED_FLAG = #{deletedFlag}
+  		</if>
+  	</where>
+  </select>
+</mapper>

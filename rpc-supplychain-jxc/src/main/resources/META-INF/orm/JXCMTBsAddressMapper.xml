@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTBsAddressMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTBsAddress">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="PROVINCE_ID" jdbcType="INTEGER" property="provinceId" />
+    <result column="PROVINCE_NAME" jdbcType="VARCHAR" property="provinceName" />
+    <result column="CITY_ID" jdbcType="INTEGER" property="cityId" />
+    <result column="CITY_NAME" jdbcType="VARCHAR" property="cityName" />
+    <result column="AREA_ID" jdbcType="INTEGER" property="areaId" />
+    <result column="AREA_NAME" jdbcType="VARCHAR" property="areaName" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, MOBILE, PROVINCE_ID, PROVINCE_NAME, CITY_ID, CITY_NAME, AREA_ID, AREA_NAME, 
+    ADDRESS, MERCHANT_CODE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <sql id="MchantOrder_Column_List">
+  	 DISTINCT CONCAT(b.NAME,b.MOBILE,b.ADDRESS,b.MERCHANT_CODE),b.ID, b.NAME, b.MOBILE, b.PROVINCE_ID, b.PROVINCE_NAME, b.CITY_ID, b.CITY_NAME, b.AREA_ID, b.AREA_NAME, 
+     b.MERCHANT_CODE, b.CREATED_BY, b.CREATED_DATE, b.UPDATED_BY, b.UPDATED_DATE, b.DELETED_FLAG,b.ADDRESS
+  </sql>
+  
+  <select id="listMerchantOrderAddress" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTBsAddress" resultMap="BaseResultMap">
+  	select
+  	<include refid="MchantOrder_Column_List" />
+  	from bs_address as b left join bs_logistics as bl on(b.id = bl.receive_id)
+  	where bl.type = 1
+  		<if test="provinceId != null">
+  			and b.PROVINCE_ID = #{provinceId}
+  		</if>
+  		<if test="cityId != null">
+  			and b.CITY_ID = #{cityId}
+  		</if>
+  		<if test="areaId != null">
+  			and b.AREA_ID = #{areaId}
+  		</if>
+  		<if test="merchantCode != null">
+  			and b.MERCHANT_CODE = #{merchantCode}
+  		</if>
+  		<if test="deletedFlag != null">
+  			and b.DELETED_FLAG = #{deletedFlag}
+  		</if>
+  		group by CONCAT(b.NAME,b.MOBILE,b.ADDRESS,b.MERCHANT_CODE)
+  </select>
+
+    <select id="listServiceProviderAddress" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTBsAddress" resultMap="BaseResultMap">
+        select
+        <include refid="MchantOrder_Column_List" />
+        from bs_address as b left join bs_logistics as bl on(b.id = bl.receive_id)
+        where bl.type = 8
+        <if test="provinceId != null">
+            and b.PROVINCE_ID = #{provinceId}
+        </if>
+        <if test="cityId != null">
+            and b.CITY_ID = #{cityId}
+        </if>
+        <if test="areaId != null">
+            and b.AREA_ID = #{areaId}
+        </if>
+        <if test="merchantCode != null">
+            and b.MERCHANT_CODE = #{merchantCode}
+        </if>
+        <if test="deletedFlag != null">
+            and b.DELETED_FLAG = #{deletedFlag}
+        </if>
+        group by CONCAT(b.NAME,b.MOBILE,b.ADDRESS,b.MERCHANT_CODE)
+    </select>
+ 
+  <insert id="insertAddress" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTBsAddress">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="mobile != null">
+                MOBILE,
+            </if>
+            <if test="provinceId != null">
+                PROVINCE_ID,
+            </if>
+            <if test="provinceName != null">
+                PROVINCE_NAME,
+            </if>
+            <if test="cityId != null">
+                CITY_ID,
+            </if>
+            <if test="cityName != null">
+                CITY_NAME,
+            </if>
+            <if test="areaId != null">
+                AREA_ID,
+            </if>
+            <if test="areaName != null">
+                AREA_NAME,
+            </if>
+            <if test="address != null">
+                ADDRESS,
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="provinceName != null">
+                #{provinceName,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="cityName != null">
+                #{cityName,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="areaName != null">
+                #{areaName,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

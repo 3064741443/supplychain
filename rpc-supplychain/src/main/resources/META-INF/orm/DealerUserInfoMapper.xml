@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.DealerUserInfoMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.DealerUserInfo">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="NAME" property="name" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="TINYINT"/>
+        <result column="CHANNEL" property="channel" jdbcType="TINYINT"/>
+        <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR"/>
+        <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+        <result column="SALE_MODE" property="saleMode" jdbcType="TINYINT"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, NAME, TYPE, CHANNEL,MERCHANT_NAME, MERCHANT_CODE, PASSWORD,SALE_MODE, CREATED_BY, CREATED_DATE,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <select id="listDealerUserInfo" parameterType="cn.com.glsx.supplychain.model.bs.DealerUserInfo"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_dealer_user_info
+        where DELETED_FLAG="N"
+        <if test="name != null">
+            AND name like "%"#{name,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="merchantName != null">
+            AND MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="merchantCode != null">
+            AND MERCHANT_CODE like "%"#{merchantCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="type != null">
+            AND TYPE = #{type,jdbcType=TINYINT}
+        </if>
+        <if test="channel != null and channel !=''">
+            AND CHANNEL = #{channel,jdbcType=TINYINT}
+        </if>
+        <if test="saleMode != null and saleMode !=''">
+            AND SALE_MODE = #{saleMode,jdbcType=TINYINT}
+        </if>
+        order by CREATED_DATE DESC
+    </select>
+
+    <select id="gteDealerUserInfoList" parameterType="cn.com.glsx.supplychain.model.bs.DealerUserInfo"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_dealer_user_info
+        where DELETED_FLAG="N"
+        <if test="name != null">
+            AND name like "%"#{name,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="merchantName != null">
+            AND MERCHANT_NAME like "%"#{merchantName,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="merchantCode != null">
+            AND MERCHANT_CODE like "%"#{merchantCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="type != null">
+            AND TYPE = #{type,jdbcType=TINYINT}
+        </if>
+        <if test="channel != null">
+            AND CHANNEL = #{channel,jdbcType=TINYINT}
+        </if>
+        order by CREATED_DATE DESC
+    </select>
+
+    <select id="getDelerUseInfoById" parameterType="cn.com.glsx.supplychain.model.bs.DealerUserInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM
+        bs_dealer_user_info
+        where DELETED_FLAG="N"
+        AND ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="updateByDealerUserName" parameterType="cn.com.glsx.supplychain.model.bs.DealerUserInfo">
+        update bs_dealer_user_info
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="channel != null">
+                CHANNEL = #{channel,jdbcType=TINYINT},
+            </if>
+            <if test="merchantName != null">
+                MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="saleMode != null">
+                SALE_MODE = #{saleMode,jdbcType=TINYINT},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">getDeviceFileById
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where NAME = #{name,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByDealerUserId" parameterType="cn.com.glsx.supplychain.model.bs.DealerUserInfo">
+        update bs_dealer_user_info
+        <set>
+            <if test="name != null">
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="channel != null">
+                CHANNEL = #{channel,jdbcType=TINYINT},
+            </if>
+            <if test="merchantName != null">
+                MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="saleMode != null">
+                SALE_MODE = #{saleMode,jdbcType=TINYINT},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">getDeviceFileById
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteByDealerUserId" parameterType="cn.com.glsx.supplychain.model.bs.DealerUserInfo">
+        update bs_dealer_user_info
+        set DELETED_FLAG ="Y"
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

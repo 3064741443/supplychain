@@ -1,0 +1,511 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">新增产品</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_ProductManage_form" method="post"
+              enctype="multipart/form-data">
+            <h3>基础信息</h3>
+            <hr/>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">业务类型 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="typeId" ng-required="true" ng-change="serviceTypeChange(addProductData.serviceType)" ng-model="addProductData.serviceType"
+                                           theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in serviceTypeList">
+                                        <div ng-bind="item.text "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_ProductManage_form.typeId.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.typeId.$error.required">
+                                        请选择业务类型
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                <label class="col-lg-3 control-label required">产品名称 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="name" ng-required="true" check-length="50" maxlength="50"
+                                   ng-blur="productNameCheck(addProductData.productName)" class="form-control" type="text" size="8" ng-model="addProductData.productName"/>
+                            <div class="m-t-xs" ng-show="add_ProductManage_form.name.$invalid && add_ProductManage_form.submitted">
+                                <small class="text-danger" ng-show="add_ProductManage_form.name.$error.required">请输入产品名称</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6" ng-if="serviceTimeShow">
+                    <label class="col-lg-3 control-label required">服务期限 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="serviceTime" ng-required="true" placeholder="月" check-length="2" maxlength="2" class="form-control"
+                                       type="text" size="8" ng-model="addProductData.serviceTime"/>
+                                <div class="m-t-xs" ng-show="add_ProductManage_form.serviceTime.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.serviceTime.$error.required">请输入服务期限</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6" ng-if="packageOneShow">
+                    <label class="col-lg-3 control-label required">套餐 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="packageOne" ng-required="true" check-length="20" maxlength="20" class="form-control" type="text" size="8" ng-model="addProductData.packageOne"/>
+                                <div class="m-t-xs" ng-show="add_ProductManage_form.packageOne.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.packageOne.$error.required">请输入套餐</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           </div>
+
+            <div class="form-group">
+                <div class="col-lg-6" ng-if="deviceQuantityShow">
+                    <label class="col-lg-3 control-label required">设备数 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="code" ng-required="true" class="form-control" maxlength="11"
+                                       ng-pattern="/^[1-9]\d*$/" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                                       type="text" size="8" ng-model="addProductData.deviceQuantity"/>
+                                <div class="m-t-xs" ng-show="add_ProductManage_form.code.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.code.$error.required">请输入设备数</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-if="carTypeShow">
+                    <div class="col-lg-6">
+                        <label class="col-lg-3 control-label required">车机类型:</label>
+                        <div class="control-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <ui-select name="carType" ng-required="true" ng-model="addProductData.carType"
+                                               theme="bootstrap">
+                                        <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                        <ui-select-choices repeat="item in carTypeList">
+                                            <div ng-bind="item.text "></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <div class="m-t-xs"
+                                         ng-show="add_ProductManage_form.carType.$invalid && add_ProductManage_form.submitted">
+                                        <small class="text-danger" ng-show="add_ProductManage_form.carType.$error.required">请选择车机类型</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">物料编号:</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10 addMaterial" ng-repeat="item in addProductData.Material">
+                            <b class="glyphicon glyphicon-plus icon_add_one" ng-click="addMaterialClick()"></b>
+                            <b class="glyphicon glyphicon-minus clean_add_one" ng-click="cleanMaterialClick($index)"></b>
+                            <ui-select name="AllMaterial" ng-disabled="alreadyShipped" ng-required="true" ng-model="item.materialCode"
+                                       theme="bootstrap" style="float: left; margin-right: 20px; width: 60%">
+                                <ui-select-match placeholder="请选择物料信息">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices  repeat="item in materialList | filter: $select.search">
+                                    <div ng-if="item.text!=0" class="AllMaterial" ng-bind-html="item.text | highlight: $select.search" ng-click="materialCallback(item)"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <!--<input name="hardPrice" ng-required="true" placeholder="元" maxlength="11" style="width: 15%;margin-left: 72%;"
+                                   onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,''),this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                   class="form-control PriceFlag" type="text" size="8" ng-model="item.hardPrice"/>-->
+                            <div class="m-t-xs"
+                                 ng-show="add_ProductManage_form.AllMaterial.$invalid && add_ProductManage_form.submitted">
+                                <small class="text-danger"
+                                       ng-show="add_ProductManage_form.AllMaterial.$error.required">请选择物料信息
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>销售信息</h3>
+            <hr/>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="sourceList" ng-change="checkChannel(addProductData.channelAndMerchant)"
+                                           style="width: 33%;margin-left: 8px" ng-model="addProductData.channelAndMerchant" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in channelAndMerchantList">
+                                        <div ng-bind="item.text "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6" ng-if="channelTypeShow">
+                    <label class="col-lg-3 control-label required">渠道类型 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="sourceList" ng-required="true" ng-model="addProductData.channel" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in channelTypeList">
+                                        <div ng-bind="item.text "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_ProductManage_form.sourceList.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.sourceList.$error.required">请选择渠道类型</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6" ng-if="merchantShow">
+                    <label class="col-lg-3 control-label required">客户 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="merchantCode" ng-required="true" ng-model="addProductData.merchantCode" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in dealerUserInfoList | filter: $select.search">
+                                        <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_ProductManage_form.merchantCode.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.merchantCode.$error.required">请选择产品类型</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-6">
+                        <label class="col-lg-3 control-label">别名 :</label>
+                        <div class="control-content">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <input name="alias" class="form-control" maxlength="30" type="text" size="8" ng-model="addProductData.alias"/>
+                                    <div class="m-t-xs" ng-show="add_ProductManage_form.alias.$invalid && add_ProductManage_form.submitted">
+                                        <small class="text-danger" ng-show="add_ProductManage_form.alias.$error.required">请输入别名</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="form-group">
+                <div class="col-lg-12">
+                <label class="col-lg-3 control-label">部分商户对产品不可见:</label>
+                <input type="radio" ng-click="radioCheck(yesRadio)" name="Radio" value="1" style="margin-left: 28px;margin-top: 8px" ng-model="yesRadio">是&nbsp&nbsp&nbsp
+                <input type="radio" ng-click="radioCheck(noRadio)" name="Radio" value="2" ng-checked="true" ng-model="noRadio">否
+                </div>
+            </div>-->
+
+            <!--<div class="form-group" ng-if="merchantToProduct">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">请选择商户 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="merchantCode" style="width: 145%;" ng-required="true" ng-model="addProductData.merchantShow" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in dealerUserInfoList | filter: $select.search">
+                                        <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_ProductManage_form.merchantCode.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.merchantCode.$error.required">请选择商户</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-10">
+                        <tbody>
+                        <div class="addressBox">
+                            <div class="addressBook">
+                                <div class="addressInfo" ng-repeat="merchantInfo in merchantBookList"
+                                     ng-click="addressChecked($index)">
+                                    <p class="content">
+                                       {{merchantInfo.name}}<b class="glyphicon glyphicon-remove" ng-click="cleanMerchant(merchantInfo.name)"></b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        </tbody>
+                    </div>
+                </div>
+                <p>
+                    <button type="submit" style="margin-left: 70px;" class="btn btn-primary" ng-click="addMerchant()">添加</button>
+                </p>
+            </div>-->
+
+            <h3>拆分信息</h3>
+            <hr/>
+            
+            <div class="form-group">
+                <div ng-if="show_hiden1">
+                    <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">有源无源标识:</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="sourceFlag" ng-required="true" ng-model="addProductData.sourceFlag" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in sourceFlagList">
+                                        <div ng-bind="item.text "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_ProductManage_form.sourceFlag.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.sourceFlag.$error.required">请选择有源无源标识</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div ng-if="show_hiden1">
+                    <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">硬件是否包含有源无源:</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="hardwareContainSource" ng-required="true" ng-model="addProductData.hardwareContainSource"
+                                            ng-change="sourceChange(addProductData.hardwareContainSource)" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in hardwareSourceList">
+                                        <div ng-bind="item.text "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_ProductManage_form.hardwareContainSource.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.hardwareContainSource.$error.required">请选择硬件是否包含有源无源</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div ng-if="show_hiden4">
+                    <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">是否加融:</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <ui-select name="plusJrfk" ng-required="true" ng-model="addProductData.plusJrfk" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in plusJrfkList">
+                                        <div ng-bind="item.text "></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                     ng-show="add_ProductManage_form.plusJrfk.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.plusJrfk.$error.required">请确定是否加融产品</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                <div ng-if="show_hiden2">
+                    <label class="col-lg-3 control-label required">有源所占比列:</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="sourceProportion" placeholder="%" class="form-control" type="text"  maxlength="9"
+                                       onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,''),this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                       ng-model="addProductData.sourceProportion"/>
+                                <div class="m-t-xs" ng-show="add_ProductManage_form.sourceProportion.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.sourceProportion.$error.required">请输入有源所占比列</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div ng-if="show_hiden3">
+                    <div class="col-lg-6">
+                    <label class="col-lg-3 control-label required">无源所占比列:</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="notSourceProportion" placeholder="%" class="form-control" type="text" maxlength="9"
+                                       onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,''),this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                       ng-model="addProductData.notSourceProportion"/>
+                                <div class="m-t-xs" ng-show="add_ProductManage_form.notSourceProportion.$invalid && add_ProductManage_form.submitted">
+                                    <small class="text-danger" ng-show="add_ProductManage_form.notSourceProportion.$error.required">请输入无源所占比列</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-left: -90px;"  ng-if="oneMaterialHiden">
+                <div class="control-content">
+                    <div class="row" ng-repeat="item in addProductData.OneMaterial">
+                        <div class="col-lg-3">
+                            <ui-select name="sourceList" ng-change="choicOneChange(item.choiceOne,$index)"
+                                       ng-required="true" ng-model="item.choiceOne" theme="bootstrap">
+                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in choiceMaterial">
+                                    <div ng-bind="item.text "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+
+                        <div class="col-lg-8 addMaterial">
+                            <b class="glyphicon glyphicon-plus icon_add" ng-click="addMaterialClick1()"></b>
+                            <b class="glyphicon glyphicon-minus clean_add" ng-click="cleanMaterialClick1($index)"></b>
+                            <ui-select name="AllMaterial" ng-disabled="{{'OnealreadyShipped' + $index}}" ng-model="item.oneMaterialCode"
+                                       theme="bootstrap" style="float: left; margin-right: 20px; width: 60%">
+                                <ui-select-match placeholder="请选择物料">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices  repeat="item in choiceOneMaterialList | filter: $select.search">
+                                    <div ng-if="item.text!=0" class="AllMaterial" ng-bind-html="item.text | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <input name="netSoftWarePrice" ng-required="true" placeholder="元" maxlength="11" style="width: 20%"
+                                   onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,''),this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                   class="form-control PriceFlag" type="text" size="8" ng-model="item.onePrice"/>
+                            <div class="m-t-xs" ng-show="add_ProductManage_form.netSoftWarePrice.$invalid && add_ProductManage_form.submitted">
+                                <small class="text-danger" ng-show="add_ProductManage_form.netSoftWarePrice.$error.required">请输入物料与价格</small>
+                            </div>
+                            <input name="taxRate" ng-required="true" placeholder="税率&nbsp;&nbsp;%" maxlength="11" style="width: 20%;float:right;margin-right: -30px;margin-top: -34px;"
+                                   onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,''),this.value= this.value.match(/\d+(\.\d{0,2})?/) ? this.value.match(/\d+(\.\d{0,2})?/)[0] : ''"
+                                   class="form-control" type="text" size="8" ng-model="item.taxRate"/>
+                            <div class="m-t-xs" ng-show="add_ProductManage_form.taxRate.$invalid && add_ProductManage_form.submitted">
+                                <small class="text-danger" ng-show="add_ProductManage_form.taxRate.$error.required">请输入税率</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <h4/>销售价格:{{salePriceSum.toFixed(2)}}<br/>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">提交</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>
+
+<style>
+    .addMaterial {
+        position: relative;
+    }
+
+    .addMaterial .icon_add_one {
+        position: absolute;
+        right: 228px;
+        line-height: 35px;
+    }
+
+    .addMaterial .clean_add_one {
+        position: absolute;
+        right: 200px;
+        line-height: 34px;
+    }
+
+    .addMaterial .icon_add {
+        position: absolute;
+        right: -35px;
+        line-height: 35px;
+    }
+
+    .addMaterial .clean_add {
+        position: absolute;
+        right: -65px;
+        line-height: 34px;
+    }
+
+     .addressBox {
+         position: relative;
+         padding-top: 10px;
+     }
+
+    .addressBox .addressBook {
+        margin-left: 98px;
+        width: 122%;
+        display: inline-block;
+        border: 1px solid #ddd;
+        height: 120px;
+        overflow-y: auto;
+    }
+
+    .addressBox .addressBook p {
+        margin: 0;
+    }
+
+    .addressBox .addressBook .addressInfo {
+        padding: 10px 10px;
+        /*margin: 10px 0;*/
+        border-bottom: 1px solid #ccc;
+    }
+
+    .addressBox .addressBook .addressInfo:last-child {
+        border-bottom: none;
+    }
+
+    .addressBox .addressTip {
+        display: inline-block;
+        width: 39%;
+        padding: 10px;
+        position: absolute;
+        top: 0;
+    }
+</style>

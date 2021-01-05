@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.DeviceInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.DeviceInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="VCODE" jdbcType="VARCHAR" property="vcode" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="BATCH" jdbcType="INTEGER" property="batch" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="wareHouseId" />
+    <result column="WAREHOUSE_ID_UP" jdbcType="INTEGER" property="wareHouseIdUp" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+    
+    <association property="attribMana" resultMap="AttribManaMap"/> 
+    <association property="wareHouseInfo" resultMap="WareHouseInfoMap"/> 
+    
+  </resultMap>
+  
+  <resultMap id="WareHouseInfoMap" type="cn.com.glsx.supplychain.model.WareHouseInfo">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="AttribInfoMap" type="cn.com.glsx.supplychain.model.AttribInfo">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="AttribManaMap" type="cn.com.glsx.supplychain.model.AttribMana">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="ATTRIB_CODE" property="attribCode" jdbcType="VARCHAR" />
+		<result column="TYPE" property="type" jdbcType="INTEGER" />
+		<result column="MODEL" property="model" jdbcType="INTEGER" />
+        <result column="MSIZE" jdbcType="INTEGER" property="msize" />
+		<result column="CONFIGURE" property="configure" jdbcType="INTEGER" />
+		<result column="BOARD_VERSION" property="boardVersion" jdbcType="VARCHAR" />
+		<result column="SOFT_VERSION" property="softVersion" jdbcType="VARCHAR" />
+		<result column="FASTENER_VERSION" property="fastenerVersion" jdbcType="VARCHAR" />
+        <result column="DEV_TYPE_ID" jdbcType="INTEGER" property="devTypeId" />
+        <result column="DEV_MNUM_ID" jdbcType="INTEGER" property="devMnumId" />
+        <result column="OR_NET_ID" jdbcType="INTEGER" property="orNetId" />
+        <result column="CARD_SELF_ID" jdbcType="INTEGER" property="cardSelfId" />
+        <result column="SOURCE_ID" jdbcType="INTEGER" property="sourceId" />
+        <result column="SCREEN_ID" jdbcType="INTEGER" property="screenId" />
+        <result column="OR_OPEN_ID" jdbcType="INTEGER" property="orOpenId" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List2"> 
+    ID, ICCID, IMEI,VCODE,
+    ATTRIB_CODE, BATCH, STATUS, 
+    ORDER_CODE,WAREHOUSE_ID,WAREHOUSE_ID_UP,CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, DELETED_FLAG,SN
+  </sql>
+  
+  <sql id="export_Column_List">
+  	ID, ICCID, IMEI,ATTRIB_CODE, BATCH,CREATED_DATE,VCODE
+  </sql>
+  
+  <sql id="Base_Column_List"> 
+    d.ID, 
+    d.ICCID, 
+    d.IMEI,
+    d.SN,
+    d.VCODE,
+    a.MODEL,
+    a.MSIZE,
+    a.DEV_TYPE_ID,
+    a.DEV_MNUM_ID,
+    a.OR_NET_ID,
+    a.CARD_SELF_ID,
+    a.SOURCE_ID,
+    a.SCREEN_ID,
+    a.OR_OPEN_ID,
+    a.TYPE, 
+    a.CONFIGURE, 
+    a.BOARD_VERSION, 
+    a.SOFT_VERSION, 
+    a.FASTENER_VERSION,
+    d.ATTRIB_CODE, 
+    d.BATCH, 
+    d.STATUS, 
+    d.ORDER_CODE,
+    d.WAREHOUSE_ID,
+    d.WAREHOUSE_ID_UP,
+    d.CREATED_DATE, 
+    d.CREATED_BY, 
+    d.UPDATED_DATE, 
+    d.UPDATED_BY, 
+    d.DELETED_FLAG
+  </sql>
+  
+  <select id="listDeviceInfoBySn" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select SN from device_info
+  	where 1=1 and DELETED_FLAG='N' 
+  	<if test="sns != null and sns.size() &gt; 0">
+  		and SN in
+  		<foreach collection="sns" item="sn" open="(" close=")" separator=",">
+  			#{sn,jdbcType=VARCHAR}
+  		</foreach>
+  	</if>
+  </select>
+  
+  <select id="listDeviceInfoByIccids" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select iccid from device_info
+  	where 1=1 and deleted_flag='N' 
+  	<if test="iccids != null and iccids.size() &gt; 0">
+  		and ICCID in
+  		<foreach collection="iccids" item="iccid" open="(" close=")" separator=",">
+  			#{iccid,jdbcType=VARCHAR}
+  		</foreach>
+  	</if>
+  </select>
+  
+   <!-- 通过ID查询设备信息 -->
+  <select id="getDeviceInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device_info d left JOIN attrib_mana a ON d.ATTRIB_CODE = a.ATTRIB_CODE
+    where d.ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+   <!-- 通过iccid,imei查询设备信息 --> 
+  <select id="getDeviceInfo" resultMap="BaseResultMap">
+    select 
+    		<include refid="Base_Column_List2" />
+       from device_info d
+      where ICCID = #{iccid}
+         or IMEI = #{imei}
+  </select>
+  
+  <select id="getDeviceInfoByImei" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List2" />
+  	from device_info
+  	where IMEI=#{imei}
+  	AND DELETED_FLAG='N'
+  </select>
+  
+  <select id="getDeviceInfoBySn" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List2" />
+  	from device_info
+  	where SN=#{sn} and DELETED_FLAG='N'
+  </select>
+  
+  <select id="getDeviceInfoByIccid" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List2" />
+  	from device_info
+  	where ICCID=#{iccid} and DELETED_FLAG='N'
+  </select>
+
+    <select id="getDeviceInfoBySnAndFlagIsY" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List2" />
+        from device_info
+        where SN=#{sn} or IMEI = #{imei}
+        and DELETED_FLAG='Y'
+    </select>
+  
+   <!--统计设备总数-->
+  <select id="count" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultType="java.lang.Integer">
+    select  
+    	count(*)
+    from device_info d
+    <where>
+	      <if test="iccid != null and iccid != '' ">
+	        (ICCID LIKE CONCAT('%',#{iccid},'%')
+	      </if>
+	      <if test="imei != null and imei != ''">
+	        or IMEI LIKE CONCAT('%',#{imei},'%')
+	      </if>
+	      <if test="orderCode != null and orderCode != ''">
+	        or ORDER_CODE LIKE CONCAT('%',#{orderCode},'%')
+	      </if>
+	      <if test="status != null and status != '' ">
+	        AND STATUS = #{status,jdbcType=CHAR}
+	      </if>
+	  </where>
+  </select>
+  
+  <select id="countOutDevices" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultType="java.lang.Integer">
+  	select count(1) from device_info
+  	<where>
+	      <if test="orderCode != null and orderCode != ''">
+	         ORDER_CODE = #{orderCode,jdbcType=VARCHAR}
+	      </if>
+	      <if test="status != null and status != '' ">
+	        AND STATUS = #{status,jdbcType=CHAR}
+	      </if>
+  	</where>
+  </select>
+  
+  <select id="getTotalAttrib" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultType="java.lang.Integer">
+  	select COUNT(DISTINCT attrib_code) from device_info
+  	where DELETED_FLAG='N'
+  	<if test="attribCode != null and attribCode != ''">
+		AND ATTRIB_CODE = #{attribCode,jdbcType=CHAR}
+	</if>
+	<if test="wareHouseIdUp != null and wareHouseIdUp != 0">
+		AND WAREHOUSE_ID_UP=#{wareHouseIdUp,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+  <select id="pageStatAttrib" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultType="cn.com.glsx.supplychain.model.DeviceInfo">
+  	select attrib_code as attribCode, count(1) as attribCount from device_info
+  	where DELETED_FLAG='N'
+	<if test="attribCode != null and attribCode != ''">
+		AND ATTRIB_CODE = #{attribCode,jdbcType=CHAR}
+	</if>
+	<if test="wareHouseIdUp != null and wareHouseIdUp != 0">
+		AND WAREHOUSE_ID_UP=#{wareHouseIdUp,jdbcType=INTEGER}
+	</if>
+	group by ATTRIB_CODE limit #{pn,jdbcType=INTEGER},#{ps,jdbcType=INTEGER}
+  </select>
+  
+  <select id="listExportAttribDeviceInfos" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultMap="BaseResultMap">
+  	select 
+  	<include refid="export_Column_List" />
+  	from device_info
+  	where ID > #{id,jdbcType=INTEGER}
+  	<if test="wareHouseIdUp != null">
+  		and WAREHOUSE_ID_UP=#{wareHouseIdUp,jdbcType=INTEGER}
+  	</if>
+	<if test="attribCode != null">
+		and ATTRIB_CODE=#{attribCode,jdbcType=CHAR}
+	</if>
+	<if test="iccid != null">
+  		and (ICCID LIKE CONCAT('%',#{iccid},'%')
+  	</if>
+  	<if test="imei != null">
+  		or IMEI LIKE CONCAT('%',#{imei},'%')
+  	</if>
+  	<if test="sn != null">
+  		or SN LIKE CONCAT('%',#{sn},'%'))
+  	</if>
+	<if test="deletedFlag != null">
+		and DELETED_FLAG=#{deletedFlag,jdbcType=CHAR}
+	</if>
+  	limit #{attribCount,jdbcType=INTEGER}
+  </select>
+  
+  <select id="pageStatAttribDeviceInfos" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List2" />
+  	from device_info
+  	where ATTRIB_CODE=#{attribCode,jdbcType=CHAR}
+  		<if test="iccid != null">
+  			and (ICCID LIKE CONCAT('%',#{iccid},'%')
+  		</if>
+  		<if test="imei != null">
+  			or IMEI LIKE CONCAT('%',#{imei},'%')
+  		</if>
+  		<if test="sn != null">
+  			or SN LIKE CONCAT('%',#{sn},'%'))
+  		</if>
+  		<if test="wareHouseIdUp != null">
+  			and WAREHOUSE_ID_UP=#{wareHouseIdUp,jdbcType=INTEGER}
+  		</if>
+  		<if test="deletedFlag != null">
+  			and DELETED_FLAG=#{deletedFlag,jdbcType=CHAR}
+  		</if>
+  	limit #{pn,jdbcType=INTEGER},#{ps,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getTotalAttribDeviceInfos" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultType="java.lang.Integer">
+  	select count(1) from device_info
+  	where ATTRIB_CODE=#{attribCode,jdbcType=CHAR}
+  		<if test="iccid != null">
+  			and (ICCID LIKE CONCAT('%',#{iccid},'%')
+  		</if>
+  		<if test="imei != null">
+  			or IMEI LIKE CONCAT('%',#{imei},'%')
+  		</if>
+  		<if test="sn != null">
+  			or SN LIKE CONCAT('%',#{sn},'%'))
+  		</if>
+  		<if test="wareHouseIdUp != null">
+  			and WAREHOUSE_ID_UP=#{wareHouseIdUp,jdbcType=INTEGER}
+  		</if>
+  		<if test="deletedFlag != null">
+  			and DELETED_FLAG=#{deletedFlag,jdbcType=CHAR}
+  		</if>
+  </select>
+  
+   <!--查询设备列表 -->
+  <select id="listDeviceInfo" parameterType="cn.com.glsx.supplychain.model.DeviceInfo" resultMap="BaseResultMap" >
+    select 
+    	<include refid="Base_Column_List" />
+   		from device_info d 
+   left JOIN attrib_mana a 
+          ON d.ATTRIB_CODE = a.ATTRIB_CODE
+       WHERE d.DELETED_FLAG = 'N'	
+	      <if test="iccid != null and iccid != '' ">
+	        AND (d.ICCID LIKE CONCAT('%',#{iccid},'%')
+	      </if>
+	      <if test="imei != null and imei != ''">
+	        or d.IMEI LIKE CONCAT('%',#{imei},'%')
+	      </if>
+	      <if test="orderCode != null and orderCode != ''">
+	        or d.ORDER_CODE LIKE CONCAT('%',#{orderCode},'%')
+	      </if>
+          <if test="sn != null and sn != ''">
+            or d.SN LIKE CONCAT('%',#{sn},'%'))
+          </if>
+	      <if test="status != null and status != '' ">
+	        AND d.STATUS = #{status,jdbcType=CHAR}
+	      </if>
+          <if test="devTypeId != null and devTypeId != '' ">
+            AND a.DEV_TYPE_ID = #{devTypeId,jdbcType=INTEGER}
+          </if>
+  </select>
+
+   <!-- 插入设备列表信息 -->
+   <insert id="insert" parameterType="cn.com.glsx.supplychain.model.DeviceInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_info(
+    <if test="sn != null and sn !=''">SN</if>
+    <if test="iccid != null and iccid != ''">,ICCID</if>
+    <if test="imei != null and imei != ''">,IMEI</if>
+    <if test="vcode != null and vcode != ''">,VCODE</if>
+    <if test="attribCode != null and attribCode != ''">,ATTRIB_CODE</if>
+    <if test="batch != null and batch !=''">,BATCH</if>
+    <if test="status != null and status !=''">,STATUS</if>
+    <if test="orderCode != null and orderCode !=''">,ORDER_CODE</if>
+    <if test="wareHouseId != null and wareHouseId !=0">,WAREHOUSE_ID</if>
+    <if test="wareHouseIdUp != null and wareHouseIdUp !=0">,WAREHOUSE_ID_UP</if>
+    <if test="createdDate != null">,CREATED_DATE</if>
+    <if test="createdBy != null and createdBy !=''">,CREATED_BY</if>
+    <if test="updatedDate != null">,UPDATED_DATE</if>
+    <if test="updatedBy != null and updatedBy !=''">,UPDATED_BY</if>
+    <if test="deletedFlag != null and deletedFlag !=''">,DELETED_FLAG</if>
+    )values(
+    <if test="sn != null and sn !=''">#{sn}</if>
+    <if test="iccid != null and iccid != ''">,#{iccid}</if>
+    <if test="imei != null and imei != ''">,#{imei}</if>
+    <if test="vcode != null and vcode != ''">,#{vcode}</if>
+    <if test="attribCode != null and attribCode != ''">,#{attribCode}</if>
+    <if test="batch != null and batch !=''">,#{batch}</if>
+    <if test="status != null and status !=''">,#{status}</if>
+    <if test="orderCode != null and orderCode !=''">,#{orderCode}</if>
+    <if test="wareHouseId != null and wareHouseId !=0">,#{wareHouseId}</if>
+    <if test="wareHouseIdUp != null and wareHouseIdUp !=0">,#{wareHouseIdUp}</if>
+    <if test="createdDate != null">,#{createdDate}</if>
+    <if test="createdBy != null and createdBy !=''">,#{createdBy}</if>
+    <if test="updatedDate != null">,#{updatedDate}</if>
+    <if test="updatedBy != null and updatedBy !=''">,#{updatedBy}</if>
+    <if test="deletedFlag != null and deletedFlag !=''">,'N'</if>
+    )
+  </insert>
+  
+  <insert id="batchAddDeviceInfoOnDuplicateKey" parameterType="java.util.List">
+	insert into device_info(ICCID,IMEI,VCODE,ATTRIB_CODE,BATCH,STATUS,ORDER_CODE,WAREHOUSE_ID,WAREHOUSE_ID_UP,CREATED_DATE,CREATED_BY,UPDATED_DATE,UPDATED_BY,DELETED_FLAG,SN,IMSI,sim_card_no)
+	values
+	<foreach collection="list" item="item" index="index" separator=",">
+	(#{item.iccid}
+	,#{item.imei}
+	,#{item.vcode}
+	,#{item.attribCode}
+	,#{item.batch}
+	,#{item.status}
+	,#{item.orderCode}
+	,#{item.wareHouseId}
+	,#{item.wareHouseIdUp}
+	,#{item.createdDate}
+	,#{item.createdBy}
+	,#{item.updatedDate}
+	,#{item.updatedBy}
+	,#{item.deletedFlag}
+	,#{item.sn}
+	,#{item.imsi}
+	,#{item.simCardNo}
+	)
+	</foreach>
+	on duplicate key update
+  	ICCID = values(ICCID),
+    IMEI = values(IMEI),
+    VCODE = values(VCODE),
+    ATTRIB_CODE = values(ATTRIB_CODE),
+    BATCH = values(BATCH),
+    STATUS = values(STATUS),
+    ORDER_CODE = values(ORDER_CODE),
+    WAREHOUSE_ID = values(WAREHOUSE_ID),
+    WAREHOUSE_ID_UP = values(WAREHOUSE_ID_UP),
+    CREATED_DATE = values(CREATED_DATE),
+    CREATED_BY = values(CREATED_BY),
+    UPDATED_DATE = values(UPDATED_DATE),
+    UPDATED_BY = values(UPDATED_BY),
+    DELETED_FLAG = values(DELETED_FLAG),
+    SN=values(SN),
+    IMSI=values(IMSI),
+    SIM_CARD_NO = values(SIM_CARD_NO)
+ </insert>
+
+  
+  <insert id="addDeviceInfoOnDuplicateKey" parameterType="cn.com.glsx.supplychain.model.DeviceInfo">
+  	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into device_info(
+    <if test="sn != null">SN</if>
+    <if test="imei != null">,IMEI</if>
+    <if test="vcode != null">,VCODE</if>
+    <if test="attribCode != null and attribCode != ''">,ATTRIB_CODE</if>
+    <if test="batch != null and batch !=''">,BATCH</if>
+    <if test="status != null and status !=''">,STATUS</if>
+    <if test="orderCode != null">,ORDER_CODE</if>
+    <if test="wareHouseId != null and wareHouseId !=0">,WAREHOUSE_ID</if>
+    <if test="wareHouseIdUp != null and wareHouseIdUp !=0">,WAREHOUSE_ID_UP</if>
+    <if test="createdDate != null">,CREATED_DATE</if>
+    <if test="createdBy != null and createdBy !=''">,CREATED_BY</if>
+    <if test="updatedDate != null">,UPDATED_DATE</if>
+    <if test="updatedBy != null and updatedBy !=''">,UPDATED_BY</if>
+    <if test="deletedFlag != null and deletedFlag !=''">,DELETED_FLAG</if>
+    <if test="iccid != null">,ICCID</if>
+    )values(
+    <if test="sn != null">#{sn}</if>
+    <if test="imei != null">,#{imei}</if>
+    <if test="vcode != null">,#{vcode}</if>
+    <if test="attribCode != null and attribCode != ''">,#{attribCode}</if>
+    <if test="batch != null and batch !=''">,#{batch}</if>
+    <if test="status != null and status !=''">,#{status}</if>
+    <if test="orderCode != null">,#{orderCode}</if>
+    <if test="wareHouseId != null and wareHouseId !=0">,#{wareHouseId}</if>
+    <if test="wareHouseIdUp != null and wareHouseIdUp !=0">,#{wareHouseIdUp}</if>
+    <if test="createdDate != null">,#{createdDate}</if>
+    <if test="createdBy != null and createdBy !=''">,#{createdBy}</if>
+    <if test="updatedDate != null">,#{updatedDate}</if>
+    <if test="updatedBy != null and updatedBy !=''">,#{updatedBy}</if>
+    <if test="deletedFlag != null and deletedFlag !=''">,#{deletedFlag}</if>
+    <if test="iccid != null">,#{iccid}</if>
+    )
+  	on duplicate key update
+  	<if test="sn != null">SN = values(SN)</if>
+    <if test="imei != null">,IMEI = values(IMEI)</if>
+    <if test="vcode != null">,VCODE = values(VCODE)</if>
+    <if test="attribCode != null and attribCode != ''">,ATTRIB_CODE = values(ATTRIB_CODE)</if>
+    <if test="batch != null and batch !=''">,BATCH = values(BATCH)</if>
+    <if test="status != null and status !=''">,STATUS = values(STATUS)</if>
+    <if test="orderCode != null">,ORDER_CODE = values(ORDER_CODE)</if>
+    <if test="wareHouseId != null and wareHouseId !=0">,WAREHOUSE_ID = values(WAREHOUSE_ID)</if>
+    <if test="wareHouseIdUp != null and wareHouseIdUp !=0">,WAREHOUSE_ID_UP = values(WAREHOUSE_ID_UP)</if>
+    <if test="createdDate != null">,CREATED_DATE = values(CREATED_DATE)</if>
+    <if test="createdBy != null and createdBy !=''">,CREATED_BY = values(CREATED_BY)</if>
+    <if test="updatedDate != null">,UPDATED_DATE = values(UPDATED_DATE)</if>
+    <if test="updatedBy != null and updatedBy !=''">,UPDATED_BY = values(UPDATED_BY)</if>
+    <if test="deletedFlag != null and deletedFlag !=''">,DELETED_FLAG = values(DELETED_FLAG)</if>
+    <if test="iccid != null">,ICCID=values(ICCID)</if>
+  </insert>
+  
+  <!-- 修改设备信息 -->
+  <update id="update" parameterType="cn.com.glsx.supplychain.model.DeviceInfo">
+    update device_info
+    <set>
+      <if test="iccid != null">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null">
+        ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null">
+        VCODE = #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        BATCH = #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="wareHouseId != null">
+        WAREHOUSE_ID = #{wareHouseId,jdbcType=INTEGER},
+      </if>
+      <if test="wareHouseIdUp != null">
+        WAREHOUSE_ID_UP = #{wareHouseIdUp,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=CHAR},
+      </if>
+      <if test="sn != null">
+      	SN = #{sn,jdbcType=CHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateSelectBySn" parameterType="cn.com.glsx.supplychain.model.DeviceInfo">
+  	update device_info
+  	<set>
+      <if test="iccid != null and iccid !=''">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null and attribCode !=''">
+        ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null and imei !=''">
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null and vcode !=''">
+        VCODE = #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null and batch !=''">
+        BATCH = #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null and status !=''">
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="wareHouseId != null">
+        WAREHOUSE_ID = #{wareHouseId,jdbcType=INTEGER},
+      </if>
+      <if test="wareHouseIdUp != null">
+        WAREHOUSE_ID_UP = #{wareHouseIdUp,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy !=''">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null and updatedBy !=''">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=CHAR},
+      </if>
+    </set>
+     where SN = #{sn,jdbcType=CHAR}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.DeviceInfo">
+  	update device_info set `ICCID`= #{iccid,jdbcType=VARCHAR},`IMEI`= #{imei,jdbcType=VARCHAR},`VCODE`= #{vcode,jdbcType=VARCHAR},`ATTRIB_CODE`=#{attribCode,jdbcType=VARCHAR},
+  	`BATCH`= #{batch,jdbcType=VARCHAR},`STATUS`=#{status,jdbcType=VARCHAR},`WAREHOUSE_ID`=#{wareHouseId,jdbcType=INTEGER},`WAREHOUSE_ID_UP`=#{wareHouseIdUp,jdbcType=INTEGER},
+  	`ORDER_CODE`=#{orderCode,jdbcType=VARCHAR},`CREATED_BY`=#{createdBy,jdbcType=VARCHAR},`CREATED_DATE`=#{createdDate,jdbcType=TIMESTAMP},`UPDATED_BY`=#{updatedBy,jdbcType=VARCHAR},
+  	`UPDATED_DATE`=#{updatedDate,jdbcType=TIMESTAMP},`DELETED_FLAG`=#{deletedFlag,jdbcType=CHAR},`SN`=#{sn,jdbcType=CHAR} 
+  	where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!--根据订单编码查询设备列表 -->
+  <select id="listDeviceInfoByOrderCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    	ICCID,IMEI,SN,STATUS,ATTRIB_CODE,BATCH,UPDATED_DATE,CREATED_DATE,ORDER_CODE
+    from device_info
+    <where>
+      <if test="_parameter != null and _parameter != ''">
+        ORDER_CODE = #{_parameter,jdbcType=VARCHAR}
+      </if>
+	 </where>
+  </select>
+
+ 
+</mapper>

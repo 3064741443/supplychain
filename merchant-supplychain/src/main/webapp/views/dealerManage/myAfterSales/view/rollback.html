@@ -1,0 +1,47 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <label class="col-lg-3 control-label">商品寄回:</label>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="aftersalesRollback_form" method="post"
+                  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">物流公司 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="company" ng-required="true" check-length="25" maxlength="25" class="form-control" type="text"  ng-model="rollbackMyafterData.company"/>
+                                <div class="m-t-xs" ng-show="aftersalesRollback_form.company.$invalid && aftersalesRollback_form.submitted">
+                                    <small class="text-danger" ng-show="aftersalesRollback_form.company.$error.required">请输入物流公司</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">物流单号 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <input name="orderNumber" ng-required="true" check-length="25" maxlength="25" class="form-control" type="text"
+                                       ng-model="logistics.orderNumber"/>
+                                <div class="m-t-xs" ng-show="aftersalesRollback_form.orderNumber.$invalid && aftersalesRollback_form.submitted">
+                                    <small class="text-danger" ng-show="aftersalesRollback_form.orderNumber.$error.required">请输入物流单号</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="ok();">确认</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>

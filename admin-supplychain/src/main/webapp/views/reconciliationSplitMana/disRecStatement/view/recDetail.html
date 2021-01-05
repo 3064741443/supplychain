@@ -1,0 +1,292 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">详情</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="recDetail_form" method="post"
+              enctype="multipart/form-data">
+            <h2 align="center">销售出货对账单</h2>
+            <br/>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">客户名称 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.customerName }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">销售组织 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.saleGroupNameCus }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">客户地址 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.customerAddr }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">销售组地址 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.saleGroupAddr }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">客户联系人 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.customerContact }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">销售组联系人 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.saleGroupContact }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-6"> 
+                    <label class="col-lg-3 control-label">客户联系电话 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.customerPhone }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <label class="col-lg-3 control-label">销售组联系电话 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                {{ detailDate.saleGroupPhone }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br/><br/>
+            <h3>出货详单
+                <span class="recTime"> 对账时间：{{ startTime }}～{{ endTime }}</span>
+            </h3>
+            <hr/>
+            <div class="listBox m-t-md" style="width: 100%;overflow-x: auto" ng-if="detailDate.channel == '2' || detailDate.channel == '4'">
+                <table class="table" style="width: 2000px">
+                    <thead>
+                        <tr>
+                            <th width="300px">产品名称</th>
+                            <!-- <th width="100px">物料编号</th>
+                            <th width="100px">物料名称</th> -->
+                            <th width="200px">服务套餐</th>
+                            <th width="100px">服务期限</th>
+                            <th width="100px">单位</th>
+                            <th width="100px">发货数量</th>
+                            <th width="130px">硬件单价（含税）</th>
+                            <th width="150px">服务费单价（含税）</th>
+                            <th width="100px">硬件小计</th>
+                            <th width="100px">服务费小计</th>
+                            <th width="150px">合计单价（含税）</th>
+                            <th width="100px">价税合计</th>
+                            <th width="100px">发货时间 </th>
+                            <th width="200px">发货物流</th>                           
+                        </tr>
+                    </thead>
+                    <tbody>
+    
+                        <tr ng-repeat="item in shipmentSpecifications" ng-if="item.deletedFlag == 'N'">
+                            <td>{{item.productName||'--'}}</td>
+                            <!-- <td>{{item.materialCodes||'--'}}</td>
+                            <td>{{item.materialNames||'--'}}</td> -->
+                            <td>{{item.packageOne||'--'}}</td>
+                            <td>{{item.serviceTime||'--'}}</td>
+                            <td>{{item.unitType||'--'}}</td>
+                            <td>{{item.sendCount||'--'}}</td>
+                            <td>{{item.hardwareUintPrice||'--'}}</td>
+                            <td>{{item.serviceUintPrice||'--'}}</td>
+                            <td>{{item.hardwareTotalPrice||'--'}}</td>
+                            <td>{{item.serviceTotalPrice||'--'}}</td>
+                            <td>{{item.uintTotalPrice||'--'}}</td>
+                            <td>{{item.totalPrice||'--'}}</td>
+                            <td>{{item.sendGoodsTime||'--'}}</td>
+                            <!-- <td>{{item.logisticsInfo||'--'}}</td> -->
+                            <td><span ng-bind-html="item.logisticsInfoShow"></span></td>                           
+                        </tr>
+                        <tr ng-if="shipmentSpecifications">
+                            <td><b>合计</b></td>
+                            <!-- <td></td>
+                            <td></td> -->
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>{{hardwareSubtotal_total}}</b></td>
+                            <td><b>{{serviceSubtotal_total}}</b></td>
+                            <td></td>
+                            <td><b>{{pricetaxTotal_total}}</b></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!--暂无数据 开始-->
+                        <tr ng-if="!shipmentSpecifications">
+                            <td colspan="10">暂无数据</td>
+                        </tr>
+                        <!--暂无数据 end-->
+    
+                    </tbody>
+                </table>
+            </div>
+            <div class="listBox m-t-md" style="width: 100%;overflow-x: auto" ng-if="detailDate.channel != '2' && detailDate.channel != '4'">
+                <table class="table" style="width: 2000px"> 
+                    <thead>
+                        <tr>
+                            <th width="150px">订单编号</th>
+                            <th width="300px">产品名称</th>
+                            <th width="150px">物料编号</th>
+                            <th width="250px">物料名称</th>
+                            <th width="100px">单位</th>
+                            <th width="100px">销售数量</th>
+                            <th width="100px">含税单价</th>
+                            <th width="100px">价税合计</th>
+                            <th width="100px">发货时间 </th>
+                            <th width="200px">发货物流</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    
+                        <tr ng-repeat="item in shipmentSpecifications" ng-if="item.deletedFlag == 'N'">
+                            <td>{{item.merchantOrderCode||'--'}}</td>
+                            <td>{{item.productName||'--'}}</td>
+                            <td>{{item.materialCodes||'--'}}</td>
+                            <td>{{item.materialNames||'--'}}</td>
+                            <td>{{item.unitType||'--'}}</td>
+                            <td>{{item.sendCount||'--'}}</td>
+                            <td>{{item.uintTotalPrice||'--'}}</td>
+                            <td>{{item.totalPrice||'--'}}</td>
+                            <td>{{item.sendGoodsTime||'--'}}</td>
+                            <!-- <td>{{item.logisticsInfo||'--'}}</td> -->
+                            <td><span ng-bind-html="item.logisticsInfoShow"></span></td>  
+                        </tr>
+                        
+                        <tr ng-if="!shipmentSpecifications">
+                            <td colspan="10">暂无数据</td>
+                        </tr>
+                        
+    
+                    </tbody>
+                </table>
+            </div>
+
+            <div ng-if="detailDate.channel == '2' || detailDate.channel == '4'">
+                <br/><br/>
+                <h3>安装服务费详单</h3>
+                <hr/>
+                <div class="listBox m-t-md">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="25%">服务费名称</th>
+                                <th width="25%">数量</th>
+                                <th width="25%">含税单价</th>
+                                <th width="25%">价税合计</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        
+                            <tr ng-repeat="item in installService" ng-if="item.deletedFlag == 'N'">
+                                <td>{{item.materialName||'--'}}</td>
+                                <td>{{item.sendCount||'--'}}</td>
+                                <td>{{item.serviceUintPrice||'--'}}</td>
+                                <td>{{item.serviceTotalPrice||'--'}}</td>
+                            </tr>
+                            <tr ng-if="installService">
+                                <td><b>合计</b></td>
+                                <td><b>{{num_total}}</b></td>
+                                <td></td>
+                                <td><b>{{pricetaxTotal_service_total}}</b></td>
+                            </tr>
+                            <!--暂无数据 开始-->
+                            <tr ng-if="!installService">
+                                <td colspan="10">暂无数据</td>
+                            </tr>
+                            <!--暂无数据 end-->
+        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <br/><br/>
+            <h3>汇总
+                <span class="recTime"> 截止时间：{{ endTime }}</span>
+            </h3>
+            <hr/>
+            <div class="listBox m-t-md">
+                <table class="table">
+                    <tr>
+                        <th width="50%"><h3>本期结算合计:</h3></th>
+                        <th width="50%"><h3>¥{{allTotal}}</h3></th>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-if="detailDate.status == '1'" ng-click="gotoEdit()">修改</button>
+        <button type="submit" class="btn btn-primary" ng-if="detailDate.status == '1' && paramData.whereFrom == 'FromSplit'" ng-click="splitAccount()">拆分对账单</button>
+        <button type="submit" class="btn btn-primary" ng-click="export()">导出</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">关闭</button>
+    </div>
+</div>
+
+<style>
+    .recTime {
+        float: right;
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+</style>

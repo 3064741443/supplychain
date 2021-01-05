@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.SalesSummarizingMaterialDetailMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.SalesSummarizingMaterialDetail">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="SALES_ID" property="salesId" jdbcType="BIGINT"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_NAME" property="materialName" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_PRICE" property="materialPrice" jdbcType="DOUBLE"/>
+        <result column="TAX_RATE" property="taxRate" jdbcType="DOUBLE"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, SALES_ID, PRODUCT_CODE, MATERIAL_CODE, MATERIAL_NAME, MATERIAL_PRICE, TAX_RATE, CREATED_BY,
+        CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+    </sql>
+
+    <sql id="M_Base_Column_List">
+        m.ID, m.SALES_ID, m.PRODUCT_CODE, m.MATERIAL_CODE, m.MATERIAL_NAME, m.MATERIAL_PRICE, m.TAX_RATE, m.CREATED_BY,
+        m.CREATED_DATE, m.UPDATED_BY, m.UPDATED_DATE, m.DELETED_FLAG
+    </sql>
+
+    <select id="getSalesSummarizingMaterialDetailList" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizingMaterialDetail"
+            resultMap="BaseResultMap">
+        select
+        <include refid="M_Base_Column_List"/>
+        from bs_sales_summarizing_material_detail m
+        where m.DELETED_FLAG = "N"
+        <if test="salesId != null">
+            and m.SALES_ID = #{salesId,jdbcType=BIGINT}
+        </if>
+        <if test="productCode != null">
+            and m.PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="materialCode != null">
+            and m.MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR}
+        </if>
+        <if test="materialName != null">
+            and m.MATERIAL_NAME = #{materialName,jdbcType=VARCHAR}
+        </if>
+        <if test="materialPrice != null">
+            and m.MATERIAL_PRICE = #{materialPrice,jdbcType=DOUBLE}
+        </if>
+    </select>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizingMaterialDetail">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_sales_summarizing_material_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="salesId !=null">
+                SALES_ID,
+            </if>
+            <if test="productCode !=null">
+                PRODUCT_CODE,
+            </if>
+            <if test="materialCode !=null">
+                MATERIAL_CODE,
+            </if>
+            <if test="materialName !=null">
+                MATERIAL_NAME,
+            </if>
+            <if test="materialPrice !=null">
+                MATERIAL_PRICE,
+            </if>
+            <if test="taxRate !=null">
+                TAX_RATE,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="salesId !=null">
+                #{salesId,jdbcType=BIGINT},
+            </if>
+            <if test="productCode !=null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCode !=null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName !=null">
+                #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialPrice !=null">
+                #{materialPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="taxRate !=null">
+                #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList" parameterType="cn.com.glsx.supplychain.model.bs.SalesSummarizingMaterialDetail">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_sales_summarizing_material_detail (
+        SALES_ID, PRODUCT_CODE, MATERIAL_CODE, MATERIAL_NAME,MATERIAL_PRICE,TAX_RATE,
+        CREATED_BY,CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.salesId,jdbcType=BIGINT}, #{item.productCode,jdbcType=VARCHAR}, #{item.materialCode,jdbcType=VARCHAR},
+            #{item.materialName,jdbcType=VARCHAR}, #{item.materialPrice,jdbcType=DOUBLE}, #{item.taxRate,jdbcType=DOUBLE},
+            #{item.createdBy,jdbcType=VARCHAR},#{item.createdDate,jdbcType=TIMESTAMP}, #{item.updatedBy,jdbcType=VARCHAR},
+            #{item.updatedDate,jdbcType=TIMESTAMP},#{item.deletedFlag,jdbcType=VARCHAR})
+        </foreach>
+        on duplicate key update
+        SALES_ID = values(SALES_ID),
+        PRODUCT_CODE = values(PRODUCT_CODE),
+        MATERIAL_CODE = values(MATERIAL_CODE),
+        MATERIAL_NAME = values(MATERIAL_NAME),
+        MATERIAL_PRICE = values(MATERIAL_PRICE),
+        TAX_RATE = values(TAX_RATE),
+        CREATED_BY = values(CREATED_BY),
+        CREATED_DATE = values(CREATED_DATE),
+        UPDATED_BY = values(UPDATED_BY),
+        UPDATED_DATE = values(UPDATED_DATE),
+        DELETED_FLAG = values(DELETED_FLAG)
+    </insert>
+</mapper>

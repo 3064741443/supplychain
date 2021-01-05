@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementSellReconDetailMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementSellReconDetail">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="MERCHANT_ORDER_CODE" jdbcType="VARCHAR" property="merchantOrderCode" />
+    <result column="SEND_GOODS_TIME" jdbcType="VARCHAR" property="sendGoodsTime" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+    <result column="SERVICE_TIME" jdbcType="VARCHAR" property="serviceTime" />
+    <result column="UNIT_TYPE" jdbcType="VARCHAR" property="unitType" />
+    <result column="SEND_COUNT" jdbcType="INTEGER" property="sendCount" />
+    <result column="HARDWARE_UINT_PRICE" jdbcType="DOUBLE" property="hardwareUintPrice" />
+    <result column="SERVICE_UINT_PRICE" jdbcType="DOUBLE" property="serviceUintPrice" />
+    <result column="HARDWARE_TOTAL_PRICE" jdbcType="DOUBLE" property="hardwareTotalPrice" />
+    <result column="SERVICE_TOTAL_PRICE" jdbcType="DOUBLE" property="serviceTotalPrice" />
+    <result column="UINT_TOTAL_PRICE" jdbcType="DOUBLE" property="uintTotalPrice" />
+    <result column="TOTAL_PRICE" jdbcType="DOUBLE" property="totalPrice" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="RECON_CODE" jdbcType="VARCHAR" property="reconCode" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />   
+    <result column="MATERIAL_CODES" jdbcType="VARCHAR" property="materialCodes" />
+    <result column="MATERIAL_NAMES" jdbcType="VARCHAR" property="materialNames" />
+    <result column="LOGISTICS_INFO" jdbcType="VARCHAR" property="logisticsInfo" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, WORK_ORDER, PRODUCT_CODE, PRODUCT_NAME,MERCHANT_ORDER_CODE, PACKAGE_ONE, SERVICE_TIME, UNIT_TYPE, 
+    SEND_COUNT, HARDWARE_UINT_PRICE, SERVICE_UINT_PRICE, HARDWARE_TOTAL_PRICE, SERVICE_TOTAL_PRICE, 
+    UINT_TOTAL_PRICE, TOTAL_PRICE, REMARK, RECON_CODE, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG,MATERIAL_CODES,MATERIAL_NAMES,LOGISTICS_INFO,SEND_GOODS_TIME
+  </sql> 
+  
+  <insert id="batchInsertReplace" parameterType="java.util.List">
+  	insert into am_statement_sell_recon_detail(WORK_ORDER, MERCHANT_ORDER_CODE,PRODUCT_CODE, PRODUCT_NAME, PACKAGE_ONE, SERVICE_TIME, UNIT_TYPE, 
+    SEND_COUNT, HARDWARE_UINT_PRICE, SERVICE_UINT_PRICE, HARDWARE_TOTAL_PRICE, SERVICE_TOTAL_PRICE, 
+    UINT_TOTAL_PRICE, TOTAL_PRICE, REMARK, RECON_CODE, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG,MATERIAL_CODES,MATERIAL_NAMES,LOGISTICS_INFO,SEND_GOODS_TIME)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+    	(
+    		#{item.workOrder,jdbcType=VARCHAR},
+    		#{item.merchantOrderCode,jdbcType=VARCHAR},
+    		#{item.productCode,jdbcType=VARCHAR},
+    		#{item.productName,jdbcType=VARCHAR},
+    		#{item.packageOne,jdbcType=VARCHAR},
+    		#{item.serviceTime,jdbcType=VARCHAR},
+    		#{item.unitType,jdbcType=INTEGER},
+    		#{item.sendCount,jdbcType=VARCHAR},
+    		#{item.hardwareUintPrice,jdbcType=DOUBLE},
+    		#{item.serviceUintPrice,jdbcType=DOUBLE},
+    		#{item.hardwareTotalPrice,jdbcType=DOUBLE},
+    		#{item.serviceTotalPrice,jdbcType=DOUBLE},
+    		#{item.uintTotalPrice,jdbcType=DOUBLE},
+    		#{item.totalPrice,jdbcType=DOUBLE},
+    		#{item.remark,jdbcType=VARCHAR},
+    		#{item.reconCode,jdbcType=VARCHAR},   		
+    		#{item.createdBy,jdbcType=VARCHAR},
+    		#{item.createdDate,jdbcType=TIMESTAMP},
+    		#{item.updatedBy,jdbcType=VARCHAR},
+    		#{item.updatedDate,jdbcType=TIMESTAMP},
+    		#{item.deletedFlag,jdbcType=VARCHAR},
+    		#{item.materialCodes,jdbcType=VARCHAR},
+    		#{item.materialNames,jdbcType=VARCHAR},
+    		#{item.logisticsInfo,jdbcType=VARCHAR},
+    		#{item.sendGoodsTime,jdbcType=VARCHAR}
+    	)
+    </foreach>
+    on duplicate key update
+    WORK_ORDER=values(WORK_ORDER), 
+    MERCHANT_ORDER_CODE=values(MERCHANT_ORDER_CODE),
+    PRODUCT_CODE=values(PRODUCT_CODE), 
+    PRODUCT_NAME=values(PRODUCT_NAME), 
+    PACKAGE_ONE=values(PACKAGE_ONE), 
+    SERVICE_TIME=values(SERVICE_TIME), 
+    UNIT_TYPE=values(UNIT_TYPE), 
+    SEND_COUNT=values(SEND_COUNT), 
+    HARDWARE_UINT_PRICE=values(HARDWARE_UINT_PRICE), 
+    SERVICE_UINT_PRICE=values(SERVICE_UINT_PRICE), 
+    HARDWARE_TOTAL_PRICE=values(HARDWARE_TOTAL_PRICE), 
+    SERVICE_TOTAL_PRICE=values(SERVICE_TOTAL_PRICE), 
+    UINT_TOTAL_PRICE=values(UINT_TOTAL_PRICE), 
+    TOTAL_PRICE=values(TOTAL_PRICE), 
+    REMARK=values(REMARK), 
+    RECON_CODE=values(RECON_CODE), 
+    CREATED_BY=values(CREATED_BY), 
+    CREATED_DATE=values(CREATED_DATE), 
+    UPDATED_BY=values(UPDATED_BY), 
+    UPDATED_DATE=values(UPDATED_DATE), 
+    DELETED_FLAG=values(DELETED_FLAG),
+    MATERIAL_CODES=values(MATERIAL_CODES),
+    MATERIAL_NAMES=values(MATERIAL_NAMES),
+    LOGISTICS_INFO=values(LOGISTICS_INFO),
+    SEND_GOODS_TIME=values(SEND_GOODS_TIME)
+  </insert>
+</mapper>

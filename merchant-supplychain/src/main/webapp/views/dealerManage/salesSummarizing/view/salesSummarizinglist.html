@@ -1,0 +1,48 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <form role="form" class="form-horizontal clearfix">
+        <div class="col-lg-4 col-sm-6">
+            <div class="form-group">
+                <label class="col-lg-4 control-label">对账状态</label>
+                <div class="col-lg-8">
+                    <ui-select name="exportStatu" ng-model="formData.status" theme="bootstrap">
+                        <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                        <ui-select-choices repeat="item in salesStatuList">
+                            <div ng-bind="item.text "></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8 col-sm-12" style="margin-left: -5%">
+            <div class="form-group">
+                <label class="col-lg-2 control-label">对账日期</label>
+                <div class="col-sm-4">
+                    <input date-range-picker options="singleDateSettings" name="dateRange1Start"
+                           max="formData.endDate.startDate"
+                           class="form-control date-picker" type="text" ng-model="formData.startDate"/>
+                </div>
+                <label class="pull-left control-label">至</label>
+                <div class="col-sm-4">
+                    <input date-range-picker options="singleDateSettings" name="dateRange1End"
+                           min="formData.startDate.startDate"
+                           class="form-control date-picker" type="text" ng-model="formData.endDate"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " type="button" ng-click="search()">查询</button>
+        </div>
+    </form>
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>对账单管理</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

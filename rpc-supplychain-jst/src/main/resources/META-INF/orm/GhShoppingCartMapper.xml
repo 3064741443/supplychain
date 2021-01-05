@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.GhShoppingCartMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.GhShoppingCart">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="cart_code" jdbcType="VARCHAR" property="cartCode" />
+    <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="product_config_code" jdbcType="INTEGER" property="productConfigCode" />
+    <result column="parent_brand_id" jdbcType="INTEGER" property="parentBrandId" />
+    <result column="sub_brand_id" jdbcType="INTEGER" property="subBrandId" />
+    <result column="audi_id" jdbcType="INTEGER" property="audiId" />
+    <result column="motorcycle" jdbcType="VARCHAR" property="motorcycle" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="spa_product_code" jdbcType="VARCHAR" property="spaProductCode" />
+    <result column="spa_product_name" jdbcType="VARCHAR" property="spaProductName" />
+    <result column="glsx_product_code" jdbcType="VARCHAR" property="glsxProductCode" />
+    <result column="glsx_product_name" jdbcType="VARCHAR" property="glsxProductName" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, cart_code, merchant_code, product_config_code, parent_brand_id, sub_brand_id, audi_id, 
+    motorcycle, category_id, spa_product_code, spa_product_name, glsx_product_code, glsx_product_name, 
+    total, remark, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <select id="pageGhShoppingCart" parameterType="cn.com.glsx.supplychain.jst.model.GhShoppingCart" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from gh_shopping_cart
+  	<where>
+  		<if test="merchantCode != null">
+  			and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  </select>
+  
+  <insert id="insertGhShoppingCartReplace" parameterType="java.util.List">
+  	insert into gh_shopping_cart(cart_code, merchant_code, product_config_code, parent_brand_id, sub_brand_id, audi_id, 
+    motorcycle, category_id, spa_product_code, spa_product_name, glsx_product_code, glsx_product_name, 
+    total, remark, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+    	(#{item.cartCode},
+    	 #{item.merchantCode},
+    	 #{item.productConfigCode},
+    	 #{item.parentBrandId},
+    	 #{item.subBrandId},
+    	 #{item.audiId},
+    	 #{item.motorcycle},
+    	 #{item.categoryId},
+    	 #{item.spaProductCode},
+    	 #{item.spaProductName},
+    	 #{item.glsxProductCode},
+    	 #{item.glsxProductName},
+    	 #{item.total},
+    	 #{item.remark},
+    	 #{item.createdBy},
+    	 #{item.createdDate},
+    	 #{item.updatedBy},
+    	 #{item.updatedDate},
+    	 #{item.deletedFlag}
+    	)
+    </foreach>
+    on duplicate key update
+    cart_code = values(cart_code), 
+    merchant_code = values(merchant_code), 
+    product_config_code = values(product_config_code), 
+    parent_brand_id = values(parent_brand_id), 
+    sub_brand_id = values(sub_brand_id), 
+    audi_id = values(audi_id), 
+    motorcycle = values(motorcycle), 
+    category_id = values(category_id), 
+    spa_product_code = values(spa_product_code), 
+    spa_product_name = values(spa_product_name), 
+    glsx_product_code = values(glsx_product_code), 
+    glsx_product_name = values(glsx_product_name), 
+    total = values(total), 
+    remark = values(remark), 
+    CREATED_BY = values(CREATED_BY), 
+    CREATED_DATE = values(CREATED_DATE), 
+    UPDATED_BY = values(UPDATED_BY), 
+    UPDATED_DATE = values(UPDATED_DATE), 
+    DELETED_FLAG = values(DELETED_FLAG)
+  </insert>
+</mapper>

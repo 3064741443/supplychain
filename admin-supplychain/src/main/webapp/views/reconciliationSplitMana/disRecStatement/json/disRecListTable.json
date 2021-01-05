@@ -1,0 +1,50 @@
+{
+  "condition": null,
+  "draw": 0,
+  "error": null,
+  "total": 5,
+  "recordsFiltered": 5,
+  "recordsTotal": 5,
+  "data": [
+    {
+      "merchantName": "广州萌锐科技发展有限公司0", 
+      "channelType": "金融渠道", 
+      "reconciliationDate": "2020/03/19", 
+      "reconciliationDateRange": "2020/02/08～2020/03/19", 
+      "reconciliationTotal": 20000, 
+      "splitStatus": 1
+    },
+    {
+      "merchantName": "广州萌锐科技发展有限公司1", 
+      "channelType": "同盟会渠道", 
+      "reconciliationDate": "2020/03/19", 
+      "reconciliationDateRange": "2020/02/08～2020/03/19", 
+      "reconciliationTotal": 20000, 
+      "splitStatus": 1
+    },
+    {
+      "merchantName": "广州萌锐科技发展有限公司2", 
+      "channelType": "特殊渠道", 
+      "reconciliationDate": "2020/03/19", 
+      "reconciliationDateRange": "2020/02/08～2020/03/19", 
+      "reconciliationTotal": 20000, 
+      "splitStatus": 1
+    },
+    {
+      "merchantName": "广州萌锐科技发展有限公司3", 
+      "channelType": "金融渠道1", 
+      "reconciliationDate": "2020/03/19", 
+      "reconciliationDateRange": "2020/02/08～2020/03/19", 
+      "reconciliationTotal": 20000, 
+      "splitStatus": 2
+    },
+    {
+      "merchantName": "广州萌锐科技发展有限公司4", 
+      "channelType": "金融渠道2", 
+      "reconciliationDate": "2020/03/19", 
+      "reconciliationDateRange": "2020/02/08～2020/03/19", 
+      "reconciliationTotal": 20000, 
+      "splitStatus": 2
+    }
+  ]
+}

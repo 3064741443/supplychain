@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTBsDealerUserInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTBsDealerUserInfo">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+    <result column="CHANNEL" jdbcType="TINYINT" property="channel" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="SALE_MODE" jdbcType="TINYINT" property="saleMode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, TYPE, CHANNEL, MERCHANT_NAME, MERCHANT_CODE, PASSWORD, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG, SALE_MODE
+  </sql>
+  
+  <select id="pageServerMerchant" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTBsDealerUserInfo" 
+  			resultType="cn.com.glsx.supplychain.jxc.dto.JXCDealerUserInfoDTO">
+  	select 
+  	merchant_code as serviceProviderCode,
+  	merchant_name as serviceProviderName
+  	from bs_dealer_user_info 
+  	<where>
+  		<if test="merchantCode != null">
+  			and (merchant_code like concat('%',#{merchantCode,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="merchantName != null">
+  			or merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+  		</if>
+  	</where>
+  </select>
+
+    <select id="listServerMerchant" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTBsDealerUserInfo"
+            resultType="cn.com.glsx.supplychain.jxc.dto.JXCDealerUserInfoDTO">
+        select
+        merchant_code as serviceProviderCode,
+        merchant_name as serviceProviderName
+        from bs_dealer_user_info
+        <where>
+            <if test="channelList != null">
+                 channel in
+                <foreach collection="channelList" item="channelId" index="index" separator="," open="(" close=")">
+                    #{channelId,jdbcType=TINYINT}
+                </foreach>
+            </if>
+            <if test="merchantCode != null">
+                and (merchant_code like concat('%',#{merchantCode,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="merchantName != null">
+                or merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+            </if>
+        </where>
+    </select>
+</mapper>

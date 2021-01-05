@@ -1,0 +1,85 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">确认签收</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="signView_form"
+                  method="post"
+                  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">实际签收数量 :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <div style="display: inline-block;width:80%;position: relative">
+                                    <input name="quantity" disabled="disabled" maxlength="9" class="form-control" type="text" style="float: left; margin-right: 25px;width: 30%"
+                                            ng-model="signViewData.quantity"/>
+                                </div>
+                                <!--<div class="m-t-xs" ng-show="signView_form.quantity.$invalid && signView_form.submitted">
+                                    <small class="text-danger" ng-show="signView_form.quantity.$error.required">
+                                        请输入实际签收数量
+                                    </small>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">实际签收SN :</label>
+                    <div class="control-content">
+                        <div class="row">
+                            <div class="col-lg-10 addSn">
+                            <div style="display: inline-block;width:65%;position: relative"
+                                 ng-repeat="item in signViewData.AfterSn">
+                                <b class="glyphicon glyphicon-plus icon_add" ng-click="addSn()"></b>
+                                <b class="glyphicon glyphicon-minus clean_add" ng-click="cleanSn($index)"></b>
+                                <input ng-required="true" name="sn" maxlength="18" placeholder="请输入SN" class="form-control myAfterOrderSn" type="text"
+                                       style="float: left; margin-right: 25px;width: 80%;display: inline-block;" ng-pattern="/^[1-9]\d*$/" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                                       ng-blur="snClick(item.sn,$index)" ng-model="item.sn"/>
+                                <div class="m-t-xs" ng-show="signView_form.sn.$invalid && signView_form.submitted">
+                                    <small style="margin-left: 8px;" class="text-danger" ng-show="signView_form.sn.$error.required">
+                                        请输入SN
+                                    </small>
+                                </div>
+                                <!--<small class="text-danger" ng-show="signView_form.sn.$error.notScreen">
+                                    SN不存在
+                                </small>-->
+                            </div>
+                                <p style="float: right">
+                                    <button type="submit" class="btn btn-primary" ng-click="importSn()">批量导入</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="ok();">确认</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>
+<style>
+    .addSn {
+        position: relative;
+    }
+
+    .addSn .icon_add {
+        position: absolute;
+        right: 20px;
+        line-height: 34px;
+    }
+
+    .addSn .clean_add {
+        position: absolute;
+        right: -5px;
+        line-height: 34px;
+    }
+</style>

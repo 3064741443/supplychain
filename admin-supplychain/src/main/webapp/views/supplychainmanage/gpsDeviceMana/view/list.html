@@ -1,0 +1,82 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="supplychain_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">发货单号</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入发货单号" name="searchKey" ng-model="formData.orderCode" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">SN</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入SN" name="searchKey" ng-model="formData.sn" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">操作标记</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入操作标记" name="searchKey" ng-model="formData.seedTag" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">处理状态</label>
+                    <div class="col-lg-8">
+                        <ui-select name="result" ng-model="formData.result" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in resultList" >
+                                <div ng-if="item.text!=0"  ng-bind="item.text "></div>
+                            </ui-select-choices>                        
+                        </ui-select>
+                     </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">导入时间</label>
+                    <div class="col-sm-4">
+                        <input date-range-picker options="singleDateSettings"  name="dateRange1Start" max="formData.endDate.startDate"
+                               class="form-control date-picker" type="text" ng-model="formData.startDate" />
+                    </div>
+                    <label class="pull-left control-label">至</label>
+                    <div class="col-sm-4">
+                        <input date-range-picker options="singleDateSettings"  name="dateRange1End" min="formData.startDate.startDate"
+                               class="form-control date-picker" type="text" ng-model="formData.endDate" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <div class="form-group">
+                <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+                <button class="btn btn-primary " type="button" ng-click="importExcel()">导入</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>GPS出库管理</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

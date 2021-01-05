@@ -1,0 +1,149 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">创建商户</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form role="form" class="form-horizontal form-fixed form-fixed-6" novalidate name="add_newDealer_form" method="post"
+              enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">商户名称 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="name" ng-required="true" class="form-control" type="text" size="8" ng-model="addNewDealerData.merchantName"/>
+                            <div class="m-t-xs" ng-show="add_newDealer_form.name.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger" ng-show="add_newDealer_form.name.$error.required">请输入商户名称</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">商户地址 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="province" ng-required="true"
+                                       style="width: 25%;margin-right: 1%;float: left"
+                                       ng-model="addNewDealerData.province" theme="bootstrap">
+                                <ui-select-match placeholder="选择省">{{$select.selected.province}}</ui-select-match>
+                                <ui-select-choices repeat="item in provinceList">
+                                    <div ng-click="provinceClick(item.pid)" ng-bind="item.province"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <!--<div class="m-t-xs"
+                                 ng-show="add_newDealer_form.province.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger" >请选择省份
+                                </small>
+                            </div>-->
+                            <ui-select name="city" ng-required="true"
+                                       style="width: 25%;margin-right: 1%;float: left" ng-model="addNewDealerData.city"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="选择市">{{$select.selected.city}}</ui-select-match>
+                                <ui-select-choices repeat="item in cityList">
+                                    <div ng-click="cityClick(item.cid)" ng-bind="item.city "></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <!--<div class="m-t-xs"
+                                 ng-show="add_newDealer_form.city.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger">请选择城市
+                                </small>
+                            </div>-->
+                            <ui-select name="area" ng-required="true"
+                                       style="width: 25%;margin-right: 1%;float: left" ng-model="addNewDealerData.area"
+                                       theme="bootstrap">
+                                <ui-select-match placeholder="选择区">{{$select.selected.area}}</ui-select-match>
+                                <ui-select-choices repeat="item in areaList">
+                                    <div ng-bind="item.area"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_newDealer_form.area.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger">请选择省市区
+                                </small>
+                            </div>
+                            <input name="particularsAddress" ng-required="true" maxlength="200" check-length="200" placeholder="请输入详细地址" class="form-control" type="text"
+                                   style="width: 100%;margin-top:40px" ng-model="addNewDealerData.particularsAddress"/>
+                            <div class="m-t-xs"
+                                 ng-show="add_newDealer_form.particularsAddress.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger">请输入详细地址
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">商户渠道 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <ui-select name="userSource" uis-open-close="onOpenClose(isOpen)" ng-required="true" ng-model="addNewDealerData.channel"
+                                       theme="bootstrap" ng-keyup="myKeyUp()">
+                                <ui-select-match placeholder="请输入内容进行查询">{{$select.selected.text}}</ui-select-match>
+                                <ui-select-choices repeat="item in merchantChanneList | filter: $select.search">
+                                    <div ng-if="item.text!=0" ng-bind-html="item.text | highlight: $select.search" ng-click="sendMerchantClick(merchantChanneList)"></div>
+                                </ui-select-choices>
+                                <ui-select-no-choice style="padding: 10px;text-align: center;">
+                                    没有匹配的数据
+                                </ui-select-no-choice>
+                            </ui-select>
+                            <div class="m-t-xs"
+                                 ng-show="add_newDealer_form.userSource.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger" ng-show="add_newDealer_form.userSource.$error.required">请选择商户渠道</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">联系人 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="name" ng-required="true" placeholder="联系人姓名" class="form-control" type="text"
+                                   ng-pattern="/^[A-Za-z\u4e00-\u9fa5]+$/" style="float: left;width: 80%; margin-right: 25px" ng-model="addNewDealerData.name"/>
+                            <div class="m-t-xs"
+                                 ng-show="add_newDealer_form.name.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger" ng-show="add_newDealer_form.name.$error.required">请输入联系人
+                                </small>
+                                <small class="text-danger" ng-show="add_newDealer_form.name.$error.pattern">联系人只能为字母和汉字
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label required">联系电话 :</label>
+                <div class="control-content">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <input name="mobile" ng-required="true" placeholder="联系电话" class="form-control" type="text"
+                                   ng-pattern="/^(((0\d{2,3}-?)?\d{7,8})|(1[0-9]{10}))$/" style="float: left;width: 80%;" ng-model="addNewDealerData.mobile"/>
+                            <div class="m-t-xs"
+                                 ng-show="add_newDealer_form.mobile.$invalid && add_newDealer_form.submitted">
+                                <small class="text-danger" ng-show="add_newDealer_form.mobile.$error.required">请输入联系电话
+                                </small>
+                                <small class="text-danger" ng-show="add_newDealer_form.mobile.$error.pattern">请输入正确的联系电话
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" ng-click="ok()">保存并返回上一级</button>
+        <button type="button" class="btn btn-white" ng-click="cancel()">取消</button>
+    </div>
+</div>

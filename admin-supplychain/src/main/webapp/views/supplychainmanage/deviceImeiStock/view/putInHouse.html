@@ -1,0 +1,45 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">IMEI入库设备</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form name="outerForm" novalidate>
+                <p>请点击"<a href="javascript:void(0)" ng-click="downloadTemplate()">下载导入设备模版</a>", 并填写导入信息</p>
+                <ng-form class="form-horizontal form-fixed form-fixed-4" name="import_form" role="form" novalidate>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 submitted">导入设备:</label>
+                        <div class="col-sm-10">
+                            <input type="file" nv-file-select="" uploader="uploaderDeviceList" name="fileName"
+                                   ng-model="deviceList.fileName" upload-shell ng-click="clearItems()"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="importLoadShow">
+                        <div class="sk-spinner sk-spinner-fading-circle">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                    </div>
+                </ng-form>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="importDeviceList();">导入</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="business_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">订单状态</label>
+                    <div class="col-lg-8">
+                        <ui-select name="status" ng-model="formData.status" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in statusList" >
+                                <div ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">订单编号：</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入编号" name="conditionQuery"
+                               ng-model="formData.orderNumber"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">产品名称/编码：</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="产品名称/编码" name="conditionQuery"
+                               ng-model="formData.searchKey"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">下单时间：</label>
+                    <div class="col-sm-4">
+                        <input date-range-picker options="singleDateSettings" name="dateRange1Start"
+                               max="formData.endDate.startDate"
+                               class="form-control date-picker" type="text" ng-model="formData.startDate"/>
+                    </div>
+                    <label class="pull-left control-label">至</label>
+                    <div class="col-sm-4">
+                        <input date-range-picker options="singleDateSettings" name="dateRange1End"
+                               min="formData.startDate.startDate"
+                               class="form-control date-picker" type="text" ng-model="formData.endDate"/>
+                    </div>
+                </div>
+            </div>
+
+     </div>
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            <button class="btn btn-primary " type="button" ng-click="addOrders()">新建订单</button>
+            <button class="btn btn-primary " type="button" ng-click="exportExcel()" style="margin-right: 15px">导出</button>
+        </div>
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>我的订单</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

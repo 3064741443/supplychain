@@ -1,0 +1,54 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="supplychain_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+       
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">任务名称</label>
+                    <div class="col-lg-8">
+                        <ui-select name="taskCfgId" ng-model="form.taskCfgId" id="taskCfgId" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in taskCfgList" >
+                                <div ng-if="item.text!=0"  ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+			
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">任务状态</label>
+                    <div class="col-lg-8">
+                        <ui-select name="statu" ng-model="form.statu" id="statu" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in taskStatuList" >
+                                <div ng-if="item.text!=0"  ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+		
+        <div class="col-lg-2 pull-right">
+            <div class="form-group">
+                <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>下载任务记录</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

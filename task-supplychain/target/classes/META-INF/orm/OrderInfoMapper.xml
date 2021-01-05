@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.OrderInfoMapper">
+
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.OrderInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="TOTAL" jdbcType="INTEGER" property="total" />
+    <result column="STATUS" jdbcType="CHAR" property="status" />
+    <result column="DEVICE_ID" jdbcType="INTEGER" property="deviceId" />
+    <result column="DEVICE_NAME" jdbcType="VARCHAR" property="deviceName" />
+    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+    <result column="SEND_MERCHANT_NAME" jdbcType="VARCHAR" property="sendMerchantName" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="CONTACTS" jdbcType="VARCHAR" property="contacts" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+    <result column="PACKAGE_TWO" jdbcType="VARCHAR" property="packageTwo" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+  </resultMap>
+
+	<sql id="Base_Column_List">
+		ID,ORDER_CODE,TOTAL,STATUS,DEVICE_ID,DEVICE_NAME,OPERATOR_MERCHANT_NO,BATCH,WAREHOUSE_ID,SEND_MERCHANT_NO,
+		SEND_MERCHANT_NAME,ADDRESS,CONTACTS,MOBILE,CREATED_DATE,CREATED_BY,UPDATED_DATE,UPDATED_BY,DELETED_FLAG,REMARK,
+		PACKAGE_ONE,PACKAGE_TWO,ATTRIB_CODE
+	</sql>
+
+	<select id="getOrderInfoByOrderCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+    	<include refid="Base_Column_List" />
+    	FROM order_info WHERE ORDER_CODE=#{orderCode,jdbcType=VARCHAR}
+	</select>
+
+    <!-- 通过订单编码查询订单信息 -->
+    <select id="getShipmentsQuantityByOrderCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(ID) FROM order_info_detail  where ORDER_CODE = #{_parameter,jdbcType=VARCHAR}
+    </select>
+</mapper>

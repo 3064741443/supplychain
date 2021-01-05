@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.OrderInfoDetailMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.OrderInfoDetail">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+    <result column="IMEI" jdbcType="VARCHAR" property="imei" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+    <result column="WAREHOUSE_ID_UP" jdbcType="INTEGER" property="warehouseIdUp" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="LOGISTICS_ID" jdbcType="INTEGER" property="logisticsId" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_CODE, ICCID, IMEI, ATTRIB_CODE, BATCH, WAREHOUSE_ID, WAREHOUSE_ID_UP, CREATED_BY, LOGISTICS_ID,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+  <!-- 通过订单编码查询订单信息 -->
+  <select id="getShipmentsQuantityByOrderCodeList" resultMap="BaseResultMap" parameterType="java.util.List">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM order_info_detail where ORDER_CODE in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item,jdbcType=VARCHAR}
+    </foreach>
+  </select>
+
+  <select id="listOrderInfoDetail" parameterType="glsx.com.cn.task.model.OrderInfoDetail" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from order_info_detail
+  	where LOGISTICS_ID in
+    <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+        #{item.logisticsId,jdbcType=INTEGER}
+    </foreach>
+  </select>
+  <select id="getOrderInfoDetailByImei" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from order_info_detail
+    where 1=1
+      <if test="imei != null">
+        AND IMEI = #{imei,jdbcType=VARCHAR}
+      </if>
+    GROUP BY CREATED_DATE DESC LIMIT 1
+  </select>
+
+  <select id="getMaxUpdateOrderInfoDetailByOrderCode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from order_info_detail
+    where 1=1
+    <if test="orderCode != null">
+      AND ORDER_CODE = #{orderCode,jdbcType=VARCHAR}
+    </if>
+    GROUP BY UPDATED_DATE DESC LIMIT 1
+  </select>
+
+  <select id="getOrderInfoDetailByOrderCode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List"/>
+    from order_info_detail
+    where 1=1
+    <if test="orderCode != null">
+      AND ORDER_CODE = #{orderCode,jdbcType=VARCHAR}
+    </if>
+    GROUP BY UPDATED_DATE DESC LIMIT 1
+  </select>
+  <select id="pageOrderInfoDetail" parameterType="glsx.com.cn.task.model.OrderInfoDetail" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from order_info_detail
+  	<where>
+  		<if test="orderCode != null">
+  			ORDER_CODE=#{orderCode,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  </select>
+  
+
+  <select id="snList" parameterType="java.lang.String" resultType="java.lang.String">
+    select `ORDER_CODE` from order_info_detail where 1=1
+    <if test="orderCode != null and orderCode!=''">
+      ORDER_CODE=#{orderCode,jdbcType=VARCHAR}
+    </if>
+  </select>
+
+  <insert id="insert" parameterType="glsx.com.cn.task.model.OrderInfoDetail">
+    insert into order_info_detail (ID, ORDER_CODE, ICCID, 
+      IMEI, ATTRIB_CODE, BATCH, 
+      WAREHOUSE_ID, WAREHOUSE_ID_UP, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{iccid,jdbcType=VARCHAR}, 
+      #{imei,jdbcType=VARCHAR}, #{attribCode,jdbcType=VARCHAR}, #{batch,jdbcType=VARCHAR}, 
+      #{warehouseId,jdbcType=INTEGER}, #{warehouseIdUp,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.OrderInfoDetail">
+    insert into order_info_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE,
+      </if>
+      <if test="iccid != null">
+        ICCID,
+      </if>
+      <if test="imei != null">
+        IMEI,
+      </if>
+      <if test="attribCode != null">
+        ATTRIB_CODE,
+      </if>
+      <if test="batch != null">
+        BATCH,
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID,
+      </if>
+      <if test="warehouseIdUp != null">
+        WAREHOUSE_ID_UP,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null">
+        #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseIdUp != null">
+        #{warehouseIdUp,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.OrderInfoDetail">
+    update order_info_detail
+    <set>
+      <if test="orderCode != null">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="iccid != null">
+        ICCID = #{iccid,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        IMEI = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null">
+        ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        BATCH = #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseIdUp != null">
+        WAREHOUSE_ID_UP = #{warehouseIdUp,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.OrderInfoDetail">
+    update order_info_detail
+    set ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      BATCH = #{batch,jdbcType=VARCHAR},
+      WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      WAREHOUSE_ID_UP = #{warehouseIdUp,jdbcType=INTEGER},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

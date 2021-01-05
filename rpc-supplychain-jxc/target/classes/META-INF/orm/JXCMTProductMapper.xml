@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTProductMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTProduct">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="SERVICE_TYPE" jdbcType="TINYINT" property="serviceType" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+    <result column="DEVICE_QUANTITY" jdbcType="INTEGER" property="deviceQuantity" />
+    <result column="SERVICE_TIME" jdbcType="VARCHAR" property="serviceTime" />
+    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+    <result column="HARDWARE_CONTAIN_SOURCE" jdbcType="VARCHAR" property="hardwareContainSource" />
+    <result column="SOURCE_PROPORTION" jdbcType="DOUBLE" property="sourceProportion" />
+    <result column="NOT_SOURCE_PROPORTION" jdbcType="DOUBLE" property="notSourceProportion" />
+    <result column="CAR_TYPE" jdbcType="TINYINT" property="carType" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="SPECIFICATION" jdbcType="VARCHAR" property="specification" />
+    <result column="TYPE" jdbcType="VARCHAR" property="type" />
+    <result column="CHANNEL" jdbcType="TINYINT" property="channel" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="PRODUCT_SPLIT_ID" jdbcType="BIGINT" property="productSplitId" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, SERVICE_TYPE, MERCHANT_CODE, MERCHANT_NAME, ALIAS, DEVICE_QUANTITY, SERVICE_TIME, 
+    PACKAGE_ONE, HARDWARE_CONTAIN_SOURCE, SOURCE_PROPORTION, NOT_SOURCE_PROPORTION, CAR_TYPE, 
+    CODE, NAME, SPECIFICATION, TYPE, CHANNEL, STATUS, PRODUCT_SPLIT_ID, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+</mapper>

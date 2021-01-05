@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.am.StatementSellRzfbMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.StatementSellRzfb">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SETTLE_CUSTOMER_CODE" jdbcType="VARCHAR" property="settleCustomerCode" />
+    <result column="SETTLE_CUSTOMER_NAME" jdbcType="VARCHAR" property="settleCustomerName" />
+    <result column="STATUS" property="status" jdbcType="TINYINT" />
+    <result column="REASONS" property="reasons" jdbcType="VARCHAR" />
+    <result column="SALE_GROUP_CODE" property="saleGroupCode" jdbcType="VARCHAR" />
+    <result column="SALE_GROUP_NAME" property="saleGroupName" jdbcType="VARCHAR" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="ALIPAY_TRANSACTION_NUMBER" jdbcType="VARCHAR" property="alipayTransactionNumber" />
+    <result column="ALIPAY_SERIAL_NUMBER" jdbcType="VARCHAR" property="alipaySerialNumber" />
+    <result column="MERCHANT_ORDER_CODE" jdbcType="VARCHAR" property="merchantOrderCode" />
+    <result column="ACCOUNT_TYPE" jdbcType="VARCHAR" property="accountType" />
+    <result column="INCOME" jdbcType="DOUBLE" property="income" />
+    <result column="EXPENDITURE" jdbcType="DOUBLE" property="expenditure" />
+    <result column="ACCOUNT_BALANCE" jdbcType="DOUBLE" property="accountBalance" />
+    <result column="SERVICE_FEE" jdbcType="DOUBLE" property="serviceFee" />
+    <result column="PAYMENT_CHANNEL" jdbcType="VARCHAR" property="paymentChannel" />
+    <result column="SIGNED_PRODUCTS" jdbcType="VARCHAR" property="signedProducts" />
+    <result column="COUNTER_ACCOUNT" jdbcType="VARCHAR" property="counterAccount" />
+    <result column="COUNTER_NAME" jdbcType="VARCHAR" property="counterName" />
+    <result column="BANK_ORDER_NUMBER" jdbcType="VARCHAR" property="bankOrderNumber" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="RECORDED_DATA" jdbcType="TIMESTAMP" property="recordedData" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SETTLE_CUSTOMER_CODE, SETTLE_CUSTOMER_NAME,STATUS,REASONS,SALE_GROUP_CODE,SALE_GROUP_NAME, WORK_ORDER, ALIPAY_TRANSACTION_NUMBER, 
+    ALIPAY_SERIAL_NUMBER, MERCHANT_ORDER_CODE, ACCOUNT_TYPE, INCOME, EXPENDITURE, ACCOUNT_BALANCE, 
+    SERVICE_FEE, PAYMENT_CHANNEL, SIGNED_PRODUCTS, COUNTER_ACCOUNT, COUNTER_NAME, BANK_ORDER_NUMBER, 
+    PRODUCT_NAME, RECORDED_DATA, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+  
+  <update id="setSuccessStatusByIds" parameterType="java.util.List">
+  	update am_statement_sell_rzfb set `STATUS` = 2 where ID in
+  	<foreach collection="list" item="id" index="index" open=" (" close=")" separator=",">
+  		#{id}
+  	</foreach>
+  </update>
+  
+  <update id="setFailedStatusByIds" parameterType="java.util.List">
+  	update am_statement_sell_rzfb set `STATUS` = 3, `REASONS`='根据商品套餐名称未找到对应的物料' where ID in
+  	<foreach collection="list" item="id" index="index" open=" (" close=")" separator=",">
+  		#{id}
+  	</foreach>
+  </update>
+  
+</mapper>

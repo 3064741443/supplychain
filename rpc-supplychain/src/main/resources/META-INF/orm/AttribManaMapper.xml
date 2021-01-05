@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.AttribManaMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.AttribMana">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="MODEL" jdbcType="INTEGER" property="model" />
+     <result column="MCU_VERSION" jdbcType="VARCHAR" property="mcuVersion" />
+    <result column="BOARD_VERSION" jdbcType="VARCHAR" property="boardVersion" />
+    <result column="CONFIGURE" jdbcType="INTEGER" property="configure" />
+    <result column="SOFT_VERSION" jdbcType="VARCHAR" property="softVersion" />
+    <result column="FASTENER_VERSION" jdbcType="VARCHAR" property="fastenerVersion" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+    <result column="DEV_TYPE_ID" jdbcType="INTEGER" property="devTypeId" />
+    <result column="DEV_MNUM_ID" jdbcType="INTEGER" property="devMnumId" />
+    <result column="OR_NET_ID" jdbcType="INTEGER" property="orNetId" />
+    <result column="CARD_SELF_ID" jdbcType="INTEGER" property="cardSelfId" />
+    <result column="SOURCE_ID" jdbcType="INTEGER" property="sourceId" />
+    <result column="SCREEN_ID" jdbcType="INTEGER" property="screenId" />
+    <result column="OR_OPEN_ID" jdbcType="INTEGER" property="orOpenId" />
+    <result column="verify_iccid" jdbcType="INTEGER" property="verifyIccid" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, ATTRIB_CODE,MSIZE,TYPE,MODEL,CONFIGURE,MCU_VERSION,BOARD_VERSION, SOFT_VERSION,FASTENER_VERSION, CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, DELETED_FLAG,
+    DEV_TYPE_ID,DEV_MNUM_ID,OR_NET_ID,CARD_SELF_ID,SOURCE_ID,SCREEN_ID,OR_OPEN_ID,verify_iccid
+  </sql>
+  
+  <select id="getAttribManaCodeList" parameterType="cn.com.glsx.supplychain.model.AttribMana" resultMap="BaseResultMap">
+  	select ATTRIB_CODE from attrib_mana
+  	<where>
+	  	<if test="attribCode != null and attribCode !=''">
+			AND ATTRIB_CODE LIKE CONCAT('%',#{attribCode},'%')	   
+		</if>
+		<if test="devTypeId != null">
+			AND DEV_TYPE_ID = #{devTypeId,jdbcType=INTEGER}
+		</if>
+  	</where>
+  </select>
+  
+  <select id="guessAttribManaByDevmnumId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from attrib_mana 
+  	where DEV_MNUM_ID = #{devMnumId,jdbcType=INTEGER} limit 1 
+  </select>
+  
+  <!-- 查询设备配置信息列表 -->
+  <select id="listAttribMana" parameterType="cn.com.glsx.supplychain.model.AttribMana" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from attrib_mana f
+    	<where>
+    	 <if test="msize != null">
+		        AND MSIZE = #{msize,jdbcType=INTEGER}
+		   </if>
+		   <if test="model != null">
+		        AND MODEL = #{model,jdbcType=INTEGER}
+		   </if>
+		   <if test="configure != null">
+		        AND CONFIGURE = #{configure,jdbcType=INTEGER}
+		   </if>
+		   <if test="type != null">
+		        AND TYPE = #{type,jdbcType=INTEGER}
+		   </if>
+		   <if test="devTypeId != null and devTypeId != ''">
+		   		AND DEV_TYPE_ID = #{devTypeId,jdbcType=INTEGER}
+		   </if>
+		   <if test="devMnumId != null">
+		   		AND DEV_MNUM_ID = #{devMnumId,jdbcType=INTEGER}
+		   </if>
+		   <if test="orNetId != null">
+		   		AND OR_NET_ID = #{orNetId,jdbcType=INTEGER}
+		   </if>
+		   <if test="cardSelfId != null">
+		   		AND CARD_SELF_ID = #{cardSelfId,jdbcType=INTEGER}
+		   </if>
+		   <if test="sourceId != null">
+		   		AND SOURCE_ID = #{sourceId,jdbcType=INTEGER}
+		   </if>
+		   <if test="screenId != null">
+		   		AND SCREEN_ID = #{screenId,jdbcType=INTEGER}
+		   </if>
+		   <if test="orOpenId != null">
+		   		AND OR_OPEN_ID = #{orOpenId,jdbcType=INTEGER}
+		   </if>
+		   <if test="attribCode != null and attribCode !=''">
+		   		AND ATTRIB_CODE LIKE CONCAT('%',#{attribCode},'%')
+		   </if>
+		   <if test="boardVersion != null and boardVersion !=''">
+		    	AND BOARD_VERSION LIKE CONCAT('%',#{boardVersion},'%')
+		    </if>
+		    <if test="mcuVersion != null and mcuVersion !=''">
+		    	AND MCU_VERSION LIKE CONCAT('%',#{mcuVersion},'%')
+		    </if>
+		    <if test="fastenerVersion != null and fastenerVersion !=''">
+		    	AND FASTENER_VERSION LIKE CONCAT('%',#{fastenerVersion},'%')
+		    </if>
+		    <if test="softVersion != null and softVersion !=''">
+		    	AND SOFT_VERSION LIKE CONCAT('%',#{softVersion},'%')
+		    </if>
+	    </where>
+  </select>
+  
+  
+  <!-- 查询设备配置信息列表 -->
+  <select id="getAttribManaByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from attrib_mana where ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 统计固件列表总记录数 -->
+  <select id="count" parameterType="cn.com.glsx.supplychain.model.AttribMana" resultType="java.lang.Integer">
+    select 
+    	count(*)
+    from attrib_mana
+    <where>
+    		<if test="msize != null">
+		        AND MSIZE = #{msize,jdbcType=INTEGER}
+		   </if>
+		   <if test="model != null">
+		        AND MODEL = #{model,jdbcType=INTEGER}
+		   </if>
+		   <if test="configure != null">
+		        AND CONFIGURE = #{configure,jdbcType=INTEGER}
+		   </if>
+		   <if test="type != null">
+		        AND TYPE = #{type,jdbcType=INTEGER}
+		   </if>
+		   <if test="devTypeId != null">
+		   		AND DEV_TYPE_ID = #{devTypeId,jdbcType=INTEGER}
+		   </if>
+		   <if test="devMnumId != null">
+		   		AND DEV_MNUM_ID = #{devMnumId,jdbcType=INTEGER}
+		   </if>
+		   <if test="orNetId != null">
+		   		AND OR_NET_ID = #{orNetId,jdbcType=INTEGER}
+		   </if>
+		   <if test="cardSelfId != null">
+		   		AND CARD_SELF_ID = #{cardSelfId,jdbcType=INTEGER}
+		   </if>
+		   <if test="sourceId != null">
+		   		AND SOURCE_ID = #{sourceId,jdbcType=INTEGER}
+		   </if>
+		   <if test="screenId != null">
+		   		AND SCREEN_ID = #{screenId,jdbcType=INTEGER}
+		   </if>
+		   <if test="orOpenId != null">
+		   		AND OR_OPEN_ID = #{orOpenId,jdbcType=INTEGER}
+		   </if>
+		   <if test="attribCode != null and attribCode !=''">
+		        AND ATTRIB_CODE LIKE CONCAT('%',#{attribCode},'%')	 
+		   </if>
+		    <if test="boardVersion != null and boardVersion !=''">
+		    	AND BOARD_VERSION LIKE CONCAT('%',#{boardVersion},'%')		     
+		    </if>
+		    <if test="mcuVersion != null and mcuVersion !=''">
+		    	AND MCU_VERSION LIKE CONCAT('%',#{mcuVersion},'%')
+		    </if>
+		    <if test="fastenerVersion != null and fastenerVersion !=''">
+		    	AND FASTENER_VERSION LIKE CONCAT('%',#{fastenerVersion},'%')
+		    </if>
+		    <if test="softVersion != null and softVersion !=''">
+		    	AND SOFT_VERSION LIKE CONCAT('%',#{softVersion},'%')
+		    </if>
+	    </where>
+  </select>
+  
+   <!-- 插入设备配置信息 -->
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.AttribMana">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      	SELECT LAST_INSERT_ID()
+    </selectKey>
+	  insert into attrib_mana (ID,ATTRIB_CODE,MSIZE, TYPE, MODEL, BOARD_VERSION,MCU_VERSION,
+	  SOFT_VERSION, CONFIGURE, FASTENER_VERSION ,CREATED_DATE, CREATED_BY,
+	  UPDATED_DATE, UPDATED_BY, DELETED_FLAG,DEV_TYPE_ID,DEV_MNUM_ID,OR_NET_ID,
+	  CARD_SELF_ID,SOURCE_ID,SCREEN_ID,OR_OPEN_ID)
+	  values (#{id,jdbcType=INTEGER},
+	  #{attribCode,jdbcType=VARCHAR},
+	  #{msize,jdbcType=INTEGER},
+	  #{type,jdbcType=INTEGER},
+	  #{model,jdbcType=INTEGER},
+	  #{boardVersion,jdbcType=VARCHAR},
+	  #{mcuVersion,jdbcType=VARCHAR},
+	  #{softVersion,jdbcType=VARCHAR},
+	  #{configure,jdbcType=INTEGER},
+	  #{fastenerVersion,jdbcType=VARCHAR},
+	  #{createdDate,jdbcType=TIMESTAMP},
+	  #{createdBy,jdbcType=VARCHAR},
+	  #{updatedDate,jdbcType=TIMESTAMP},
+	  #{updatedBy,jdbcType=VARCHAR},
+	  'N',
+	  #{devTypeId,jdbcType=VARCHAR},
+	  #{devMnumId,jdbcType=VARCHAR},
+	  #{orNetId,jdbcType=VARCHAR},
+	  #{cardSelfId,jdbcType=VARCHAR},
+	  #{sourceId,jdbcType=VARCHAR},
+	  #{screenId,jdbcType=VARCHAR},
+	  #{orOpenId,jdbcType=VARCHAR},)
+  </insert>
+
+	<insert id="insertAttribMana" parameterType="cn.com.glsx.supplychain.model.AttribMana">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into attrib_mana
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="attribCode != null" >
+				ATTRIB_CODE,
+			</if>
+			<if test="msize != null" >
+				MSIZE,
+			</if>
+			<if test="type != null" >
+				TYPE,
+			</if>
+			<if test="model != null" >
+				MODEL,
+			</if>
+			<if test="boardVersion != null">
+				BOARD_VERSION,
+			</if>
+			<if test="mcuVersion != null" >
+				MCU_VERSION,
+			</if>
+			<if test="softVersion != null" >
+				SOFT_VERSION,
+			</if>
+			<if test="configure != null" >
+				CONFIGURE,
+			</if>
+			<if test="fastenerVersion != null" >
+				FASTENER_VERSION,
+			</if>
+			<if test="createdBy != null" >
+				CREATED_BY,
+			</if>
+			<if test="createdDate != null" >
+				CREATED_DATE,
+			</if>
+			<if test="updatedBy != null" >
+				UPDATED_BY,
+			</if>
+			<if test="updatedDate != null" >
+				UPDATED_DATE,
+			</if>
+			<if test="deletedFlag != null" >
+				DELETED_FLAG,
+			</if>
+			<if test="devTypeId != null" >
+				DEV_TYPE_ID,
+			</if>
+			<if test="devMnumId != null" >
+				DEV_MNUM_ID,
+			</if>
+			<if test="orNetId != null" >
+				OR_NET_ID,
+			</if>
+			<if test="cardSelfId != null" >
+				CARD_SELF_ID,
+			</if>
+			<if test="sourceId != null" >
+				SOURCE_ID,
+			</if>
+			<if test="screenId != null" >
+				SCREEN_ID,
+			</if>
+			<if test="orOpenId != null" >
+				OR_OPEN_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="attribCode != null" >
+				#{attribCode,jdbcType=VARCHAR},
+			</if>
+			<if test="msize != null" >
+				#{msize,jdbcType=INTEGER},
+			</if>
+			<if test="type != null" >
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="model != null" >
+				#{model,jdbcType=INTEGER},
+			</if>
+			<if test="boardVersion != null">
+				#{boardVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="mcuVersion != null" >
+				#{mcuVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="softVersion != null" >
+				#{softVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="configure != null" >
+				#{configure,jdbcType=INTEGER},
+			</if>
+			<if test="fastenerVersion != null" >
+				#{fastenerVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="createdBy != null" >
+				#{createdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createdDate != null" >
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedBy != null" >
+				#{updatedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null" >
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="devTypeId != null" >
+				#{devTypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="devMnumId != null" >
+				#{devMnumId,jdbcType=VARCHAR},
+			</if>
+			<if test="orNetId != null" >
+				#{orNetId,jdbcType=VARCHAR},
+			</if>
+			<if test="cardSelfId != null" >
+				#{cardSelfId,jdbcType=VARCHAR},
+			</if>
+			<if test="sourceId != null" >
+				#{sourceId,jdbcType=VARCHAR},
+			</if>
+			<if test="screenId != null" >
+				#{screenId,jdbcType=VARCHAR},
+			</if>
+			<if test="orOpenId != null" >
+				#{orOpenId,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+  
+   <!-- 更新配置信息 --> 
+  <update id="update" parameterType="cn.com.glsx.supplychain.model.AttribMana">
+    update attrib_mana
+    <set>
+      <if test="attribCode != null and attribCode !=''">
+        ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="msize != null">
+	   MSIZE = #{msize,jdbcType=INTEGER},
+	 </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="model != null">
+        MODEL = #{model,jdbcType=INTEGER},
+      </if>
+      <if test="boardVersion != null and boardVersion !=''">
+        BOARD_VERSION = #{boardVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="mcuVersion != null and mcuVersion !=''">
+        MCU_VERSION = #{mcuVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="fastenerVersion != null and fastenerVersion !=''">
+        FASTENER_VERSION = #{fastenerVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="softVersion != null and softVersion !=''">
+        SOFT_VERSION = #{softVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="configure != null">
+        CONFIGURE = #{configure,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy !=''">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null and updatedBy !=''">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null and deletedFlag !=''">
+        DELETED_FLAG = #{deletedFlag,jdbcType=CHAR},
+      </if>
+      <if test="devTypeId != null">
+	   	DEV_TYPE_ID = #{devTypeId,jdbcType=INTEGER},
+	  </if>
+	  <if test="devMnumId != null">
+	   	DEV_MNUM_ID = #{devMnumId,jdbcType=INTEGER},
+	  </if>
+	  <if test="orNetId != null">
+	   	OR_NET_ID = #{orNetId,jdbcType=INTEGER},
+	  </if>
+	  <if test="cardSelfId != null">
+	   	CARD_SELF_ID = #{cardSelfId,jdbcType=INTEGER},
+	  </if>
+	  <if test="sourceId != null">
+	   	SOURCE_ID = #{sourceId,jdbcType=INTEGER},
+	  </if>
+	  <if test="screenId != null">
+	   	SCREEN_ID = #{screenId,jdbcType=INTEGER},
+	  </if>
+	  <if test="orOpenId != null">
+	   	OR_OPEN_ID = #{orOpenId,jdbcType=INTEGER},
+	  </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

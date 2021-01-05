@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title th:text="${name}"></title>
+<script th:inline="javascript">
+        var name = [[${name}]];
+        alert('hello:' + name);
+</script>
+</head>
+<body>
+    <span th:text="${name}">hello</span>
+</body>
+</html>

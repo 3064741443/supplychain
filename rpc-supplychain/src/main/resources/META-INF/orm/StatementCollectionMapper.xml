@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementCollectionMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementCollection">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="TINYINT"/>
+        <result column="TIME" property="time" jdbcType="TIMESTAMP"/>
+        <result column="AREA" property="area" jdbcType="VARCHAR"/>
+        <result column="MERCHANT" property="merchant" jdbcType="VARCHAR"/>
+        <result column="SHOP_NAME" property="shopName" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_NAME" property="materialName" jdbcType="VARCHAR"/>
+        <result column="DEVICE_TYPE" property="deviceType" jdbcType="VARCHAR"/>
+        <result column="PRICE" property="price" jdbcType="DOUBLE"/>
+        <result column="PRICE_NUM" property="priceNum" jdbcType="DOUBLE"/>
+        <result column="REBATE" property="rebate" jdbcType="DOUBLE"/>
+        <result column="REBATE_NUM" property="rebateNum" jdbcType="DOUBLE"/>
+        <result column="AFTER_REBATE_NUM" property="afterRebateNum" jdbcType="DOUBLE"/>
+        <result column="AFTER_REBATE_PRICE" property="afterRebatePrice" jdbcType="DOUBLE"/>
+        <result column="SALES_QUANTITY" property="salesQuantity" jdbcType="INTEGER"/>
+        <result column="CUSTOMER_CODE" property="customerCode" jdbcType="VARCHAR"/>
+        <result column="CUSTOMER_NAME" property="customerName" jdbcType="VARCHAR"/>
+        <result column="SALE_GROUP_CODE" property="saleGroupCode" jdbcType="VARCHAR"/>
+        <result column="SALE_GROUP_NAME" property="saleGroupName" jdbcType="VARCHAR"/>
+        <result column="WAREHOUSE_CODE" property="warehouseCode" jdbcType="VARCHAR"/>
+        <result column="WAREHOUSE_NAME" property="warehouseName" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="TINYINT"/>
+        <result column="REASONS" property="reasons" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+        <result column="WORK_ORDER" property="workOrder" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID,PRODUCT_CODE, SERVICE_TYPE ,TIME, AREA, MERCHANT, SHOP_NAME, MATERIAL_CODE, MATERIAL_NAME,
+    DEVICE_TYPE, PRICE, PRICE_NUM, REBATE, REBATE_NUM, AFTER_REBATE_NUM, AFTER_REBATE_PRICE, 
+    SALES_QUANTITY, CUSTOMER_CODE, CUSTOMER_NAME, SALE_GROUP_CODE, SALE_GROUP_NAME, WAREHOUSE_CODE,
+    WAREHOUSE_NAME, STATUS, REASONS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,WORK_ORDER
+  </sql>
+    <sql id="AC_Base_Column_List">
+    ac.ID, ac.PRODUCT_CODE, ac.SERVICE_TYPE, ac.TIME, ac.AREA, ac.MERCHANT, ac.SHOP_NAME, ac.MATERIAL_CODE, ac.MATERIAL_NAME,
+    ac.DEVICE_TYPE, ac.PRICE, ac.PRICE_NUM, ac.REBATE, ac.REBATE_NUM, ac.AFTER_REBATE_NUM, ac.AFTER_REBATE_PRICE,
+    ac.SALES_QUANTITY, ac.CUSTOMER_CODE, ac.CUSTOMER_NAME, ac.SALE_GROUP_CODE, ac.SALE_GROUP_NAME, ac.WAREHOUSE_CODE,
+    ac.WAREHOUSE_NAME, ac.STATUS, ac.REASONS, ac.CREATED_BY, ac.CREATED_DATE, ac.UPDATED_BY, ac.UPDATED_DATE, ac.DELETED_FLAG,ac.WORK_ORDER
+  </sql>
+
+    <select id="listStatementCollection" parameterType="cn.com.glsx.supplychain.model.am.StatementCollection"
+            resultMap="BaseResultMap">
+        select
+        <include refid="AC_Base_Column_List"/>
+        from am_statement_collection ac
+        where ac.DELETED_FLAG = "N"
+        <if test="startDate != null">
+            AND ac.TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND ac.TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="customerCode != null and customerCode != ''">
+            AND (ac.CUSTOMER_CODE LIKE "%"#{customerCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="customerName != null and customerName !=''">
+            or ac.CUSTOMER_NAME LIKE "%"#{customerName,jdbcType=VARCHAR}"%")
+        </if>
+        <if test="saleGroupCode != null and saleGroupCode != ''">
+            AND (ac.SALE_GROUP_CODE LIKE "%"#{saleGroupCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="saleGroupName != null and saleGroupName !=''">
+            or ac.SALE_GROUP_NAME LIKE "%"#{saleGroupName,jdbcType=VARCHAR}"%")
+        </if>
+        <if test="materialCode != null and materialCode != ''">
+            AND ac.MATERIAL_CODE LIKE "%"#{materialCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="workOrder != null and workOrder != ''">
+            AND ac.WORK_ORDER LIKE "%"#{workOrder,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="status != null">
+            AND ac.STATUS = #{status,jdbcType=TINYINT}
+        </if>
+        ORDER BY ac.CREATED_DATE DESC
+    </select>
+
+    <select id="getStatementCollectionByid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from am_statement_collection
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getMaxDate" resultMap="BaseResultMap">
+        select
+        max(TIME),
+        <include refid="Base_Column_List"/>
+        from am_statement_collection where DELETED_FLAG = "N"
+    </select>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.StatementCollection">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into am_statement_collection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE,
+            </if>
+            <if test="time != null">
+                TIME,
+            </if>
+            <if test="area != null">
+                AREA,
+            </if>
+            <if test="merchant != null">
+                MERCHANT,
+            </if>
+            <if test="shopName != null">
+                SHOP_NAME,
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE,
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME,
+            </if>
+            <if test="deviceType != null">
+                DEVICE_TYPE,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="priceNum != null">
+                PRICE_NUM,
+            </if>
+            <if test="rebate != null">
+                REBATE,
+            </if>
+            <if test="rebateNum != null">
+                REBATE_NUM,
+            </if>
+            <if test="afterRebateNum != null">
+                AFTER_REBATE_NUM,
+            </if>
+            <if test="afterRebatePrice != null">
+                AFTER_REBATE_PRICE,
+            </if>
+            <if test="salesQuantity != null">
+                SALES_QUANTITY,
+            </if>
+            <if test="customerCode != null">
+                CUSTOMER_CODE,
+            </if>
+            <if test="customerName != null">
+                CUSTOMER_NAME,
+            </if>
+            <if test="saleGroupCode != null">
+                SALE_GROUP_CODE,
+            </if>
+            <if test="saleGroupName != null">
+                SALE_GROUP_NAME,
+            </if>
+            <if test="warehouseCode != null">
+                WAREHOUSE_CODE,
+            </if>
+            <if test="warehouseName != null">
+                WAREHOUSE_NAME,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="reasons != null">
+                REASONS,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+            <if test="workOrder != null">
+                WORK_ORDER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="merchant != null">
+                #{merchant,jdbcType=VARCHAR},
+            </if>
+            <if test="shopName != null">
+                #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceType != null">
+                #{deviceType,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="priceNum != null">
+                #{priceNum,jdbcType=DOUBLE},
+            </if>
+            <if test="rebate != null">
+                #{rebate,jdbcType=DOUBLE},
+            </if>
+            <if test="rebateNum != null">
+                #{rebateNum,jdbcType=DOUBLE},
+            </if>
+            <if test="afterRebateNum != null">
+                #{afterRebateNum,jdbcType=DOUBLE},
+            </if>
+            <if test="afterRebatePrice != null">
+                #{afterRebatePrice,jdbcType=DOUBLE},
+            </if>
+            <if test="salesQuantity != null">
+                #{salesQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="customerCode != null">
+                #{customerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupCode != null">
+                #{saleGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupName != null">
+                #{saleGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseCode != null">
+                #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseName != null">
+                #{warehouseName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reasons != null">
+                #{reasons,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="workOrder != null">
+                #{workOrder,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="batchAddStatementCollection" parameterType="java.util.List">
+        insert into am_statement_collection(PRODUCT_CODE,SERVICE_TYPE ,TIME, AREA, MERCHANT, SHOP_NAME, MATERIAL_CODE,
+        MATERIAL_NAME,
+        DEVICE_TYPE, PRICE, PRICE_NUM, REBATE, REBATE_NUM, AFTER_REBATE_NUM, AFTER_REBATE_PRICE,
+        SALES_QUANTITY, CUSTOMER_CODE, CUSTOMER_NAME, SALE_GROUP_CODE, SALE_GROUP_NAME, WAREHOUSE_CODE,
+        WAREHOUSE_NAME, STATUS, REASONS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,WORK_ORDER)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.productCode,jdbcType=VARCHAR},
+            #{item.serviceType,jdbcType=TINYINT},
+            #{item.time,jdbcType=TIMESTAMP},
+            #{item.area,jdbcType=VARCHAR},
+            #{item.merchant,jdbcType=VARCHAR},
+            #{item.shopName,jdbcType=VARCHAR},
+            #{item.materialCode,jdbcType=VARCHAR},
+            #{item.materialName,jdbcType=VARCHAR},
+            #{item.deviceType,jdbcType=VARCHAR},
+            #{item.price,jdbcType=DOUBLE},
+            #{item.priceNum,jdbcType=DOUBLE},
+            #{item.rebate,jdbcType=DOUBLE},
+            #{item.rebateNum,jdbcType=DOUBLE},
+            #{item.afterRebateNum,jdbcType=DOUBLE},
+            #{item.afterRebatePrice,jdbcType=DOUBLE},
+            #{item.salesQuantity,jdbcType=INTEGER},
+            #{item.customerCode,jdbcType=VARCHAR},
+            #{item.customerName,jdbcType=VARCHAR},
+            #{item.saleGroupCode,jdbcType=VARCHAR},
+            #{item.saleGroupName,jdbcType=VARCHAR},
+            #{item.warehouseCode,jdbcType=VARCHAR},
+            #{item.warehouseName,jdbcType=VARCHAR},
+            #{item.status,jdbcType=TINYINT},
+            #{item.reasons,jdbcType=VARCHAR},
+            #{item.createdBy,jdbcType=VARCHAR},
+            #{item.createdDate,jdbcType=TIMESTAMP},
+            #{item.updatedBy,jdbcType=VARCHAR},
+            #{item.updatedDate,jdbcType=TIMESTAMP},
+            #{item.deletedFlag,jdbcType=VARCHAR},
+            #{item.workOrder,jdbcType=VARCHAR}
+            )
+        </foreach>
+        on duplicate key update
+        PRODUCT_CODE = values(PRODUCT_CODE),
+        SERVICE_TYPE = values(SERVICE_TYPE),
+        TIME = values(TIME),
+        AREA = values(AREA),
+        MERCHANT = values(MERCHANT),
+        SHOP_NAME = values(SHOP_NAME),
+        MATERIAL_CODE = values(MATERIAL_CODE),
+        MATERIAL_NAME = values(MATERIAL_NAME),
+        DEVICE_TYPE = values(DEVICE_TYPE),
+        PRICE = values(PRICE),
+        PRICE_NUM = values(PRICE_NUM),
+        REBATE = values(REBATE),
+        REBATE_NUM = values(REBATE_NUM),
+        AFTER_REBATE_NUM = values(AFTER_REBATE_NUM),
+        AFTER_REBATE_PRICE = values(AFTER_REBATE_PRICE),
+        SALES_QUANTITY = values(SALES_QUANTITY),
+        CUSTOMER_CODE = values(CUSTOMER_CODE),
+        CUSTOMER_NAME = values(CUSTOMER_NAME),
+        SALE_GROUP_CODE = values(SALE_GROUP_CODE),
+        SALE_GROUP_NAME = values(SALE_GROUP_NAME),
+        WAREHOUSE_CODE = values(WAREHOUSE_CODE),
+        WAREHOUSE_NAME = values(WAREHOUSE_NAME),
+        STATUS = values(STATUS),
+        REASONS = values(REASONS),
+        CREATED_BY = values(CREATED_BY),
+        CREATED_DATE = values(CREATED_DATE),
+        UPDATED_BY = values(UPDATED_BY),
+        UPDATED_DATE = values(UPDATED_DATE),
+        DELETED_FLAG = values(DELETED_FLAG),
+        WORK_ORDER = values(WORK_ORDER)
+    </insert>
+
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.StatementCollection">
+        update am_statement_collection
+        <set>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="time != null">
+                TIME = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="area != null">
+                AREA = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="merchant != null">
+                MERCHANT = #{merchant,jdbcType=VARCHAR},
+            </if>
+            <if test="shopName != null">
+                SHOP_NAME = #{shopName,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceType != null">
+                DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="priceNum != null">
+                PRICE_NUM = #{priceNum,jdbcType=DOUBLE},
+            </if>
+            <if test="rebate != null">
+                REBATE = #{rebate,jdbcType=DOUBLE},
+            </if>
+            <if test="rebateNum != null">
+                REBATE_NUM = #{rebateNum,jdbcType=DOUBLE},
+            </if>
+            <if test="afterRebateNum != null">
+                AFTER_REBATE_NUM = #{afterRebateNum,jdbcType=DOUBLE},
+            </if>
+            <if test="afterRebatePrice != null">
+                AFTER_REBATE_PRICE = #{afterRebatePrice,jdbcType=DOUBLE},
+            </if>
+            <if test="salesQuantity != null">
+                SALES_QUANTITY = #{salesQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="customerCode != null">
+                CUSTOMER_CODE = #{customerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null">
+                CUSTOMER_NAME = #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupCode != null">
+                SALE_GROUP_CODE = #{saleGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupName != null">
+                SALE_GROUP_NAME = #{saleGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseCode != null">
+                WAREHOUSE_CODE = #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseName != null">
+                WAREHOUSE_NAME = #{warehouseName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reasons != null">
+                REASONS = #{reasons,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="workOrder != null">
+                WORK_ORDER = #{workOrder,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="deleteStatementCollectionByDate" parameterType="cn.com.glsx.supplychain.model.am.StatementCollection">
+        update am_statement_collection
+        <set>DELETED_FLAG = "Y",
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where DATE_FORMAT(TIME,'%Y%m') = DATE_FORMAT(#{time,jdbcType=TIMESTAMP},'%Y%m') and CUSTOMER_CODE = #{customerCode,jdbcType=VARCHAR} and SERVICE_TYPE = #{serviceType,jdbcType=TINYINT}
+    </update>
+
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTBsLogisticsMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTBsLogistics">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="CODE" jdbcType="VARCHAR" property="code" />
+    <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="COMPANY" jdbcType="VARCHAR" property="company" />
+    <result column="TYPE" jdbcType="TINYINT" property="type" />
+    <result column="SERVICE_CODE" jdbcType="VARCHAR" property="serviceCode" />
+    <result column="SEND_ID" jdbcType="BIGINT" property="sendId" />
+    <result column="RECEIVE_ID" jdbcType="BIGINT" property="receiveId" />
+    <result column="ACCEPT" jdbcType="VARCHAR" property="accept" />
+    <result column="SHIPMENTS_QUANTITY" jdbcType="INTEGER" property="shipmentsQuantity" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="send_time" jdbcType="VARCHAR" property="sendTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CODE, ORDER_NUMBER, COMPANY, TYPE, SERVICE_CODE, SEND_ID, RECEIVE_ID, ACCEPT, 
+    SHIPMENTS_QUANTITY, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,send_time
+  </sql>
+  <insert id="insertLogistics" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTBsLogistics">
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bs_logistics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="orderNumber != null">
+        ORDER_NUMBER,
+      </if>
+      <if test="company != null">
+        COMPANY,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="serviceCode != null">
+        SERVICE_CODE,
+      </if>
+      <if test="sendId != null">
+        SEND_ID,
+      </if>
+      <if test="receiveId != null">
+        RECEIVE_ID,
+      </if>
+      <if test="accept != null">
+        ACCEPT,
+      </if>
+      <if test="shipmentsQuantity != null">
+        SHIPMENTS_QUANTITY,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="sendTime != null">
+      	send_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null">
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="serviceCode != null">
+        #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendId != null">
+        #{sendId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveId != null">
+        #{receiveId,jdbcType=BIGINT},
+      </if>
+      <if test="accept != null">
+        #{accept,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentsQuantity != null">
+        #{shipmentsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="pageOrderInfoDetail" parameterType="cn.com.glsx.supplychain.jxc.model.JXCMTBsLogistics"
+  									resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTOrderInfoDetailDTO">
+  	select 
+  		ORDER_NUMBER as logisticsNum,
+  		COMPANY as 	logisticsCompany,
+  		send_time as updatedDate,
+  		SHIPMENTS_QUANTITY as sendQulities,
+  		SERVICE_CODE as dispatchOrderCode
+  	from bs_logistics
+  	where SERVICE_CODE = #{serviceCode}	
+  	<if test="type != null">
+  		and `TYPE` = #{type}
+  	</if>	
+  	<if test="deletedFlag != null">
+  		and DELETED_FLAG = #{deletedFlag}
+  	</if>				
+  </select>
+</mapper>

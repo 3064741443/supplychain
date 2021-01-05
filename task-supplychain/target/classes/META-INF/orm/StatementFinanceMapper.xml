@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.am.StatementFinanceMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementFinance" >
+      <id column="ID" property="id" jdbcType="BIGINT" />
+      <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR" />
+      <result column="MATERIAL_CODE_ONE" property="materialCodeOne" jdbcType="VARCHAR" />
+      <result column="MATERIAL_CODE_TWO" property="materialCodeTwo" jdbcType="VARCHAR" />
+      <result column="TIME" property="time" jdbcType="TIMESTAMP" />
+      <result column="WORK_ORDER" property="workOrder" jdbcType="VARCHAR" />
+      <result column="DEVICE_NUMBER_ONE" property="deviceNumberOne" jdbcType="VARCHAR" />
+      <result column="SOURCE_ONE" property="sourceOne" jdbcType="VARCHAR" />
+      <result column="DEVICE_NUMBER_TWO" property="deviceNumberTwo" jdbcType="VARCHAR" />
+      <result column="SOURCE_TWO" property="sourceTwo" jdbcType="VARCHAR" />
+      <result column="DEVICE_TYPE_ONE" property="deviceTypeOne" jdbcType="VARCHAR" />
+      <result column="DEVICE_TYPE_TWO" property="deviceTypeTwo" jdbcType="VARCHAR" />
+      <result column="DEVICE_QUANTITY" property="deviceQuantity" jdbcType="INTEGER" />
+      <result column="GPS_TYPE" property="gpsType" jdbcType="VARCHAR" />
+      <result column="SERVICE_TIME" property="serviceTime" jdbcType="VARCHAR" />
+      <result column="SUM" property="sum" jdbcType="DOUBLE" />
+      <result column="SALE_GROUP_CODE" property="saleGroupCode" jdbcType="VARCHAR" />
+      <result column="SALE_GROUP_NAME" property="saleGroupName" jdbcType="VARCHAR" />
+      <result column="CUSTOMER_CODE" property="customerCode" jdbcType="VARCHAR" />
+      <result column="CUSTOMER_NAME" property="customerName" jdbcType="VARCHAR" />
+      <result column="WAREHOUSE_CODE" property="warehouseCode" jdbcType="VARCHAR" />
+      <result column="WAREHOUSE_NAME" property="warehouseName" jdbcType="VARCHAR" />
+      <result column="STATUS" property="status" jdbcType="TINYINT" />
+      <result column="REASONS" property="reasons" jdbcType="VARCHAR" />
+      <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+      <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+      <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+      <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+      <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+      <result column="HARDWARE_CUSTOMER_CODE" property="hardwareCustomerCode" jdbcType="VARCHAR"/>
+      <result column="HARDWARE_CUSTOMER_NAME" property="hardwareCustomerName" jdbcType="VARCHAR"/>
+      <result column="SERVICE_CUSTOMER_CODE" property="serviceCustomerCode" jdbcType="VARCHAR"/>
+      <result column="SERVICE_CUSTOMER_NAME" property="serviceCustomerName" jdbcType="VARCHAR"/>
+      <result column="IS_SURE" property="isSure" jdbcType="VARCHAR"/>
+      <result column="SURE_TIME" property="sureTime" jdbcType="VARCHAR"/>
+      <result column="SETTLE_BY_STAGES" property="settleByStages" jdbcType="VARCHAR"/>
+      <result column="WORK_TYPE" property="workType" jdbcType="VARCHAR"/> 
+      <result column="SETTLE_INSTALL" property="settleInstall" jdbcType="VARCHAR"/> 
+      <result column="CONTRACT_DATE" property="contractDate" jdbcType="TIMESTAMP"/>
+      <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR"/> 
+  </resultMap>
+    <sql id="Base_Column_List" >
+    ID, PRODUCT_CODE,  MATERIAL_CODE_ONE, MATERIAL_CODE_TWO, TIME, WORK_ORDER, DEVICE_NUMBER_ONE, SOURCE_ONE, DEVICE_NUMBER_TWO, SOURCE_TWO,
+    DEVICE_TYPE_ONE, DEVICE_TYPE_TWO, DEVICE_QUANTITY, GPS_TYPE, SERVICE_TIME, SUM, SALE_GROUP_CODE,
+    SALE_GROUP_NAME, CUSTOMER_CODE, CUSTOMER_NAME, WAREHOUSE_CODE, WAREHOUSE_NAME, STATUS,REASONS,CREATED_BY,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,HARDWARE_CUSTOMER_CODE,HARDWARE_CUSTOMER_NAME,SERVICE_CUSTOMER_CODE,SERVICE_CUSTOMER_NAME,IS_SURE,SURE_TIME,SETTLE_BY_STAGES,
+    WORK_TYPE,SETTLE_INSTALL,CONTRACT_DATE,MATERIAL_CODE
+  </sql>
+
+    <sql id="AF_Base_Column_List" >
+    af.ID,af.PRODUCT_CODE,  af.MATERIAL_CODE_ONE, af.MATERIAL_CODE_TWO, af.TIME, af.WORK_ORDER, af.DEVICE_NUMBER_ONE, af.SOURCE_ONE, af.DEVICE_NUMBER_TWO, af.SOURCE_TWO,
+    af.DEVICE_TYPE_ONE, af.DEVICE_TYPE_TWO, af.DEVICE_QUANTITY, af.GPS_TYPE, af.SERVICE_TIME, af.SUM, af.SALE_GROUP_CODE,
+    af.SALE_GROUP_NAME, af.CUSTOMER_CODE, af.CUSTOMER_NAME, af.WAREHOUSE_CODE, af.WAREHOUSE_NAME, af.STATUS,af.REASONS,
+    af.CREATED_BY, af.CREATED_DATE, af.UPDATED_BY, af.UPDATED_DATE, af.DELETED_FLAG,af.HARDWARE_CUSTOMER_CODE,af.HARDWARE_CUSTOMER_NAME,af.SERVICE_CUSTOMER_CODE,af.SERVICE_CUSTOMER_NAME,af.IS_SURE,af.SURE_TIME,
+    af.SETTLE_BY_STAGES,af.WORK_TYPE,af.SETTLE_INSTALL,af.CONTRACT_DATE,af.MATERIAL_CODE
+  </sql>
+
+  <select id="listStatementFinance" parameterType="cn.com.glsx.supplychain.model.am.StatementFinance" resultMap="BaseResultMap">
+    select
+    <include refid="AF_Base_Column_List"/>
+    from am_statement_finance af
+    where af.DELETED_FLAG = "N"
+    <if test="id != null">
+      AND af.ID &gt; #{id,jdbcType=BIGINT}
+    </if>
+    <if test="startDate != null">
+      AND af.TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endDate != null">
+      AND af.TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="customerCode != null and customerCode != ''">
+      AND (af.CUSTOMER_CODE LIKE "%"#{customerCode,jdbcType=VARCHAR}"%"
+    </if>
+    <if test="customerName != null and customerName !=''">
+      or af.CUSTOMER_NAME LIKE "%"#{customerName,jdbcType=VARCHAR}"%")
+    </if>
+    <if test="status != null">
+      AND af.STATUS = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="workType != null">
+      AND af.WORK_TYPE = #{workType,jdbcType=TINYINT}
+    </if>
+    ORDER BY af.ID ASC
+  </select>
+  
+  <insert id="batchInsertOnDuplicate" parameterType="java.util.List">
+  	insert into am_statement_finance(ID, PRODUCT_CODE,  MATERIAL_CODE_ONE, MATERIAL_CODE_TWO, TIME, WORK_ORDER, DEVICE_NUMBER_ONE, SOURCE_ONE, DEVICE_NUMBER_TWO, SOURCE_TWO,
+    DEVICE_TYPE_ONE, DEVICE_TYPE_TWO, DEVICE_QUANTITY, GPS_TYPE, SERVICE_TIME, SUM, SALE_GROUP_CODE,
+    SALE_GROUP_NAME, CUSTOMER_CODE, CUSTOMER_NAME, WAREHOUSE_CODE, WAREHOUSE_NAME, STATUS,REASONS,CREATED_BY,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,HARDWARE_CUSTOMER_CODE,HARDWARE_CUSTOMER_NAME,SERVICE_CUSTOMER_CODE,SERVICE_CUSTOMER_NAME,IS_SURE,SURE_TIME,SETTLE_BY_STAGES,
+    WORK_TYPE,SETTLE_INSTALL,CONTRACT_DATE,MATERIAL_CODE)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+    (#{item.id},
+    #{item.productCode},
+    #{item.materialCodeOne},
+    #{item.materialCodeTwo},
+    #{item.time},
+    #{item.workOrder},
+    #{item.deviceNumberOne},
+    #{item.sourceOne},
+    #{item.deviceNumberTwo},
+    #{item.sourceTwo},
+    #{item.deviceTypeOne},
+    #{item.deviceTypeTwo},
+    #{item.deviceQuantity},
+    #{item.gpsType},
+    #{item.serviceTime},
+    #{item.sum},
+    #{item.saleGroupCode},
+    #{item.saleGroupName},
+    #{item.customerCode},
+    #{item.customerName},
+    #{item.warehouseCode},
+    #{item.warehouseName},
+    #{item.status},
+    #{item.reasons},
+    #{item.createdBy},
+    #{item.createdDate},
+    #{item.updatedBy},
+    #{item.updatedDate},
+    #{item.deletedFlag},
+    #{item.hardwareCustomerCode},
+    #{item.hardwareCustomerName},
+    #{item.serviceCustomerCode},
+    #{item.serviceCustomerName},
+    #{item.isSure},
+    #{item.sureTime},
+    #{item.settleByStages},
+    #{item.workType,jdbcType=VARCHAR},
+    #{item.settleInstall,jdbcType=VARCHAR},
+    #{item.contractDate,jdbcType=TIMESTAMP},
+    #{item.materialCode,jdbcType=VARCHAR}
+    )
+    </foreach>
+    on duplicate key update
+    PRODUCT_CODE = values(PRODUCT_CODE),  
+    MATERIAL_CODE_ONE = values(MATERIAL_CODE_ONE), 
+    MATERIAL_CODE_TWO = values(MATERIAL_CODE_TWO), 
+    TIME = values(TIME), 
+    WORK_ORDER = values(WORK_ORDER), 
+    DEVICE_NUMBER_ONE = values(DEVICE_NUMBER_ONE), 
+    SOURCE_ONE = values(SOURCE_ONE), 
+    DEVICE_NUMBER_TWO = values(DEVICE_NUMBER_TWO), 
+    SOURCE_TWO = values(SOURCE_TWO),
+    DEVICE_TYPE_ONE = values(DEVICE_TYPE_ONE), 
+    DEVICE_TYPE_TWO = values(DEVICE_TYPE_TWO), 
+    DEVICE_QUANTITY = values(DEVICE_QUANTITY), 
+    GPS_TYPE = values(GPS_TYPE), 
+    SERVICE_TIME = values(SERVICE_TIME), 
+    SUM = values(SUM), 
+    SALE_GROUP_CODE = values(SALE_GROUP_CODE),
+    SALE_GROUP_NAME = values(SALE_GROUP_NAME), 
+    CUSTOMER_CODE = values(CUSTOMER_CODE), 
+    CUSTOMER_NAME = values(CUSTOMER_NAME), 
+    WAREHOUSE_CODE = values(WAREHOUSE_CODE), 
+    WAREHOUSE_NAME = values(WAREHOUSE_NAME), 
+    STATUS = values(STATUS),
+    REASONS = values(REASONS),
+    CREATED_BY = values(CREATED_BY),
+    CREATED_DATE = values(CREATED_DATE), 
+    UPDATED_BY = values(UPDATED_BY), 
+    UPDATED_DATE = values(UPDATED_DATE), 
+    DELETED_FLAG = values(DELETED_FLAG),
+    HARDWARE_CUSTOMER_CODE = values(HARDWARE_CUSTOMER_CODE),
+    HARDWARE_CUSTOMER_NAME = values(HARDWARE_CUSTOMER_NAME),
+    SERVICE_CUSTOMER_CODE = values(SERVICE_CUSTOMER_CODE),
+    SERVICE_CUSTOMER_NAME = values(SERVICE_CUSTOMER_NAME),
+    IS_SURE = values(IS_SURE),
+    SURE_TIME = values(SURE_TIME),
+    SETTLE_BY_STAGES = values(SETTLE_BY_STAGES),
+    WORK_TYPE = values(WORK_TYPE),
+    SETTLE_INSTALL = values(SETTLE_INSTALL),
+    CONTRACT_DATE = values(CONTRACT_DATE),
+    MATERIAL_CODE = values(MATERIAL_CODE)
+  </insert>
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.StatementFinance" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into am_statement_finance
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="productCode != null" >
+                PRODUCT_CODE,
+            </if>
+            <if test="materialCodeOne != null" >
+                MATERIAL_CODE_ONE,
+            </if>
+            <if test="materialCodeTwo != null" >
+                MATERIAL_CODE_TWO,
+            </if>
+            <if test="time != null" >
+                TIME,
+            </if>
+            <if test="workOrder != null" >
+                WORK_ORDER,
+            </if>
+            <if test="deviceNumberOne != null" >
+                DEVICE_NUMBER_ONE,
+            </if>
+            <if test="sourceOne != null" >
+                SOURCE_ONE,
+            </if>
+            <if test="deviceNumberTwo != null" >
+                DEVICE_NUMBER_TWO,
+            </if>
+            <if test="sourceTwo != null" >
+                SOURCE_TWO,
+            </if>
+            <if test="deviceTypeOne != null" >
+                DEVICE_TYPE_ONE,
+            </if>
+            <if test="deviceTypeTwo != null" >
+                DEVICE_TYPE_TWO,
+            </if>
+            <if test="deviceQuantity != null" >
+                DEVICE_QUANTITY,
+            </if>
+            <if test="gpsType != null" >
+                GPS_TYPE,
+            </if>
+            <if test="serviceTime != null" >
+                SERVICE_TIME,
+            </if>
+            <if test="sum != null" >
+                SUM,
+            </if>
+            <if test="saleGroupCode != null" >
+                SALE_GROUP_CODE,
+            </if>
+            <if test="saleGroupName != null" >
+                SALE_GROUP_NAME,
+            </if>
+            <if test="customerCode != null" >
+                CUSTOMER_CODE,
+            </if>
+            <if test="customerName != null" >
+                CUSTOMER_NAME,
+            </if>
+            <if test="warehouseCode != null" >
+                WAREHOUSE_CODE,
+            </if>
+            <if test="warehouseName != null" >
+                WAREHOUSE_NAME,
+            </if>
+            <if test="status != null" >
+                STATUS,
+            </if>
+            <if test="reasons != null" >
+                REASONS,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+            <if test="hardwareCustomerCode != null">
+            	HARDWARE_CUSTOMER_CODE,
+            </if>
+            <if test="hardwareCustomerName != null">
+            	HARDWARE_CUSTOMER_NAME,
+            </if>
+            <if test="serviceCustomerCode != null">
+            	SERVICE_CUSTOMER_CODE,
+            </if>
+            <if test="serviceCustomerName != null">
+            	SERVICE_CUSTOMER_NAME,
+            </if>
+            <if test="isSure != null">
+            	IS_SURE,
+            </if>
+            <if test="sureTime != null">
+            	SURE_TIME,
+            </if>
+            <if test="settleByStages != null">
+            	SETTLE_BY_STAGES,
+            </if>
+            <if test="workType != null">
+            	WORK_TYPE,
+        	</if>
+        	<if test="settleInstall != null">
+            	SETTLE_INSTALL,
+        	</if>
+        	<if test="contractDate != null">
+            	CONTRACT_DATE,
+        	</if>
+        	<if test="materialCode != null">
+            	MATERIAL_CODE,
+        	</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="productCode != null" >
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCodeOne != null" >
+                #{materialCodeOne,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCodeTwo != null" >
+                #{materialCodeTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workOrder != null" >
+                #{workOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceNumberOne != null" >
+                #{deviceNumberOne,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceOne != null" >
+                #{sourceOne,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceNumberTwo != null" >
+                #{deviceNumberTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceTwo != null" >
+                #{sourceTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceTypeOne != null" >
+                #{deviceTypeOne,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceTypeTwo != null" >
+                #{deviceTypeTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceQuantity != null" >
+                #{deviceQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="gpsType != null" >
+                #{gpsType,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceTime != null" >
+                #{serviceTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sum != null" >
+                #{sum,jdbcType=DOUBLE},
+            </if>
+            <if test="saleGroupCode != null" >
+                #{saleGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupName != null" >
+                #{saleGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerCode != null" >
+                #{customerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null" >
+                #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseCode != null" >
+                #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseName != null" >
+                #{warehouseName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reasons != null" >
+                #{reasons,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null" >
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null" >
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null" >
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null" >
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null" >
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="hardwareCustomerCode != null">
+            	#{hardwareCustomerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="hardwareCustomerName != null">
+            	#{hardwareCustomerName,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceCustomerCode != null">
+            	#{serviceCustomerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceCustomerName != null">
+            	#{serviceCustomerName,jdbcType=VARCHAR},
+            </if>
+            <if test="isSure != null">
+            	#{isSure,jdbcType=VARCHAR},
+            </if>
+            <if test="sureTime != null">
+            	#{sureTime,jdbcType=VARCHAR},
+            </if>
+            <if test="settleByStages != null">
+            	#{settleByStages,jdbcType=VARCHAR},
+            </if>
+            <if test="workType != null">
+            	#{workType,jdbcType=VARCHAR},
+        	</if>
+        	<if test="settleInstall != null">
+            	#{settleInstall,jdbcType=VARCHAR},
+        	</if>
+        	<if test="contractDate != null">
+            	#{contractDate,jdbcType=TIMESTAMP},
+        	</if>
+        	<if test="materialCode != null">
+            	#{materialCode,jdbcType=VARCHAR},
+        	</if>
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.StatementFinance" >
+        update am_statement_finance
+        <set >
+            <if test="productCode != null" >
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCodeOne != null" >
+                MATERIAL_CODE_ONE = #{materialCodeOne,jdbcType=VARCHAR},
+            </if>
+            <if test="materialCodeTwo != null" >
+                MATERIAL_CODE_TWO = #{materialCodeTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null" >
+                TIME = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="workOrder != null" >
+                WORK_ORDER = #{workOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceNumberOne != null" >
+                DEVICE_NUMBER_ONE = #{deviceNumberOne,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceOne != null" >
+                SOURCE_ONE = #{sourceOne,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceNumberTwo != null" >
+                DEVICE_NUMBER_TWO = #{deviceNumberTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="sourceTwo != null" >
+                SOURCE_TWO = #{sourceTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceTypeOne != null" >
+                DEVICE_TYPE_ONE = #{deviceTypeOne,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceTypeTwo != null" >
+                DEVICE_TYPE_TWO = #{deviceTypeTwo,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceQuantity != null" >
+                DEVICE_QUANTITY = #{deviceQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="gpsType != null" >
+                GPS_TYPE = #{gpsType,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceTime != null" >
+                SERVICE_TIME = #{serviceTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sum != null" >
+                SUM = #{sum,jdbcType=DOUBLE},
+            </if>
+            <if test="saleGroupCode != null" >
+                SALE_GROUP_CODE = #{saleGroupCode,jdbcType=VARCHAR},
+            </if>
+            <if test="saleGroupName != null" >
+                SALE_GROUP_NAME = #{saleGroupName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerCode != null" >
+                CUSTOMER_CODE = #{customerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="customerName != null" >
+                CUSTOMER_NAME = #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseCode != null" >
+                WAREHOUSE_CODE = #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseName != null" >
+                WAREHOUSE_NAME = #{warehouseName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                STATUS = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="reasons != null" >
+                REASONS = #{reasons,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="hardwareCustomerCode != null">
+                HARDWARE_CUSTOMER_CODE = #{hardwareCustomerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="hardwareCustomerName != null">
+                HARDWARE_CUSTOMER_NAME = #{hardwareCustomerName,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceCustomerCode != null">
+                SERVICE_CUSTOMER_CODE = #{serviceCustomerCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceCustomerName != null">
+                SERVICE_CUSTOMER_NAME = #{serviceCustomerName,jdbcType=VARCHAR},
+            </if>
+            <if test="isSure != null">
+            	IS_SURE = #{isSure,jdbcType=VARCHAR},
+            </if>
+            <if test="sureTime != null">
+            	SURE_TIME = #{sureTime,jdbcType=VARCHAR},
+            </if>
+            <if test="settleByStages != null">
+            	SETTLE_BY_STAGES = #{settleByStages,jdbcType=VARCHAR},
+            </if>
+            <if test="workType != null">
+                WORK_TYPE = #{workType,jdbcType=VARCHAR},
+            </if>
+            <if test="settleInstall != null">
+                SETTLE_INSTALL = #{settleInstall,jdbcType=VARCHAR},
+            </if>
+            <if test="contractDate != null">
+                CONTRACT_DATE = #{contractDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.LogisticsMapper" >
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.Logistics" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="COMPANY" property="company" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="TINYINT" />
+    <result column="SERVICE_CODE" property="serviceCode" jdbcType="VARCHAR" />
+    <result column="SEND_ID" property="sendID" jdbcType="BIGINT" />
+    <result column="RECEIVE_ID" property="receiveId" jdbcType="BIGINT" />
+    <result column="ACCEPT" property="accept" jdbcType="VARCHAR" />
+    <result column="SHIPMENTS_QUANTITY" property="shipmentsQuantity" jdbcType="INTEGER"/>
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CODE, ORDER_NUMBER, COMPANY, TYPE, SERVICE_CODE, SEND_ID, RECEIVE_ID, CREATED_BY,ACCEPT,SHIPMENTS_QUANTITY,
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,send_time
+  </sql>
+
+  <update id="updateById" parameterType="glsx.com.cn.task.model.Logistics" >
+    update bs_logistics
+    <set >
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        COMPANY = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="serviceCode != null" >
+        SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendId != null" >
+        SEND_ID = #{sendId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveId != null" >
+        RECEIVE_ID = #{receiveId,jdbcType=BIGINT},
+      </if>
+      <if test="accept != null" >
+        ACCEPT = #{accept,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentsQuantity != null" >
+        SHIPMENTS_QUANTITY = #{shipmentsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <update id="updateByServiceCodeAndType" parameterType="glsx.com.cn.task.model.Logistics" >
+    update bs_logistics
+    <set >
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNumber != null" >
+        ORDER_NUMBER = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        COMPANY = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="serviceCode != null" >
+        SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendId != null" >
+        SEND_ID = #{sendId,jdbcType=BIGINT},
+      </if>
+      <if test="receiveId != null" >
+        RECEIVE_ID = #{receiveId,jdbcType=BIGINT},
+      </if>
+      <if test="accept != null" >
+        ACCEPT = #{accept,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentsQuantity != null" >
+        SHIPMENTS_QUANTITY = #{shipmentsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR}
+    and  TYPE = #{type,jdbcType=TINYINT}
+  </update>
+
+  <select id="getLogisticsInfoList" parameterType="java.util.List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from bs_logistics
+    where 1=1
+    <if test="logistics != null ">
+      AND SERVICE_CODE IN
+      <foreach collection="logistics" item="item" open="(" close=")" separator=",">
+        #{item.serviceCode,jdbcType=VARCHAR}
+      </foreach>
+    </if>
+  </select>
+
+  <select id="acceptMerchantOrder" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from bs_logistics
+    where  TYPE IN (4,5)
+    and ACCEPT is null
+    AND DELETED_FLAG = 'N'
+  </select>
+
+  <select id="getMaxUpdateLogisticsByserviceCode" parameterType="glsx.com.cn.task.model.Logistics" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from bs_logistics
+    <where> 1=1
+      <if test="serviceCode != null">
+        and SERVICE_CODE = #{serviceCode,jdbcType=VARCHAR}
+      </if>
+    </where>
+    GROUP BY UPDATED_DATE DESC LIMIT 1
+  </select>
+</mapper>

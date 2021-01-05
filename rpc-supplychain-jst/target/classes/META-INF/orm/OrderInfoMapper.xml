@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.OrderInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="TOTAL" jdbcType="INTEGER" property="total" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="DEVICE_ID" jdbcType="INTEGER" property="deviceId" />
+    <result column="DEVICE_NAME" jdbcType="VARCHAR" property="deviceName" />
+    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+    <result column="PACKAGE_TWO" jdbcType="VARCHAR" property="packageTwo" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+    <result column="SEND_MERCHANT_NAME" jdbcType="VARCHAR" property="sendMerchantName" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="CONTACTS" jdbcType="VARCHAR" property="contacts" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.com.glsx.supplychain.jst.model.OrderInfo">
+    <result column="REMARK" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORDER_CODE, TOTAL, STATUS, DEVICE_ID, DEVICE_NAME, PACKAGE_ONE, PACKAGE_TWO, 
+    ATTRIB_CODE, OPERATOR_MERCHANT_NO, BATCH, WAREHOUSE_ID, SEND_MERCHANT_NO, SEND_MERCHANT_NAME, 
+    ADDRESS, CONTACTS, MOBILE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <sql id="Blob_Column_List">
+    REMARK
+  </sql>
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfo">
+    insert into order_info (ID, ORDER_CODE, TOTAL, 
+      STATUS, DEVICE_ID, DEVICE_NAME, 
+      PACKAGE_ONE, PACKAGE_TWO, ATTRIB_CODE, 
+      OPERATOR_MERCHANT_NO, BATCH, WAREHOUSE_ID, 
+      SEND_MERCHANT_NO, SEND_MERCHANT_NAME, ADDRESS, 
+      CONTACTS, MOBILE, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG, REMARK)
+    values (#{id,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, #{total,jdbcType=INTEGER}, 
+      #{status,jdbcType=VARCHAR}, #{deviceId,jdbcType=INTEGER}, #{deviceName,jdbcType=VARCHAR}, 
+      #{packageOne,jdbcType=VARCHAR}, #{packageTwo,jdbcType=VARCHAR}, #{attribCode,jdbcType=VARCHAR}, 
+      #{operatorMerchantNo,jdbcType=VARCHAR}, #{batch,jdbcType=VARCHAR}, #{warehouseId,jdbcType=INTEGER}, 
+      #{sendMerchantNo,jdbcType=VARCHAR}, #{sendMerchantName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{contacts,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR}, #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfo">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="orderCode != null">
+        ORDER_CODE,
+      </if>
+      <if test="total != null">
+        TOTAL,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="deviceId != null">
+        DEVICE_ID,
+      </if>
+      <if test="deviceName != null">
+        DEVICE_NAME,
+      </if>
+      <if test="packageOne != null">
+        PACKAGE_ONE,
+      </if>
+      <if test="packageTwo != null">
+        PACKAGE_TWO,
+      </if>
+      <if test="attribCode != null">
+        ATTRIB_CODE,
+      </if>
+      <if test="operatorMerchantNo != null">
+        OPERATOR_MERCHANT_NO,
+      </if>
+      <if test="batch != null">
+        BATCH,
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID,
+      </if>
+      <if test="sendMerchantNo != null">
+        SEND_MERCHANT_NO,
+      </if>
+      <if test="sendMerchantName != null">
+        SEND_MERCHANT_NAME,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="contacts != null">
+        CONTACTS,
+      </if>
+      <if test="mobile != null">
+        MOBILE,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null">
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceName != null">
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="packageOne != null">
+        #{packageOne,jdbcType=VARCHAR},
+      </if>
+      <if test="packageTwo != null">
+        #{packageTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null">
+        #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorMerchantNo != null">
+        #{operatorMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="sendMerchantNo != null">
+        #{sendMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMerchantName != null">
+        #{sendMerchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null">
+        #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfo">
+    update order_info
+    <set>
+      <if test="orderCode != null">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null">
+        TOTAL = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        DEVICE_ID = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceName != null">
+        DEVICE_NAME = #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="packageOne != null">
+        PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      </if>
+      <if test="packageTwo != null">
+        PACKAGE_TWO = #{packageTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="attribCode != null">
+        ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorMerchantNo != null">
+        OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null">
+        BATCH = #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="sendMerchantNo != null">
+        SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMerchantName != null">
+        SEND_MERCHANT_NAME = #{sendMerchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null">
+        CONTACTS = #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfo">
+    update order_info
+    set ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      TOTAL = #{total,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      DEVICE_ID = #{deviceId,jdbcType=INTEGER},
+      DEVICE_NAME = #{deviceName,jdbcType=VARCHAR},
+      PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      PACKAGE_TWO = #{packageTwo,jdbcType=VARCHAR},
+      ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      BATCH = #{batch,jdbcType=VARCHAR},
+      WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      SEND_MERCHANT_NAME = #{sendMerchantName,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      CONTACTS = #{contacts,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.jst.model.OrderInfo">
+    update order_info
+    set ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      TOTAL = #{total,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=VARCHAR},
+      DEVICE_ID = #{deviceId,jdbcType=INTEGER},
+      DEVICE_NAME = #{deviceName,jdbcType=VARCHAR},
+      PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      PACKAGE_TWO = #{packageTwo,jdbcType=VARCHAR},
+      ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      BATCH = #{batch,jdbcType=VARCHAR},
+      WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      SEND_MERCHANT_NAME = #{sendMerchantName,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      CONTACTS = #{contacts,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.am.ProductSplitSourceFlagMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.ProductSplitSourceFlag">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="HARDWARE_CONTAIN_SOURCE" jdbcType="VARCHAR" property="hardwareContainSource" />
+    <result column="SOURCE_FLAG" jdbcType="INTEGER" property="sourceFlag" />
+    <result column="SOURCE_PROPORTION" jdbcType="DOUBLE" property="sourceProportion" />
+    <result column="NOT_SOURCE_PROPORTION" jdbcType="DOUBLE" property="notSourceProportion" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, PRODUCT_CODE, HARDWARE_CONTAIN_SOURCE, SOURCE_FLAG, SOURCE_PROPORTION, NOT_SOURCE_PROPORTION, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE
+  </sql>
+  
+</mapper>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.bs.MaintainSnChangeMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.bs.MaintainSnChange">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="MAINTAIN_PRODUCT_DETAIL_ID" property="mainTainProductDetailId" jdbcType="BIGINT"/>
+        <result column="ICCID" property="iccid" jdbcType="VARCHAR"/>
+        <result column="IMEI" property="imei" jdbcType="VARCHAR"/>
+        <result column="SN" property="sn" jdbcType="VARCHAR"/>
+        <result column="REPAIR_COST_TYPE" property="repairCostType" jdbcType="VARCHAR"/>
+        <result column="PRICE" property="price" jdbcType="VARCHAR"/>
+        <result column="SN_CHANGE_FLAG" property="snChangeFlag" jdbcType="TINYINT"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, MAINTAIN_PRODUCT_DETAIL_ID,ICCID,IMEI,SN, REPAIR_COST_TYPE, PRICE,SN_CHANGE_FLAG,
+    CREATED_BY, CREATED_DATE,UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <sql id="MS_Base_Column_List">
+        ms.ID, ms.MAINTAIN_PRODUCT_DETAIL_ID,ms.ICCID,ms.IMEI,ms.SN, ms.REPAIR_COST_TYPE, ms.PRICE,
+        ms.SN_CHANGE_FLAG,ms.CREATED_BY, ms.CREATED_DATE, ms.UPDATED_BY, ms.UPDATED_DATE, ms.DELETED_FLAG
+    </sql>
+
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_maintain_sn_change
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByMainTainDetailId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from bs_maintain_sn_change
+        where MAINTAIN_PRODUCT_DETAIL_ID = #{mainTainProductDetailId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bs_maintain_sn_change
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <select id="getMainTainSnChangeList" resultMap="BaseResultMap">
+        select
+        <include refid="MS_Base_Column_List"/>
+        from bs_maintain_sn_change ms
+        where ms.DELETED_FLAG="N"
+        <if test="mainTainProductDetailId != null">
+            AND ms.MAINTAIN_PRODUCT_DETAIL_ID = #{mainTainProductDetailId,jdbcType=BIGINT},
+        </if>
+        <if test="iccid != null">
+            AND ms.ICCID = #{iccid,jdbcType=VARCHAR},
+        </if>
+        <if test="imei != null">
+            AND ms.IMEI = #{imei,jdbcType=VARCHAR},
+        </if>
+        <if test="sn != null">
+            AND ms.SN = #{sn,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="getMainTainSnChangeListById" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="MS_Base_Column_List"/>
+        from bs_maintain_sn_change ms
+        left join bs_maintain_product_detail mpd on ms.MAINTAIN_PRODUCT_DETAIL_ID = mpd.ID
+        where ms.MAINTAIN_PRODUCT_DETAIL_ID
+        <foreach collection="ids" item="item" index="index" open="in (" close=")" separator=",">
+            #{item}
+        </foreach>
+        and mpd.DISPATCH_FLAG = "N"
+    </select>
+
+    <insert id="insertList" parameterType="cn.com.glsx.supplychain.model.bs.MaintainSnChange">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_maintain_sn_change (MAINTAIN_PRODUCT_DETAIL_ID,ICCID,IMEI,SN, REPAIR_COST_TYPE, PRICE,
+        SN_CHANGE_FLAG,CREATED_BY, CREATED_DATE,UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.mainTainProductDetailId,jdbcType=BIGINT},
+            #{item.iccid,jdbcType=VARCHAR},#{item.imei,jdbcType=VARCHAR},#{item.sn,jdbcType=VARCHAR},
+            #{item.repairCostType,jdbcType=VARCHAR},#{item.price,jdbcType=VARCHAR},#{item.snChangeFlag,jdbcType=TINYINT},
+            #{item.createdBy,jdbcType=VARCHAR},#{item.createdDate,jdbcType=TIMESTAMP},
+            #{item.updatedBy,jdbcType=VARCHAR}, #{item.updatedDate,jdbcType=TIMESTAMP},
+            #{item.deletedFlag,jdbcType=VARCHAR})
+        </foreach>
+        on duplicate key update
+        MAINTAIN_PRODUCT_DETAIL_ID = values(AFTER_SALE_ORDER_NUMBER),
+        ICCID = values(ICCID),
+        IMEI = values(IMEI),
+        SN = values(SN),
+        REPAIR_COST_TYPE = values(REPAIR_COST_TYPE),
+        PRICE = values(PRICE),
+        SN_CHANGE_FLAG = values(SN_CHANGE_FLAG),
+        CREATED_BY = values(CREATED_BY),
+        CREATED_DATE = values(CREATED_DATE),
+        UPDATED_BY = values(UPDATED_BY),
+        UPDATED_DATE = values(UPDATED_DATE),
+        DELETED_FLAG = values(DELETED_FLAG)
+    </insert>
+
+    <insert id="insertSelective" parameterType="cn.com.glsx.supplychain.model.bs.MaintainSnChange">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into bs_maintain_sn_change
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mainTainProductDetailId != null">
+                MAINTAIN_PRODUCT_DETAIL_ID,
+            </if>
+            <if test="iccid != null">
+                ICCID,
+            </if>
+            <if test="imei != null">
+                IMEI,
+            </if>
+            <if test="sn != null">
+                SN,
+            </if>
+            <if test="repairCostType != null">
+                REPAIR_COST_TYPE,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="snChangeFlag != null">
+                SN_CHANGE_FLAG,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mainTainProductDetailId != null">
+                #{mainTainProductDetailId,jdbcType=BIGINT},
+            </if>
+            <if test="iccid != null">
+                #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imei != null">
+                #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="repairCostType != null">
+                #{repairCostType,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="snChangeFlag != null">
+                #{snChangeFlag,jdbcType=TINYINT},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.com.glsx.supplychain.model.bs.MaintainSnChange">
+        update bs_maintain_sn_change
+        <set>
+            <if test="mainTainProductDetailId != null">
+                MAINTAIN_PRODUCT_DETAIL_ID = #{mainTainProductDetailId,jdbcType=BIGINT},
+            </if>
+            <if test="iccid != null">
+                ICCID = #{iccid,jdbcType=VARCHAR},
+            </if>
+            <if test="imei != null">
+                IMEI = #{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="sn != null">
+                SN = #{sn,jdbcType=VARCHAR},
+            </if>
+            <if test="repairCostType != null">
+                REPAIR_COST_TYPE = #{repairCostType,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="snChangeFlag != null">
+                SN_CHANGE_FLAG = #{snChangeFlag,jdbcType=TINYINT},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="cn.com.glsx.supplychain.model.bs.MaintainSnChange">
+    update bs_maintain_sn_change
+    set MAINTAIN_PRODUCT_DETAIL_ID = #{mainTainProductDetailId,jdbcType=BIGINT},
+      ICCID = #{iccid,jdbcType=VARCHAR},
+      IMEI = #{imei,jdbcType=VARCHAR},
+      SN = #{sn,jdbcType=VARCHAR},
+      REPAIR_COST_TYPE = #{repairCostType,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=VARCHAR},
+      SN_CHANGE_FLAG = #{snChangeFlag,jdbcType=TINYINT},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.OrderInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ORDER_CODE" jdbcType="VARCHAR" property="orderCode" />
+    <result column="TOTAL" jdbcType="INTEGER" property="total" />
+    <result column="STATUS" jdbcType="CHAR" property="status" />
+    <result column="DEVICE_ID" jdbcType="INTEGER" property="deviceId" />
+    <result column="DEVICE_NAME" jdbcType="VARCHAR" property="deviceName" />
+    <result column="OPERATOR_MERCHANT_NO" jdbcType="VARCHAR" property="operatorMerchantNo" />
+    <result column="BATCH" jdbcType="VARCHAR" property="batch" />
+    <result column="WAREHOUSE_ID" jdbcType="INTEGER" property="warehouseId" />
+    <result column="alreadyShipped" jdbcType="INTEGER" property="alreadyShipped" />
+    <result column="SEND_MERCHANT_NO" jdbcType="VARCHAR" property="sendMerchantNo" />
+    <result column="SEND_MERCHANT_NAME" jdbcType="VARCHAR" property="sendMerchantName" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="CONTACTS" jdbcType="VARCHAR" property="contacts" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="PACKAGE_ONE" jdbcType="VARCHAR" property="packageOne" />
+    <result column="PACKAGE_TWO" jdbcType="VARCHAR" property="packageTwo" />
+    <result column="ATTRIB_CODE" jdbcType="VARCHAR" property="attribCode" />
+    <result column="attribManaId" jdbcType="INTEGER" property="attribManaId" />
+  	<result column="merchantOrderCode" jdbcType="VARCHAR" property="merchantOrderCode" />
+  	<result column="send_quanlity" jdbcType="INTEGER" property="sendQuanlity" />
+  	
+  	
+  	<association property="attribMana" resultMap="AttribManaMap"/> 
+    <association property="wareHouseInfo" resultMap="WareHouseInfoMap"/> 
+  </resultMap>
+  
+  <resultMap id="WareHouseInfoMap" type="cn.com.glsx.supplychain.model.WareHouseInfo">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="AttribManaMap" type="cn.com.glsx.supplychain.model.AttribMana">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="ATTRIB_CODE" property="attribCode" jdbcType="VARCHAR" />
+		<result column="TYPE" property="type" jdbcType="INTEGER" />
+		<result column="DEV_TYPE_ID" property="devTypeId" jdbcType="INTEGER" />
+		<result column="MODEL" property="model" jdbcType="INTEGER" />
+	  	<result column="MSIZE" jdbcType="INTEGER" property="msize" />
+		<result column="CONFIGURE" property="configure" jdbcType="INTEGER" />
+		<result column="BOARD_VERSION" property="boardVersion" jdbcType="VARCHAR" />
+		<result column="SOFT_VERSION" property="softVersion" jdbcType="VARCHAR" />
+		<result column="FASTENER_VERSION" property="fastenerVersion" jdbcType="VARCHAR" />
+	  	<result column="DEV_TYPE_ID" jdbcType="INTEGER" property="devTypeId" />
+	  	<result column="DEV_MNUM_ID" jdbcType="INTEGER" property="devMnumId" />
+	  	<result column="OR_NET_ID" jdbcType="INTEGER" property="orNetId" />
+	  	<result column="CARD_SELF_ID" jdbcType="INTEGER" property="cardSelfId" />
+	  	<result column="SOURCE_ID" jdbcType="INTEGER" property="sourceId" />
+	  	<result column="SCREEN_ID" jdbcType="INTEGER" property="screenId" />
+	  	<result column="OR_OPEN_ID" jdbcType="INTEGER" property="orOpenId" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List">
+    ID, ORDER_CODE, TOTAL, STATUS, concat(DEVICE_ID,'/',DEVICE_NAME) AS DEVICE_NAME,
+    OPERATOR_MERCHANT_NO, BATCH, WAREHOUSE_ID, SEND_MERCHANT_NO, SEND_MERCHANT_NAME, ADDRESS, 
+    CONTACTS, MOBILE, CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, DELETED_FLAG,REMARK,PACKAGE_ONE,PACKAGE_TWO,ATTRIB_CODE
+  </sql>
+  
+  <sql id="Base_Column">
+    ID, ORDER_CODE, TOTAL, STATUS, DEVICE_ID, DEVICE_NAME,  
+    OPERATOR_MERCHANT_NO, BATCH, WAREHOUSE_ID, SEND_MERCHANT_NO, SEND_MERCHANT_NAME, ADDRESS, 
+    CONTACTS, MOBILE, CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, DELETED_FLAG,REMARK,PACKAGE_ONE,PACKAGE_TWO,ATTRIB_CODE
+  </sql>
+  
+  <sql id="Delivery_Column_list">
+  	o.ID,
+	o.ORDER_CODE,
+	o.TOTAL,
+	count(d.id) as alreadyShipped,
+	o.STATUS
+  </sql>
+  	
+  <sql id="Base_Explain_Column_list">
+  	o.ID,
+	o.ORDER_CODE,
+	o.TOTAL,
+	(SELECT COUNT(d.ID) FROM device_info d where d.ORDER_CODE = o.ORDER_CODE) as alreadyShipped,
+	o.STATUS,
+	concat(o.DEVICE_ID, '/', o.DEVICE_NAME) AS DEVICE_NAME,
+	o.ATTRIB_CODE,
+	e.MODEL,
+	e.MSIZE,
+	e.TYPE,
+	e.DEV_TYPE_ID,
+	e.CONFIGURE,
+	e.BOARD_VERSION,
+	e.ID AS attribManaId,
+	o.OPERATOR_MERCHANT_NO,
+	o.BATCH,
+	o.WAREHOUSE_ID,
+	o.SEND_MERCHANT_NO,
+	o.SEND_MERCHANT_NAME,
+	o.ADDRESS,
+	o.CONTACTS,
+	o.MOBILE,
+	o.CREATED_DATE,
+	o.CREATED_BY,
+	o.UPDATED_DATE,
+	o.UPDATED_BY,
+	o.DELETED_FLAG,
+	o.REMARK,
+	o.send_quanlity
+  </sql>
+  
+  <sql id="Base_Explain_Column">
+   	o.ID,
+	o.ORDER_CODE,
+	o.TOTAL,
+	o.DEVICE_ID,
+	(SELECT COUNT(d.ID) FROM order_info_detail d where d.ORDER_CODE = o.ORDER_CODE ) as alreadyShipped,
+	o.STATUS,
+	concat(o.DEVICE_ID, '/', o.DEVICE_NAME) AS DEVICE_NAME,
+	o.ATTRIB_CODE,
+	e.MODEL,
+	e.TYPE,
+	e.MSIZE,
+	e.CONFIGURE,
+	e.BOARD_VERSION,
+	e.ID AS attribManaId,
+	e.DEV_MNUM_ID,
+	e.OR_NET_ID,
+	e.CARD_SELF_ID,
+	e.SOURCE_ID,
+	e.SCREEN_ID,
+	e.OR_OPEN_ID,
+	o.OPERATOR_MERCHANT_NO,
+	o.BATCH,
+	o.WAREHOUSE_ID,
+	o.SEND_MERCHANT_NO,
+	o.SEND_MERCHANT_NAME,
+	o.ADDRESS,
+	o.CONTACTS,
+	o.PACKAGE_ONE,
+	o.PACKAGE_TWO,
+	o.MOBILE,
+	o.CREATED_DATE,
+	o.CREATED_BY,
+	o.UPDATED_DATE,
+	o.UPDATED_BY,
+	o.DELETED_FLAG,
+	o.REMARK
+  </sql>
+  
+  <sql id="merchant_order_code">
+  	m.merchant_order_number as merchantOrderCode
+  </sql>
+  
+  <!-- 通过订单ID查询订单信息 --> 
+  <select id="getOrderInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Explain_Column" />
+    FROM order_info o LEFT JOIN attrib_mana e ON o.ATTRIB_CODE=e.ATTRIB_CODE left join warehouse_info w on o.WAREHOUSE_ID=w.ID
+    WHERE 1=1 AND o.ID=#{id,jdbcType=INTEGER}
+    
+  </select>
+  
+  <select id="getOrderInfoForSignOrder" parameterType="java.util.List" resultType="cn.com.glsx.supplychain.model.OrderInfo">
+  	select 
+  	o.ORDER_CODE as orderCode,
+  	o.Address as address,
+  	o.contacts as contacts,
+  	o.mobile as mobile,
+  	count(od.LOGISTICS_ID) as countLogistiss,
+  	l.order_number as LogistisNo,
+  	l.company as LogistisCpy,
+  	l.created_date as createdDate,
+  	w.name as warehouseName
+  	FROM order_info AS o 
+  	LEFT JOIN order_info_detail AS od ON(o.ORDER_CODE=od.ORDER_CODE)
+	LEFT JOIN bs_logistics AS l ON(od.LOGISTICS_ID=l.ID) 
+	LEFT JOIN warehouse_info AS w ON(o.WAREHOUSE_ID=w.id)
+    where o.ORDER_CODE in
+    <foreach collection="list" item="item" open="(" close=")" separator=",">
+	   #{item,jdbcType=VARCHAR}
+    </foreach>
+    GROUP BY o.ORDER_CODE
+  </select>
+  
+  <!-- 通过订单编码查询订单信息 --> 
+  <select id="getOrderInfoByOrderCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Explain_Column_list" />
+    from order_info o left join attrib_mana e on o.ATTRIB_CODE=e.ATTRIB_CODE left join warehouse_info w on o.WAREHOUSE_ID=w.ID
+    where ORDER_CODE = #{_parameter,jdbcType=VARCHAR}
+  </select>
+
+	<!-- 通过订单编码查询订单信息 -->
+	<select id="getShipmentsQuantityByOrderCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(ID) FROM order_info_detail  where ORDER_CODE = #{_parameter,jdbcType=VARCHAR}
+	</select>
+  
+   <!-- 统计订单数量 -->
+  <select id="count" parameterType="cn.com.glsx.supplychain.model.OrderInfo" resultType="java.lang.Integer">
+    select  
+    	count(*)
+    from order_info
+    <where>
+	    <if test="orderCode != null and orderCode !=''">
+	        AND ORDER_CODE LIKE CONCAT('%',#{orderCode},'%')
+	      </if>
+	      <if test="total != null">
+	        AND TOTAL = #{total,jdbcType=INTEGER}
+	      </if>
+	      <if test="status != null and status != '' ">
+	        AND STATUS = #{status,jdbcType=CHAR}
+	      </if>
+	      <if test="deviceId != null and deviceId !=0">
+	        AND DEVICE_ID = #{deviceId,jdbcType=INTEGER}
+	      </if>
+	      <if test="attribCode != null and attribCode != ''">
+	      	AND ATTRIB_CODE LIKE CONCAT('%',#{attribCode},'%')
+	      </if>
+	      <if test="operatorMerchantNo != null and operatorMerchantNo != ''">
+	        AND OPERATOR_MERCHANT_NO LIKE CONCAT('%',#{operatorMerchantNo},'%')
+	      </if>
+	      <if test="batch != null and batch != ''">
+	        AND BATCH = #{batch,jdbcType=VARCHAR}
+	      </if>
+	      <if test="warehouseId != null and warehouseId !=0">
+	        AND WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER}
+	      </if>
+	      <if test="sendMerchantNo != null and sendMerchantNo !=''">
+	      	AND SEND_MERCHANT_NO LIKE CONCAT('%',#{sendMerchantNo},'%')
+	      </if>
+	      <if test="address != null and address !=''">
+	      	AND ADDRESS LIKE CONCAT('%',#{address},'%') 
+	      </if>
+	      <if test="contacts != null and contacts !=''">
+	      	AND CONTACTS LIKE CONCAT('%',#{contacts},'%') 
+	      </if>
+	      <if test="mobile != null and mobile !=''">
+	      	AND MOBILE LIKE CONCAT('%',#{mobile},'%') 
+	      </if>
+	      <if test="createdDate != null">
+	        AND CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="createdBy != null and createdBy !=''">
+	        AND CREATED_BY = #{createdBy,jdbcType=VARCHAR}
+	      </if>
+	      <if test="updatedDate != null">
+	        AND UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="updatedBy != null and updatedBy !=''">
+	        AND UPDATED_BY = #{updatedBy,jdbcType=VARCHAR}
+	      </if>
+	      <if test="deletedFlag != null and deletedFlag !=''">
+	        AND DELETED_FLAG = #{deletedFlag,jdbcType=CHAR}
+	      </if>
+	  </where>
+  </select>
+  
+  <select id="getOrderList" parameterType="cn.com.glsx.supplychain.model.OrderInfo" resultMap="BaseResultMap">
+  	SELECT ORDER_CODE FROM order_info 
+  	<where>
+  		<if test="warehouseId != null">
+  			AND WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER}
+  		</if>
+  		<if test="status != null">
+  			AND STATUS = #{status,jdbcType=CHAR}
+  		</if>
+  		<if test="orderCode != null">
+  			AND ORDER_CODE LIKE CONCAT('%',#{orderCode},'%')
+  		</if>
+  	</where> 
+  </select>
+  
+  <select id="getCountOrderDetails" parameterType="java.util.List" resultMap="BaseResultMap">
+  	select
+  	<include refid="Delivery_Column_list" />
+  	from order_info o left join order_info_detail as d on(o.order_Code=d.order_Code)
+  	where 1=1
+  	<if test="orderCodes != null and orderCodes.size() &gt; 0">
+  		and o.order_code in
+  		<foreach collection="orderCodes" item="orderCode" open="(" close=")" separator=",">
+  			#{orderCode,jdbcType=VARCHAR}
+  		</foreach>
+  	</if>
+  	GROUP BY o.order_code
+  </select>
+  
+  <select id="pageOrderInfoFroDelivery" parameterType="cn.com.glsx.supplychain.model.OrderInfo" resultMap="BaseResultMap">
+  	SELECT
+  		<include refid="Delivery_Column_list" />
+  	from order_info o left join order_info_detail as d on(o.order_Code=d.order_Code)
+  	<where>
+	    <if test="orderCode != null and orderCode !=''">
+	        AND o.ORDER_CODE LIKE CONCAT('%',#{orderCode},'%')
+	      </if>	 
+	      <if test="status != null and status != '' ">
+	        AND o.STATUS = #{status,jdbcType=CHAR}
+	      </if>     	      	            
+	      <if test="warehouseId != null and warehouseId !=0">
+	        AND o.WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER}
+	      </if>	      
+	      <if test="deletedFlag != null and deletedFlag !=''">
+	        AND o.DELETED_FLAG = #{deletedFlag,jdbcType=CHAR}
+	      </if>
+	  </where>
+	  GROUP BY o.ORDER_CODE ORDER BY o.CREATED_DATE DESC
+  </select>
+  
+  <!-- 查询订单列表 -->
+  <select id="listOrderInfo" parameterType="cn.com.glsx.supplychain.model.OrderInfo" resultMap="BaseResultMap" >
+      SELECT 
+		   <include refid="Base_Explain_Column" />
+		   ,
+		   <include refid="merchant_order_code" />
+   	  FROM order_info o left join attrib_mana e on o.ATTRIB_CODE=e.ATTRIB_CODE left join warehouse_info w on o.WAREHOUSE_ID=w.ID
+   	  left join bs_merchant_order_detail as m on(o.ORDER_CODE=m.dispatch_order_number)
+    <where>
+	    <if test="orderCode != null and orderCode !=''">
+	        AND ORDER_CODE LIKE CONCAT('%',#{orderCode},'%')
+	      </if>
+	      <if test="total != null">
+	        AND TOTAL = #{total,jdbcType=INTEGER}
+	      </if>
+	      <if test="status != null and status != '' ">
+	        AND STATUS = #{status,jdbcType=CHAR}
+	      </if>
+	      <if test="deviceId != null and deviceId !=0">
+	        AND DEVICE_ID = #{deviceId,jdbcType=INTEGER}
+	      </if>
+	      <if test="attribCode != null and attribCode != ''">
+	      	AND ATTRIB_CODE LIKE CONCAT('%',#{attribCode},'%')
+	      </if>
+	      <if test="operatorMerchantNo != null and operatorMerchantNo != ''">
+	        AND OPERATOR_MERCHANT_NO LIKE CONCAT('%',#{operatorMerchantNo},'%')
+	      </if>
+	      <if test="batch != null and batch != ''">
+	        AND BATCH = #{batch,jdbcType=VARCHAR}
+	      </if>
+	      <if test="warehouseId != null and warehouseId !=0">
+	        AND WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER}
+	      </if>
+	      <if test="sendMerchantNo != null and sendMerchantNo !=''">
+	      	AND SEND_MERCHANT_NO LIKE CONCAT('%',#{sendMerchantNo},'%')
+	      </if>
+	      <if test="address != null and address !=''">
+	      	AND ADDRESS LIKE CONCAT('%',#{address},'%') 
+	      </if>
+	      <if test="contacts != null and contacts !=''">
+	      	AND CONTACTS LIKE CONCAT('%',#{contacts},'%') 
+	      </if>
+	      <if test="mobile != null and mobile !=''">
+	      	AND MOBILE LIKE CONCAT('%',#{mobile},'%') 
+	      </if>
+		  <if test="devTypeId != null">
+			AND e.DEV_TYPE_ID = #{devTypeId,jdbcType=INTEGER}
+		  </if>
+	      <if test="createdDate != null">
+	        AND CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="createdBy != null and createdBy !=''">
+	        AND CREATED_BY = #{createdBy,jdbcType=VARCHAR}
+	      </if>
+	      <if test="updatedDate != null">
+	        AND UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP}
+	      </if>
+	      <if test="updatedBy != null and updatedBy !=''">
+	        AND UPDATED_BY = #{updatedBy,jdbcType=VARCHAR}
+	      </if>
+	      <if test="deletedFlag != null and deletedFlag !=''">
+	        AND DELETED_FLAG = #{deletedFlag,jdbcType=CHAR}
+	      </if>
+	      <if test="merchantOrderCode != null and merchantOrderCode !=''">
+	      	AND m.merchant_order_number like CONCAT('%',#{merchantOrderCode},'%') 
+	      </if>
+	  </where>
+	  ORDER BY o.CREATED_DATE DESC
+  </select>
+
+   <!-- 插入订单信息 -->
+  <insert id="insertOrderInfo" parameterType="cn.com.glsx.supplychain.model.OrderInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()  AS ID
+    </selectKey>
+    insert into order_info(
+    	<if test="orderCode != null and orderCode != ''">ORDER_CODE</if>
+	    <if test="total != null and total != 0">,TOTAL</if>
+	    <if test="status != null and status != ''">,STATUS</if>
+	    <if test="deviceId != null and deviceId != 0">,DEVICE_ID</if>
+	    <if test="deviceName != null and deviceName !=''">,DEVICE_NAME</if>
+	    <if test="attribCode != null and attribCode !=''">,ATTRIB_CODE</if>
+	    <if test="operatorMerchantNo != null and operatorMerchantNo !=''">,OPERATOR_MERCHANT_NO</if> 
+	    <if test="batch != null and batch !=''">,BATCH</if>
+	    <if test="warehouseId != null and warehouseId !=0">,WAREHOUSE_ID</if>
+	    <if test="sendMerchantNo != null and sendMerchantNo !=''">,SEND_MERCHANT_NO</if>
+	    <if test="sendMerchantName != null and sendMerchantName !=''">,SEND_MERCHANT_NAME</if>
+	    <if test="address != null and address !=''">,ADDRESS</if>
+	    <if test="contacts != null and contacts	 !=''">,CONTACTS</if>
+	    <if test="mobile != null and mobile !=''">,MOBILE</if>
+	    <if test="createdDate != null!=''">,CREATED_DATE</if>
+	    <if test="createdBy != null and createdBy!=''">,CREATED_BY</if>    
+	    <if test="updatedDate != null">,UPDATED_DATE</if>
+	    <if test="updatedBy != null and updatedBy !=''">,UPDATED_BY</if>
+	    <if test="deletedFlag != null and deletedFlag !=''">,DELETED_FLAG</if>
+	    <if test="remark != null and remark !=''">,REMARK</if> 
+	    <if test="packageOne != null and packageOne !=''">,PACKAGE_ONE</if>
+	    <if test="packageTwo != null and packageTwo !=''">,PACKAGE_TWO</if>
+    )values(
+    	<if test="orderCode != null and orderCode != ''">#{orderCode}</if>
+	    <if test="total != null and total != 0">,#{total}</if>
+	    <if test="status != null and status != ''">,#{status}</if>
+	    <if test="deviceId != null and deviceId != 0">,#{deviceId}</if>
+	    <if test="deviceName != null and deviceName !=''">,#{deviceName}</if>
+	    <if test="attribCode != null and attribCode !=''">,#{attribCode}</if>	   
+	    <if test="operatorMerchantNo != null and operatorMerchantNo !=''">,#{operatorMerchantNo}</if> 
+	    <if test="batch != null and batch !=''">,#{batch}</if>
+	    <if test="warehouseId != null and warehouseId !=0">,#{warehouseId}</if>
+	    <if test="sendMerchantNo != null and sendMerchantNo !=''">,#{sendMerchantNo}</if>
+	    <if test="sendMerchantName != null and sendMerchantName !=''">,#{sendMerchantName}</if>
+	    <if test="address != null and address !=''">,#{address}</if>
+	    <if test="contacts != null and contacts	 !=''">,#{contacts}</if>
+	    <if test="mobile != null and mobile !=''">,#{mobile}</if>
+	    <if test="createdDate != null!=''">,#{createdDate}</if>
+	    <if test="createdBy != null and createdBy!=''">,#{createdBy}</if>    
+	    <if test="updatedDate != null">,#{updatedDate}</if>
+	    <if test="updatedBy != null and updatedBy !=''">,#{updatedBy}</if>
+	    <if test="deletedFlag != null and deletedFlag !=''">,'N'</if>
+	    <if test="remark != null and remark !=''">,#{remark}</if> 
+	    <if test="packageOne != null and packageOne !=''">,#{packageOne}</if>
+	    <if test="packageTwo != null and packageTwo !=''">,#{packageTwo}</if>
+    )
+  </insert>
+  
+   <!-- 更新订单信息 -->
+  <update id="update" parameterType="cn.com.glsx.supplychain.model.OrderInfo">
+    update order_info
+    <set>
+      <if test="orderCode != null and orderCode !=''">
+        ORDER_CODE = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null">
+        TOTAL = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="status != null and status !=''">
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+      <if test="deviceId != null">
+        DEVICE_ID = #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="attribCode != null and attribCode !=''">
+      	ATTRIB_CODE = #{attribCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorMerchantNo != null and operatorMerchantNo !=''">
+        OPERATOR_MERCHANT_NO = #{operatorMerchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batch != null and batch !=''">
+        BATCH = #{batch,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="sendMerchantNo != null and sendMerchantNo !=''">
+        SEND_MERCHANT_NO = #{sendMerchantNo,jdbcType=VARCHAR},
+      </if>
+	  <if test="sendMerchantName != null and sendMerchantName !=''">
+		SEND_MERCHANT_NAME = #{sendMerchantName,jdbcType=VARCHAR},
+	  </if>
+      <if test="address != null and address !=''">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null and contacts !=''">
+        CONTACTS = #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null and mobile !=''">
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null and createdBy !=''">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null and updatedBy !=''">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null and deletedFlag !=''">
+        DELETED_FLAG = #{deletedFlag,jdbcType=CHAR},
+      </if>
+      <if test="remark != null and remark !=''">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="packageOne != null and packageOne !=''">
+        PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      </if>
+      <if test="packageTwo != null and packageTwo !=''">
+        PACKAGE_TWO = #{packageTwo,jdbcType=VARCHAR}
+      </if>
+      <if test="sendQuanlity != null">
+        send_quanlity = #{sendQuanlity,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

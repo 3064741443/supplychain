@@ -1,0 +1,31 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">历史价格</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <tr ng-repeat="ProductHistoryPrice in HistoryPriceList">
+            <td class="text-right">修改日期 :</td>
+            <td class="text-left" >{{ ProductHistoryPrice.time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td class="text-right">价格 :</td>
+            <td class="text-left">{{"¥"+ProductHistoryPrice.price.toFixed(2)}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="cancel()">关闭</button>
+    </div>
+</div>

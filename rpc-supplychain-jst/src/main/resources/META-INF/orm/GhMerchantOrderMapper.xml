@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.GhMerchantOrderMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.GhMerchantOrder">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="gh_merchant_order_code" jdbcType="VARCHAR" property="ghMerchantOrderCode"/>
+        <result column="order_time" jdbcType="TIMESTAMP" property="orderTime"/>
+        <result column="merchant_code" jdbcType="VARCHAR" property="merchantCode"/>
+        <result column="merchant_name" jdbcType="VARCHAR" property="merchantName"/>
+        <result column="product_config_code" jdbcType="INTEGER" property="productConfigCode"/>
+        <result column="parent_brand_id" jdbcType="INTEGER" property="parentBrandId"/>
+        <result column="sub_brand_id" jdbcType="INTEGER" property="subBrandId"/>
+        <result column="audi_id" jdbcType="INTEGER" property="audiId"/>
+        <result column="motorcycle" jdbcType="VARCHAR" property="motorcycle"/>
+        <result column="category_id" jdbcType="INTEGER" property="categoryId"/>
+        <result column="spa_purchase_code" jdbcType="VARCHAR" property="spaPurchaseCode"/>
+        <result column="spa_product_code" jdbcType="VARCHAR" property="spaProductCode"/>
+        <result column="spa_product_name" jdbcType="VARCHAR" property="spaProductName"/>
+        <result column="glsx_product_code" jdbcType="VARCHAR" property="glsxProductCode"/>
+        <result column="glsx_product_name" jdbcType="VARCHAR" property="glsxProductName"/>
+        <result column="total" jdbcType="INTEGER" property="total"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+        <result column="address_id" jdbcType="INTEGER" property="addressId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, gh_merchant_order_code, order_time, merchant_code,merchant_name, product_config_code, parent_brand_id, 
+    sub_brand_id, audi_id, motorcycle, category_id, spa_purchase_code, spa_product_code, 
+    spa_product_name, glsx_product_code, glsx_product_name, total, remark, status, CREATED_BY, 
+    CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,address_id
+  </sql>
+
+    <select id="listGhMerchantOrder" parameterType="cn.com.glsx.supplychain.jst.model.GhMerchantOrder"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gh_merchant_order
+        where deleted_flag = 'N'
+        <if test="categoryId != null">
+            and category_id = #{categoryId,jdbcType=INTEGER}
+        </if>
+        <if test="startDate != null">
+            and order_time &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            and order_time &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="merchantCode != null">
+            and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="merchantName != null">
+            and merchant_name like CONCAT('%',#{merchantName},'%')
+        </if>
+        <if test="ghMerchantOrderCode != null">
+            and gh_merchant_order_code like CONCAT('%',#{ghMerchantOrderCode},'%')
+        </if>
+        <if test="spaProductName != null">
+            and spa_product_name like CONCAT('%',#{spaProductName},'%')
+        </if>
+        <if test="glsxProductCode != null">
+            and glsx_product_code like CONCAT('%',#{glsxProductCode},'%')
+        </if>
+        <if test="dtoStatus != null">
+            <choose>
+                <when test="dtoStatus = 'U'">
+                    and status in(1,2,3,4)
+                </when>
+                <when test="dtoStatus = 'F'">
+                    and status in(5)
+                </when>
+                <otherwise>
+                    and status=#{status,jdbcType=TINYINT}
+                </otherwise>
+            </choose>
+        </if>
+        order by order_time desc
+    </select>
+
+    <select id="pageGhMerchantOrder" parameterType="cn.com.glsx.supplychain.jst.model.GhMerchantOrder"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gh_merchant_order
+        where deleted_flag = 'N'
+        <if test="categoryId != null">
+            and category_id = #{categoryId,jdbcType=INTEGER}
+        </if>
+        <if test="startDate != null">
+            and order_time &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            and order_time &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="merchantCode != null">
+            and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="merchantName != null">
+            and merchant_name like CONCAT('%',#{merchantName},'%')
+        </if>
+        <if test="ghMerchantOrderCode != null">
+            and gh_merchant_order_code like CONCAT('%',#{ghMerchantOrderCode},'%')
+        </if>
+        <if test="spaProductName != null">
+            and spa_product_name like CONCAT('%',#{spaProductName},'%')
+        </if>
+        <if test="glsxProductCode != null">
+            and glsx_product_code like CONCAT('%',#{glsxProductCode},'%')
+        </if>
+        <if test="dtoStatus != null">
+            <choose>
+                <when test="dtoStatus = 'U'">
+                    and status in(1,2,3,4)
+                </when>
+                <when test="dtoStatus = 'F'">
+                    and status in(5)
+                </when>
+                <otherwise>
+                    and status=#{status,jdbcType=TINYINT}
+                </otherwise>
+            </choose>
+        </if>
+        order by id desc
+    </select>
+
+    <sql id="Base_Column_Two_List">
+    gmo.ID, gmo.gh_merchant_order_code, gmo.order_time, gmo.merchant_code,gmo.merchant_name, gmo.product_config_code, gmo.parent_brand_id,
+    gmo.sub_brand_id, gmo.audi_id, gmo.motorcycle, gmo.category_id, gmo.spa_purchase_code, gmo.spa_product_code,
+    gmo.spa_product_name, gmo.glsx_product_code, gmo.glsx_product_name, gmo.total, gmo.remark, gmo.status, gmo.CREATED_BY,
+    gmo.CREATED_DATE, gmo.UPDATED_BY, gmo.UPDATED_DATE, gmo.DELETED_FLAG,gmo.address_id
+  </sql>
+
+    <select id="wxlistMerchantOrders" parameterType="cn.com.glsx.supplychain.jst.model.GhMerchantOrder"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from gh_merchant_order
+        where deleted_flag = 'N'
+        <if test="categoryId != null">
+            and category_id = #{categoryId,jdbcType=INTEGER}
+        </if>
+        <if test="merchantCode != null">
+            and merchant_code = #{merchantCode,jdbcType=VARCHAR}
+        </if>
+        <if test="spaProductCode != null">
+            and spa_product_code like CONCAT('%',#{spaProductCode},'%')
+        </if>
+        <if test="spaProductName != null">
+            or spa_product_name like CONCAT('%',#{spaProductName},'%')
+        </if>
+        <if test="spaPurchaseCode != null">
+            or spa_purchase_code like CONCAT('%',#{spaPurchaseCode},'%')
+        </if>
+        <if test="dtoStatus != null">
+            <choose>
+                <when test='dtoStatus == "U"'>
+                    and status in(1,2,8)
+                </when>
+                <when test='dtoStatus == "F"'>
+                    and status in(3,4)
+                </when>
+                <when test='dtoStatus == "O"'>
+                    and status in(5,6,7)
+                </when>
+                <when test='dtoStatus == "C"'>
+                    and status in(0,9)
+                </when>
+            </choose>
+        </if>
+        order by id desc
+    </select>
+
+   <!-- <select id="wxlistSapMerchantOrders" parameterType="cn.com.glsx.supplychain.jst.model.GhMerchantOrder"
+            resultType="cn.com.glsx.supplychain.jst.dto.gh.SapGhMerchantOrderDTO">
+        select  id,spa_purchase_code spaPurchaseCode,
+        <if test="categoryId != null">
+            and gmo.category_id = #{categoryId,jdbcType=INTEGER}
+        </if>
+        <if test="spaProductCode != null">
+            and gmo.spa_product_code like CONCAT('%',#{spaProductCode},'%')
+        </if>
+        <if test="spaProductName != null">
+            or gmo.spa_product_name like CONCAT('%',#{spaProductName},'%')
+        </if>
+        <if test="spaPurchaseCode != null">
+            or gmo.spa_purchase_code like CONCAT('%',#{spaPurchaseCode},'%')
+        </if>
+        <if test="dtoStatus != null">
+            <choose>
+                <when test="dtoStatus = 'U'">
+                    and gmo.status in(1,2)
+                </when>
+                <when test="dtoStatus = 'F'">
+                    and gmo.status in(3,4)
+                </when>
+                <when test="dtoStatus = 'O'">
+                    and gmo.status in(5,6,7)
+                </when>
+                <otherwise>
+                    and gmo.status=#{status,jdbcType=TINYINT}
+                </otherwise>
+            </choose>
+        </if>
+        group by spa_purchase_code
+    </select>-->
+
+    <sql id="Base_Column_Reflect_List">
+    gr.ID, gr.gh_merchant_order_code, gr.order_time, gr.merchant_code,gr.merchant_name, gr.product_config_code, gr.parent_brand_id,
+    gr.sub_brand_id, gr.audi_id, gr.motorcycle, gr.category_id, gr.spa_purchase_code, gr.spa_product_code,
+    gr.spa_product_name, gr.glsx_product_code, gr.glsx_product_name, gr.total, gr.remark, gr.status, gr.CREATED_BY,
+    gr.CREATED_DATE, gr.UPDATED_BY, gr.UPDATED_DATE, gr.DELETED_FLAG,gr.address_id
+  </sql>
+
+    <select id="listGhMerchantOrderNoMerchantOrder" parameterType="cn.com.glsx.supplychain.jst.model.GhMerchantOrder"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_Reflect_List"/>
+        from gh_merchant_order gr LEFT JOIN gh_merchant_order_reflect_mcode gm on
+        gr.gh_merchant_order_code=gm.gh_merchant_order_code
+        where gm.merchant_order is null and gr.deleted_flag = 'N' and gr.status != 0 and gr.id > 155
+    </select>
+</mapper>

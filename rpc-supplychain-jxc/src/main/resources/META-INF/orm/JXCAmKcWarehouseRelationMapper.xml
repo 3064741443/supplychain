@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCAmKcWarehouseRelationMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCAmKcWarehouseRelation">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="WAREHOUSE_CODE" jdbcType="VARCHAR" property="warehouseCode" />
+    <result column="WAREHOUSE_NAME" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, WAREHOUSE_CODE, WAREHOUSE_NAME, MERCHANT_CODE, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG, MERCHANT_NAME
+  </sql>
+  
+  <select id="pageKcWarehouseRelation" parameterType="cn.com.glsx.supplychain.jxc.model.JXCAmKcWarehouseRelation"
+  				resultType="cn.com.glsx.supplychain.jxc.dto.JXCAmKcWarehouseRelationDTO">
+	  select 
+	  warehouse_code as warehouseCode,
+	  warehouse_name as warehouseName,
+	  merchant_code as merchantCode,
+	  merchant_name as merchantName
+	  from am_kc_warehouse_relation
+	  <where>
+	  	<if test="warehouseCode != null">
+	  		and (warehouse_code like concat('%',#{warehouseCode,jdbcType=VARCHAR},'%')
+	  	</if>
+	  	<if test="warehouseName != null">
+	  		or warehouse_name like concat('%',#{warehouseName,jdbcType=VARCHAR},'%'))
+	  	</if>
+	  	<if test="merchantCode != null">
+	  		and (merchant_code like concat('%',#{merchantCode,jdbcType=VARCHAR},'%')
+	  	</if>
+	  	<if test="merchantName != null">
+	  		or merchant_name like concat('%',#{merchantName,jdbcType=VARCHAR},'%'))
+	  	</if>
+	  </where>	
+	  order by id asc	
+  </select>
+  
+</mapper>

@@ -1,0 +1,32 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="supplychain_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">请输入</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入固件版本号" name="fastener_version" ng-model="form.fastenerVersion" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            <button class="btn btn-primary " type="button" ng-click="addFirmwares()">新建固件版本</button>
+        </div>
+
+    </form>
+
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-title">
+            <h5>固件版本列表</h5>
+        </div>
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns">
+            </div>
+        </div>
+    </div>
+
+</div>

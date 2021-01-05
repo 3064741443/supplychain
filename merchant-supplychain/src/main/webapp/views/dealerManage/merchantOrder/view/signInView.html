@@ -1,0 +1,35 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <label class="col-lg-3 control-label">签收操作 :</label>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+            <colgroup>
+                <col width="20%" />
+                <col width="20%" />
+                <col width="10%" />
+                <col width="10%" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th >物流单号</th>
+                <th >物流公司</th>
+                <th >数量</th>
+                <th >操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-repeat='logistics in signInInfoData'>
+                <td >{{logistics.orderNumber}}</td>
+                <td >{{logistics.company}}</td>
+                <td >{{logistics.quantity}}</td>
+                <td>
+                    <a class="text-info"  ng-show="showDispatch(logistics.accept)"
+                       ng-click="signInfinish(logistics)" style="margin-left: 10px">签收</a></td>
+            </tbody>
+        </table>
+    </div>
+</div>

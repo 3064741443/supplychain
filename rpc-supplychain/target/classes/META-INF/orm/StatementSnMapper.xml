@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementSnMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementSn">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SN" jdbcType="VARCHAR" property="sn" />
+    <result column="PRODUCT_CODE" jdbcType="VARCHAR" property="productCode" />
+    <result column="PRODUCT_NAME" jdbcType="VARCHAR" property="productName" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="VT_SN" jdbcType="VARCHAR" property="vtSn" />
+    <result column="STATEMENT_TYPE" jdbcType="VARCHAR" property="statementType" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SN, PRODUCT_CODE, PRODUCT_NAME, MATERIAL_CODE, MATERIAL_NAME, VT_SN, STATEMENT_TYPE, 
+    WORK_ORDER, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <insert id="batchInsertReplace" parameterType="java.util.List">
+  	insert into am_statement_sn(SN, PRODUCT_CODE, PRODUCT_NAME, MATERIAL_CODE, MATERIAL_NAME, VT_SN, STATEMENT_TYPE, 
+    WORK_ORDER, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+    	(
+    	#{item.sn,jdbcType=VARCHAR},
+    	#{item.productCode,jdbcType=VARCHAR},
+    	#{item.productName,jdbcType=VARCHAR},
+    	#{item.materialCode,jdbcType=VARCHAR},
+    	#{item.materialName,jdbcType=VARCHAR},
+    	#{item.vtSn,jdbcType=VARCHAR},
+    	#{item.statementType,jdbcType=VARCHAR},
+    	#{item.workOrder,jdbcType=VARCHAR},
+    	#{item.createdBy,jdbcType=VARCHAR},
+    	#{item.createdDate,jdbcType=TIMESTAMP},
+    	#{item.updatedBy,jdbcType=VARCHAR},
+    	#{item.updatedDate,jdbcType=TIMESTAMP},
+    	#{item.deletedFlag,jdbcType=VARCHAR}
+    	)
+    </foreach>
+    on duplicate key update
+    SN=values(SN), 
+    PRODUCT_CODE = values(PRODUCT_CODE), 
+    PRODUCT_NAME = values(PRODUCT_NAME), 
+    MATERIAL_CODE = values(MATERIAL_CODE), 
+    MATERIAL_NAME = values(MATERIAL_NAME), 
+    VT_SN = values(VT_SN), 
+    STATEMENT_TYPE = values(STATEMENT_TYPE), 
+    WORK_ORDER = values(WORK_ORDER), 
+    CREATED_BY = values(CREATED_BY), 
+    CREATED_DATE = values(CREATED_DATE), 
+    UPDATED_BY = values(UPDATED_BY), 
+    UPDATED_DATE = values(UPDATED_DATE), 
+    DELETED_FLAG = values(DELETED_FLAG)
+  </insert>
+</mapper>

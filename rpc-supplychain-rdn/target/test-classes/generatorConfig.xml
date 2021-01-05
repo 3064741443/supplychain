@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<!-- 确保已安装mybatis generator eclipse插件 -->
+<generatorConfiguration>
+	<context id="DB2Tables" targetRuntime="MyBatis3">
+	    <property name="javaFileEncoding" value="UTF-8"/>
+		<commentGenerator type="org.oreframework.datasource.mybatis.generator.OreCommentGenerator">
+		    <!-- 阻止生成注释，默认为false -->
+			<property name="suppressAllComments" value="true" />
+            <!-- 生成字段注释，默认为false -->			
+			<property name="addRemarkComments" value="true" />
+			<property name="suppressDate" value="true"/>
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.3.227:3306/数据库名?characterEncoding=utf8" userId="dev_admin" password="1f7e1ed2" />
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<javaModelGenerator targetPackage="cn.com.glsx.rpc.supplychain.rdn.model" targetProject="../rpc-supplychain-rdn-api/src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<sqlMapGenerator targetPackage="META-INF/orm" targetProject="src/main/resources">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+		<javaClientGenerator targetPackage="cn.com.glsx.rpc.supplychain.rdn.mapper" targetProject="MAVEN" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- 可配置多个 -->
+		<table tableName="数据库表名" domainObjectName="Java数据模型名" enableSelectByExample="false" enableCountByExample="false" enableDeleteByExample="false" enableUpdateByExample="false">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+	</context>
+</generatorConfiguration>  

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.MerchantOrderDetailMapper">
+    <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.MerchantOrderDetail">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="MERCHANT_ORDER_NUMBER" property="merchantOrderNumber" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="ORDER_QUANTITY" property="orderQuantity" jdbcType="INTEGER"/>
+        <result column="CHECK_QUANTITY" property="checkQuantity" jdbcType="INTEGER"/>
+        <result column="ACCEPT_QUANTITY" property="acceptQuantity" jdbcType="INTEGER"/>
+        <result column="CHECK_BY" property="checkBy" jdbcType="VARCHAR"/>
+        <result column="CHECK_TIME" property="checkTime" jdbcType="TIMESTAMP"/>
+        <result column="DISPATCH_ORDER_NUMBER" property="dispatchOrderNumber" jdbcType="VARCHAR"/>
+        <result column="SUBJECT_ID" property="subjectId" jdbcType="INTEGER"/>
+        <result column="INSURE" property="insure" jdbcType="VARCHAR"/>
+        <result column="PRODUCT_REMARKS" property="productRemarks" jdbcType="VARCHAR"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, MERCHANT_ORDER_NUMBER, PRODUCT_CODE, ORDER_QUANTITY, CHECK_QUANTITY, ACCEPT_QUANTITY,CHECK_BY,CHECK_TIME,SUBJECT_ID,INSURE,
+    DISPATCH_ORDER_NUMBER, PRODUCT_REMARKS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+    </sql>
+    <update id="updateById" parameterType="glsx.com.cn.task.model.MerchantOrderDetail">
+        update bs_merchant_order_detail
+        <set>
+            <if test="merchantOrderNumber != null">
+                MERCHANT_ORDER_NUMBER = #{merchantOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="orderQuantity != null">
+                ORDER_QUANTITY = #{orderQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="checkQuantity != null">
+                CHECK_QUANTITY = #{checkQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="acceptQuantity != null">
+                ACCEPT_QUANTITY = #{acceptQuantity,jdbcType=INTEGER},
+            </if>
+            <if test="checkBy != null">
+                CHECK_BY = #{checkBy,jdbcType=VARCHAR},
+            </if>
+            <if test="checkTime != null">
+                CHECK_TIME = #{checkTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dispatchOrderNumber != null">
+                DISPATCH_ORDER_NUMBER = #{dispatchOrderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectId != null">
+                SUBJECT_ID = #{subjectId,jdbcType=INTEGER},
+            </if>
+            <if test="insure != null">
+                INSURE = #{insure,jdbcType=VARCHAR},
+            </if>
+            <if test="productRemarks != null">
+                PRODUCT_REMARKS = #{productRemarks,jdbcType=VARCHAR},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

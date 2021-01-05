@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.BsMerchantStockSettMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.BsMerchantStockSett">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="SETTER_NO" jdbcType="VARCHAR" property="setterNo" />
+    <result column="SETTER_TYPE" jdbcType="INTEGER" property="setterType" />
+    <result column="SETT_NUM" jdbcType="INTEGER" property="settNum" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MERCHANT_CODE, MERCHANT_NAME, MATERIAL_CODE, MATERIAL_NAME, SETTER_NO, SETTER_TYPE, 
+    SETT_NUM, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bs_merchant_stock_sett
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bs_merchant_stock_sett
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.BsMerchantStockSett">
+    insert into bs_merchant_stock_sett (ID, MERCHANT_CODE, MERCHANT_NAME, 
+      MATERIAL_CODE, MATERIAL_NAME, SETTER_NO, 
+      SETTER_TYPE, SETT_NUM, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG)
+    values (#{id,jdbcType=INTEGER}, #{merchantCode,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, 
+      #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, #{setterNo,jdbcType=VARCHAR}, 
+      #{setterType,jdbcType=INTEGER}, #{settNum,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{deletedFlag,jdbcType=VARCHAR})
+  </insert>
+  <insert id="batchAddAndUpdateMerchantStockSett" parameterType="java.util.List">
+  	insert into bs_merchant_stock_sett (MERCHANT_CODE, MERCHANT_NAME, 
+      MATERIAL_CODE, MATERIAL_NAME, SETTER_NO, 
+      SETTER_TYPE, SETT_NUM, CREATED_BY, 
+      CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+      DELETED_FLAG)
+      values
+      <foreach collection="list" item="item" index="index" separator=",">
+      (
+      	#{item.merchantCode,jdbcType=VARCHAR}, 
+      	#{item.merchantName,jdbcType=VARCHAR}, 
+      	#{item.materialCode,jdbcType=VARCHAR}, 
+      	#{item.materialName,jdbcType=VARCHAR}, 
+      	#{item.setterNo,jdbcType=VARCHAR}, 
+      	#{item.setterType,jdbcType=INTEGER}, 
+      	#{item.settNum,jdbcType=INTEGER}, 
+      	#{item.createdBy,jdbcType=VARCHAR}, 
+      	#{item.createdDate,jdbcType=TIMESTAMP}, 
+      	#{item.updatedBy,jdbcType=VARCHAR}, 
+      	#{item.updatedDate,jdbcType=TIMESTAMP}, 
+      	#{item.deletedFlag,jdbcType=VARCHAR}
+      )
+      </foreach>
+      on duplicate key update
+      MERCHANT_CODE = values(MERCHANT_CODE), 
+      MERCHANT_NAME = values(MERCHANT_NAME), 
+      MATERIAL_CODE = values(MATERIAL_CODE), 
+      MATERIAL_NAME = values(MATERIAL_NAME), 
+      SETTER_NO = values(SETTER_NO), 
+      SETTER_TYPE = values(SETTER_TYPE), 
+      SETT_NUM = values(SETT_NUM), 
+      CREATED_BY = values(CREATED_BY), 
+      CREATED_DATE = values(CREATED_DATE), 
+      UPDATED_BY = values(UPDATED_BY), 
+      UPDATED_DATE = values(UPDATED_DATE), 
+      DELETED_FLAG = values(DELETED_FLAG)
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.BsMerchantStockSett">
+    insert into bs_merchant_stock_sett
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE,
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME,
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE,
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME,
+      </if>
+      <if test="setterNo != null">
+        SETTER_NO,
+      </if>
+      <if test="setterType != null">
+        SETTER_TYPE,
+      </if>
+      <if test="settNum != null">
+        SETT_NUM,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null">
+        #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="setterNo != null">
+        #{setterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="setterType != null">
+        #{setterType,jdbcType=INTEGER},
+      </if>
+      <if test="settNum != null">
+        #{settNum,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.BsMerchantStockSett">
+    update bs_merchant_stock_sett
+    <set>
+      <if test="merchantCode != null">
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantName != null">
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null">
+        MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null">
+        MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="setterNo != null">
+        SETTER_NO = #{setterNo,jdbcType=VARCHAR},
+      </if>
+      <if test="setterType != null">
+        SETTER_TYPE = #{setterType,jdbcType=INTEGER},
+      </if>
+      <if test="settNum != null">
+        SETT_NUM = #{settNum,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.BsMerchantStockSett">
+    update bs_merchant_stock_sett
+    set MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+      MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+      SETTER_NO = #{setterNo,jdbcType=VARCHAR},
+      SETTER_TYPE = #{setterType,jdbcType=INTEGER},
+      SETT_NUM = #{settNum,jdbcType=INTEGER},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

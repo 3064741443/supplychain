@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jst.mapper.GhProductConfigOtherMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jst.model.GhProductConfigOther">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="product_config_code" jdbcType="VARCHAR" property="productConfigCode" />
+    <result column="attrib_info_id" jdbcType="INTEGER" property="attribInfoId" />
+    <result column="option" jdbcType="VARCHAR" property="option" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, product_config_code, attrib_info_id, `option`, CREATED_BY, CREATED_DATE, UPDATED_BY, 
+    UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <select id="selectProductConfigOthers" parameterType="cn.com.glsx.supplychain.jst.model.GhProductConfigOther" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from gh_product_config_other
+  	<where>
+  		<if test="productConfigCode != null">
+  			and product_config_code = #{productConfigCode,jdbcType=VARCHAR}
+  		</if>
+  		<if test="deletedFlag != null">
+  			and DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+  		</if>
+  		<if test="option != null">
+  			and `option` = #{option,jdbcType=VARCHAR}
+  		</if>
+  		<if test="listProductConfigCodes != null">
+  			and product_config_code in 
+  			<foreach collection="listProductConfigCodes" item="configCode" open="(" close=")" separator=",">
+  				#{configCode}
+  			</foreach>
+  		</if>
+  	</where>
+  </select>
+</mapper>

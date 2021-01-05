@@ -1,0 +1,67 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">删除</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="delete_statementFinance_form"
+                  method="post"
+                  enctype="multipart/form-data">
+                
+                
+	           <div class="form-group">
+	               <label class="col-lg-1 control-label" style="margin-left:20px">结算类型:</label>
+	               <div class="control-content">
+		               	<div class="row" style="margin-left:10px">
+		               		<div class="col-lg-10">
+			                   <ui-select name="workType" ng-model="$parent.deleteStatementFinanceData.workType" theme="bootstrap">
+			                       <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+			                       <ui-select-choices repeat="item in workTypeList" >
+			                           <div ng-bind="item.text"></div>
+			                       </ui-select-choices>
+			                   </ui-select>
+		                   </div>
+		               </div>
+		            </div>
+	           </div>
+                 
+               	<div class="form-group">
+	                <label class="col-lg-1 control-label">结算客户编码／名称：</label>
+	                <div class="control-content">
+	                    <div class="row" style="margin-left:10px">
+	                        <div class="col-lg-10">
+	                            <ui-select name="customer" ng-required="true" ng-model="$parent.deleteStatementFinanceData.customerCode" theme="bootstrap" ng-keyup="customerKeyUp()">
+	                                <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+	                                <ui-select-choices repeat="item in customerList">
+	                                    <div ng-bind="item.text"></div>
+	                                </ui-select-choices>
+	                            </ui-select>		                            	
+                               </ui-select>	                          
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+		              
+                <div class="form-group">
+                    <label class="col-lg-1 control-label" style="margin-left:20px">删除数据月份 :</label>
+                    <div class="col-sm-6" style="margin-left:4px">
+                        <input date-range-picker options="singleDateSettings" name="dateRange1Start" max="dateRange1End.endDate" class="form-control date-picker" type="text" ng-model="deleteStatementFinanceData.date" />
+                        <!--<input readonly="readonly" date-range-picker max="singleDateSettings.minDate"  options="singleDateSettings" name="date" ng-required="true"-->
+                        <!--class="form-control date-picker" type="text" ng-model="updateProductData.date"/>-->
+                        <div class="m-t-xs" ng-show="update_ProductManage_form.dateRange1Start.$invalid && update_ProductManage_form.submitted">
+                            <small class="text-danger" ng-show="update_ProductManage_form.dateRange1Start.$error.required">请选择删除数据月份</small>
+                        </div>
+                    </div>
+                </div>
+                <label style="margin-left: 23%">删除后，该月份的对账数据以及拆分结果都会被删除</label>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="ok();">确认删除</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>

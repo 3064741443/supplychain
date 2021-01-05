@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.DeviceStatisReportMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.DeviceStatisReport">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="DAY" property="day" jdbcType="VARCHAR"/>
+        <result column="DEVICE_TOTAL" property="deviceTotal" jdbcType="INTEGER"/>
+        <result column="DEVICE_IN" property="deviceIn" jdbcType="INTEGER"/>
+        <result column="DEVICE_AL" property="deviceAl" jdbcType="INTEGER"/>
+        <result column="DEVICE_UA" property="deviceUa" jdbcType="INTEGER"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, DAY, DEVICE_TOTAL, DEVICE_IN, DEVICE_AL, DEVICE_UA, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+    <select id="getMaxDeviceStatisReport" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        device_statis_report
+        order by DAY desc limit 1
+    </select>
+</mapper>

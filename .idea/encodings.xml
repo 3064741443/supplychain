@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/admin-supplychain" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/admin-supplychain-jxc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/admin-supplychain-jxc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/admin-supplychain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/admin-supplychain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/merchant-supplychain" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/merchant-supplychain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/merchant-supplychain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jst" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jst-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jst-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jst-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jst/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jst/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jxc-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jxc-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jxc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-jxc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-rdn-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-rdn-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-rdn/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain-rdn/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rpc-supplychain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-supplychain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/task-supplychain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/web-supplychain/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/web-supplychain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/webapp-supplychain-jst" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/webapp-supplychain-jst/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/webapp-supplychain-jst/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

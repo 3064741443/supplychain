@@ -1,0 +1,66 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">对账单详情</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <tr>
+            <td class="text-right">商户名称 :</td>
+            <td class="text-left">{{salesDetailsData.merchantName}}</td>
+        </tr>
+        <tr>
+            <td class="text-right">发货日期 :</td>
+            <td class="text-left">{{ salesDetailsData.salesTime}}</td>
+        </tr>
+        </tbody>
+    </table>
+        <label class="col-lg-3 control-label">对账详情 :</label>
+        <table dt-options="dtOptions" class="table table-striped table-bordered table-hover">
+            <colgroup>
+                <col width="10%"/>
+                <col width="15%"/>
+                <col width="5%"/>
+                <col width="5%"/>
+                <col width="5%"/>
+                <col width="10%"/>
+                <col width="20%"/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>产品编号</th>
+                <th>产品名称</th>
+                <th>数量</th>
+                <th>含税单价</th>
+                <th>含税总价</th>
+                <th>发货日期</th>
+                <th>物流信息</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{salesDetailsData.details.productCode}}</td>
+                <td>{{productInfo.name}}</td>
+                <td>{{salesDetailsData.details.quantity}}</td>
+                <td>{{"¥"+(productPriceSum).toFixed(2)}}</td>
+                <td>{{"¥"+(salesDetailsData.details.quantity * productPriceSum).toFixed(2)}}</td>
+                <td>{{salesDetailsData.salesTime | date:'yyyy-MM-dd'}}</td>
+                <td>
+                    <div class="list" style="width: auto">
+                        <span ng-repeat="logistics in salesDetailsData.details.logisticsInfoList">{{logistics.company }}:{{logistics.orderNumber}}</br></span>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

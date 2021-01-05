@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.ProductSplitHistoryPriceMapper">
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="TIME" property="time" jdbcType="TIMESTAMP"/>
+        <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR"/>
+        <result column="SERVICE_TYPE" property="serviceType" jdbcType="TINYINT"/>
+        <result column="MATERIAL_CODE" property="materialCode" jdbcType="VARCHAR"/>
+        <result column="MATERIAL_NAME" property="materialName" jdbcType="VARCHAR"/>
+        <result column="TYPE" property="type" jdbcType="TINYINT"/>
+        <result column="PRICE" property="price" jdbcType="DOUBLE"/>
+        <result column="PRODUCT_TYPE" property="productType" jdbcType="VARCHAR"/>
+        <result column="TAX_RATE" property="taxRate" jdbcType="DOUBLE"/>
+        <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP"/>
+        <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP"/>
+        <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, TIME, PRODUCT_CODE, SERVICE_TYPE, MATERIAL_CODE, MATERIAL_NAME, TYPE, PRICE, PRODUCT_TYPE, TAX_RATE, CREATED_BY, CREATED_DATE,
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+    <select id="getProductSplitHistoryPriceByTypeNotTwo" resultMap="BaseResultMap"
+            parameterType="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        select DISTINCT TIME,TYPE
+        from am_product_split_history_price
+        where TYPE != 2
+        AND DELETED_FLAG != "Y"
+        <if test="productCode != null">
+            and PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="time != null">
+            and TIME = #{time,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <select id="getProductSplitHistoryPrice" resultMap="BaseResultMap"
+            parameterType="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        select
+        <include refid="Base_Column_List"/>
+        from am_product_split_history_price
+        where DELETED_FLAG = "N"
+        <if test="productCode != null">
+            and PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+        </if>
+        <if test="type != null">
+            and TYPE = #{type,jdbcType=TINYINT}
+        </if>
+        order BY TIME ASC,
+        PRODUCT_TYPE ASC
+    </select>
+
+    <select id="getProductSplitHistoryPriceById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from am_product_split_history_price
+        where ID = #{id,jdbcType=BIGINT}
+    </select>
+
+    <update id="updateDeletedFlagByProductCodeTimeMaterialCodeProductType" parameterType="java.util.List">
+        update am_product_split_history_price
+        <set>
+            DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+        </set>
+        where PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+        and TIME = #{time,jdbcType=TIMESTAMP}
+        and MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR}
+        and PRODUCT_TYPE = #{productType,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByProductCodeMaterialCodeProductType" parameterType="java.util.List">
+        update am_product_split_history_price
+        <set>
+            PRICE = #{price,jdbcType=DOUBLE},
+            TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+            UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+        </set>
+        where PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+        and TYPE = 0
+        and MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR}
+        and PRODUCT_TYPE = #{productType,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateTaxRateByProductType" parameterType="java.util.List">
+        update am_product_split_history_price
+        <set>
+            TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+            UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+        </set>
+        where PRODUCT_TYPE = #{productType,jdbcType=VARCHAR}
+    </update>
+
+    <!--  <insert id="batchInsertOnDuplicateKeyUpdateProductSplitHistor" parameterType="java.util.List">
+        insert into am_product_split_history_price(`TIME`,PRODUCT_CODE,SERVICE_TYPE, MATERIAL_CODE, MATERIAL_NAME,
+        `TYPE`,PRICE,PRODUCT_TYPE,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATED_DATE,DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+          (#{item.time,jdbcType=TIMESTAMP},
+          #{item.productCode,jdbcType=VARCHAR},
+          #{item.serviceType,jdbcType=TINYINT},
+          #{item.materialCode,jdbcType=VARCHAR},
+          #{item.materialName,jdbcType=VARCHAR},
+          #{item.type,jdbcType=TINYINT},
+          #{item.price,jdbcType=DOUBLE},
+          #{item.productType,jdbcType=VARCHAR},
+          #{item.createdBy,jdbcType=VARCHAR},
+          #{item.createdDate,jdbcType=TIMESTAMP},
+          #{item.updatedBy,jdbcType=VARCHAR},
+          #{item.updatedDate,jdbcType=TIMESTAMP},
+          #{item.deletedFlag,jdbcType=VARCHAR})
+        </foreach>
+        on duplicate key update
+        `TIME`=values(`TIME`),
+        PRODUCT_CODE=values(PRODUCT_CODE),
+        SERVICE_TYPE=values(SERVICE_TYPE),
+        MATERIAL_CODE=values(MATERIAL_CODE),
+        MATERIAL_NAME=values(MATERIAL_NAME),
+        TYPE=values(TYPE),
+        PRICE=values(PRICE),
+        PRODUCT_TYPE=values(PRODUCT_TYPE),
+        CREATED_BY=values(CREATED_BY),
+        CREATED_DATE=values(CREATED_DATE),
+        UPDATED_BY=values(UPDATED_BY),
+        UPDATED_DATE=values(UPDATED_DATE),
+        DELETED_FLAG=values(DELETED_FLAG)
+      </insert>-->
+
+    <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into am_product_split_history_price
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="time != null">
+                TIME,
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE,
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE,
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="price != null">
+                PRICE,
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE,
+            </if>
+            <if test="taxRate != null">
+                TAX_RATE,
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY,
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE,
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY,
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE,
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="time != null">
+                #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="productCode != null">
+                #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=TINYINT},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="productType != null">
+                #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRate != null">
+                #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="addProductSplitHistoryPriceList" parameterType="java.util.List">
+        insert into am_product_split_history_price (TIME, PRODUCT_CODE, SERVICE_TYPE, MATERIAL_CODE,
+        MATERIAL_NAME, TYPE, PRICE, PRODUCT_TYPE, TAX_RATE, CREATED_BY, CREATED_DATE,
+        UPDATED_BY, UPDATED_DATE, DELETED_FLAG)
+        values
+        <foreach collection="productSplitHistoryPriceList" item="item" index="index" separator=",">
+            (#{item.time},#{item.productCode},#{item.serviceType},#{item.materialCode},#{item.materialName},#{item.type}
+            ,#{item.price},#{item.productType},#{item.taxRate},#{item.createdBy},#{item.createdDate}
+            ,#{item.updatedBy},#{item.updatedDate},#{item.deletedFlag})
+        </foreach>
+    </insert>
+
+    <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        update am_product_split_history_price
+        <set>
+            <if test="time != null">
+                TIME = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRate != null">
+                TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByProductCode" parameterType="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        update am_product_split_history_price
+        <set>
+            <if test="time != null">
+                TIME = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRate != null">
+                TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateProductSplitHistoryPriceByTimeProductCode"
+            parameterType="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        update am_product_split_history_price
+        <set>
+            <if test="time != null">
+                TIME = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRate != null">
+                TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+        AND TIME = #{time,jdbcType=TIMESTAMP}
+        AND DELETED_FLAG = 'N'
+    </update>
+
+
+    <update id="updateProductSplitHistoryPriceByTime"
+            parameterType="cn.com.glsx.supplychain.model.am.ProductSplitHistoryPrice">
+        update am_product_split_history_price
+        <set>
+            <if test="time != null">
+                TIME = #{time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceType != null">
+                SERVICE_TYPE = #{serviceType,jdbcType=TINYINT},
+            </if>
+            <if test="materialCode != null">
+                MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR},
+            </if>
+            <if test="materialName != null">
+                MATERIAL_NAME = #{materialName,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                TYPE = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="price != null">
+                PRICE = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="productType != null">
+                PRODUCT_TYPE = #{productType,jdbcType=VARCHAR},
+            </if>
+            <if test="taxRate != null">
+                TAX_RATE = #{taxRate,jdbcType=DOUBLE},
+            </if>
+            <if test="createdBy != null">
+                CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createdDate != null">
+                CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedBy != null">
+                UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updatedDate != null">
+                UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedFlag != null">
+                DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where
+        PRODUCT_CODE = #{productCode,jdbcType=VARCHAR}
+        and TIME = #{time,jdbcType=TIMESTAMP}
+        AND DELETED_FLAG = 'N'
+        <if test="materialCode != null">
+            and MATERIAL_CODE = #{materialCode,jdbcType=VARCHAR}
+        </if>
+        <if test="productType != null">
+            and PRODUCT_TYPE = #{productType,jdbcType=VARCHAR}
+        </if>
+    </update>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementSellCombileMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementSellCombile">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="COMBILE_CODE" jdbcType="VARCHAR" property="combileCode" />
+    <result column="WORK_ORDER" jdbcType="VARCHAR" property="workOrder" />
+    <result column="WORK_TYPE" jdbcType="VARCHAR" property="workType" />
+    <result column="BILL_TYPE_CODE" jdbcType="VARCHAR" property="billTypeCode" />
+    <result column="BILL_TYPE_NAME" jdbcType="VARCHAR" property="billTypeName" />
+    <result column="BILL_NUMBER" jdbcType="VARCHAR" property="billNumber" />
+    <result column="TIME" jdbcType="TIMESTAMP" property="time" />
+    <result column="SALES_CODE" jdbcType="VARCHAR" property="salesCode" />
+    <result column="SALES_NAME" jdbcType="VARCHAR" property="salesName" />
+    <result column="CUSTOMER_CODE" jdbcType="VARCHAR" property="customerCode" />
+    <result column="CUSTOMER_NAME" jdbcType="VARCHAR" property="customerName" />
+    <result column="SALE_GROUP_CODE" jdbcType="VARCHAR" property="saleGroupCode" />
+    <result column="SALE_GROUP_NAME" jdbcType="VARCHAR" property="saleGroupName" />
+    <result column="STATEMENT_CURRENCY_CODE" jdbcType="VARCHAR" property="statementCurrencyCode" />
+    <result column="STATEMENT_CURRENCY_NAME" jdbcType="VARCHAR" property="statementCurrencyName" />
+    <result column="MATERIAL_CODE" jdbcType="VARCHAR" property="materialCode" />
+    <result column="MATERIAL_NAME" jdbcType="VARCHAR" property="materialName" />
+    <result column="SALES_UNIT_CODE" jdbcType="VARCHAR" property="salesUnitCode" />
+    <result column="SALES_UNIT_NAME" jdbcType="VARCHAR" property="salesUnitName" />
+    <result column="SALES_QUANTITY" jdbcType="INTEGER" property="salesQuantity" />
+    <result column="PRICE" jdbcType="DOUBLE" property="price" />
+    <result column="GIFT" jdbcType="VARCHAR" property="gift" />
+    <result column="TAX_RATE" jdbcType="DOUBLE" property="taxRate" />
+    <result column="TAKE_GOODS_DATE" jdbcType="TIMESTAMP" property="takeGoodsDate" />
+    <result column="STATEMENT_ORGANIZE_CODE" jdbcType="VARCHAR" property="statementOrganizeCode" />
+    <result column="STATEMENT_ORGANIZE_NAME" jdbcType="VARCHAR" property="statementOrganizeName" />
+    <result column="RESERVE_TYPE" jdbcType="VARCHAR" property="reserveType" />
+    <result column="WAREHOUSE_CODE" jdbcType="VARCHAR" property="warehouseCode" />
+    <result column="WAREHOUSE_NAME" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="QUANTITY" jdbcType="INTEGER" property="quantity" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, COMBILE_CODE, WORK_ORDER,WORK_TYPE, BILL_TYPE_CODE, BILL_TYPE_NAME, BILL_NUMBER, TIME, 
+    SALES_CODE, SALES_NAME, CUSTOMER_CODE, CUSTOMER_NAME, SALE_GROUP_CODE, SALE_GROUP_NAME, 
+    STATEMENT_CURRENCY_CODE, STATEMENT_CURRENCY_NAME, MATERIAL_CODE, MATERIAL_NAME, SALES_UNIT_CODE, 
+    SALES_UNIT_NAME, SALES_QUANTITY, PRICE, GIFT, TAX_RATE, TAKE_GOODS_DATE, STATEMENT_ORGANIZE_CODE, 
+    STATEMENT_ORGANIZE_NAME, RESERVE_TYPE, WAREHOUSE_CODE, WAREHOUSE_NAME, QUANTITY, 
+    CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+  
+  <select id="pageStatementSellCombile" parameterType="cn.com.glsx.supplychain.model.am.StatementSellCombile" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from am_statement_sell_combile
+  	<where>
+  		<if test="workType != null and workType !=''">
+  			AND WORK_TYPE = #{workType,jdbcType=VARCHAR}
+  		</if>	
+  		<if test="saleGroupCode != null and saleGroupCode != ''">
+            AND (SALE_GROUP_CODE LIKE "%"#{saleGroupCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="saleGroupName != null and saleGroupName !=''">
+            or SALE_GROUP_NAME LIKE "%"#{saleGroupName,jdbcType=VARCHAR}"%")
+        </if>
+  		<if test="customerCode != null and customerCode != ''">
+            AND (CUSTOMER_CODE LIKE "%"#{customerCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="customerName != null and customerName !=''">
+            or CUSTOMER_NAME LIKE "%"#{customerName,jdbcType=VARCHAR}"%")
+        </if>	
+        <if test="materialCode != null and materialCode != ''">
+            AND (MATERIAL_CODE LIKE "%"#{materialCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="materialName != null and materialName !=''">
+            or MATERIAL_NAME LIKE "%"#{materialName,jdbcType=VARCHAR}"%")
+        </if>
+  		<if test="startDate != null">
+            AND TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="workOrder != null">
+        	AND WORK_ORDER LIKE "%"#{workOrder,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="combileCode != null">
+        	AND COMBILE_CODE LIKE "%"#{combileCode,jdbcType=VARCHAR}"%"
+        </if>
+  	</where>
+  </select>
+  
+  <select id="listStatementSellCombile" parameterType="cn.com.glsx.supplychain.model.am.StatementSellCombile" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from am_statement_sell_combile
+  	<where>
+  		<if test="workType != null and workType !=''">
+  			AND WORK_TYPE = #{workType,jdbcType=VARCHAR}
+  		</if>	
+  		<if test="customerCode != null and customerCode != ''">
+            AND (CUSTOMER_CODE LIKE "%"#{customerCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="customerName != null and customerName !=''">
+            or CUSTOMER_NAME LIKE "%"#{customerName,jdbcType=VARCHAR}"%")
+        </if>	
+        <if test="materialCode != null and materialCode != ''">
+            AND (MATERIAL_CODE LIKE "%"#{materialCode,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="materialName != null and materialName !=''">
+            or MATERIAL_NAME LIKE "%"#{materialName,jdbcType=VARCHAR}"%")
+        </if>
+  		<if test="startDate != null">
+            AND TIME &gt;= #{startDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="endDate != null">
+            AND TIME &lt;= #{endDate,jdbcType=TIMESTAMP}
+        </if>
+        <if test="workOrder != null">
+        	AND WORK_ORDER LIKE "%"#{workOrder,jdbcType=VARCHAR}"%"
+        </if>
+        <if test="combileCode != null">
+        	AND COMBILE_CODE LIKE "%"#{combileCode,jdbcType=VARCHAR}"%"
+        </if>
+  	</where>
+  </select>
+</mapper>

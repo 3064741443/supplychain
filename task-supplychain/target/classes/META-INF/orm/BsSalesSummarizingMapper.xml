@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.BsSalesSummarizingMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.BsSalesSummarizing">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="SALES_TIME" jdbcType="TIMESTAMP" property="salesTime" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MERCHANT_CODE, STATUS, SALES_TIME, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, 
+    DELETED_FLAG
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bs_sales_summarizing
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="listSalesSummarizingByCondition" parameterType="glsx.com.cn.task.model.BsSalesSummarizing" resultType="glsx.com.cn.task.model.BsSalesSummarizing">
+  	SELECT s.id as id,s.merchant_code as merchantCode,u.merchant_name as merchantName,s.sales_time as salesTime,d.sales_quantity as quantity,p.MATERIAL_CODE as materialCode FROM bs_sales_summarizing AS s LEFT JOIN 
+	bs_dealer_user_info AS u ON(s.MERCHANT_CODE=u.MERCHANT_CODE) LEFT JOIN bs_sales_summarizing_detail AS d ON(s.id=d.SALES_ID)
+	LEFT JOIN bs_product_detail AS p ON(d.PRODUCT_CODE=p.PRODUCT_CODE) WHERE 
+	s.STATUS=4 AND s.DELETED_FLAG='N' AND DATE_FORMAT(s.`SALES_TIME`,'%Y-%m-%d %H:%i:%s') > DATE_FORMAT(#{salesTime},'%Y-%m-%d %H:%i:%s') and (p.TYPE=0 or p.TYPE=7)
+	order by s.`UPDATED_DATE` asc 
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from bs_sales_summarizing
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.BsSalesSummarizing">
+    insert into bs_sales_summarizing (ID, MERCHANT_CODE, STATUS, 
+      SALES_TIME, CREATED_BY, CREATED_DATE, 
+      UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+      )
+    values (#{id,jdbcType=BIGINT}, #{merchantCode,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{salesTime,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, 
+      #{updatedBy,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, #{deletedFlag,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.BsSalesSummarizing">
+    insert into bs_sales_summarizing
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="merchantCode != null">
+        MERCHANT_CODE,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="salesTime != null">
+        SALES_TIME,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantCode != null">
+        #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="salesTime != null">
+        #{salesTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.BsSalesSummarizing">
+    update bs_sales_summarizing
+    <set>
+      <if test="merchantCode != null">
+        MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="salesTime != null">
+        SALES_TIME = #{salesTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.BsSalesSummarizing">
+    update bs_sales_summarizing
+    set MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=TINYINT},
+      SALES_TIME = #{salesTime,jdbcType=TIMESTAMP},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

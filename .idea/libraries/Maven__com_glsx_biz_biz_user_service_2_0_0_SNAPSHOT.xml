@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.glsx.biz:biz-user-service:2.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-user-service/2.0.0-SNAPSHOT/biz-user-service-2.0.0-20180904.091536-36.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-user-service/2.0.0-SNAPSHOT/biz-user-service-2.0.0-20180904.091536-36-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/glsx/biz/biz-user-service/2.0.0-SNAPSHOT/biz-user-service-2.0.0-20180904.091536-36-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

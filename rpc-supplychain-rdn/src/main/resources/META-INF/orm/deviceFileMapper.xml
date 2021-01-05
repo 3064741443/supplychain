@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.rpc.supplychain.rdn.mapper.DeviceFileMapper">
+  <sql id="return_Column_List">
+   		dfs.sn sn ,df.imei imei,dcmc.iccid iccid,dcmc.imsi imsi,dfs.user_id userId,dt.name deviceTypeName,dc.device_code deviceCode ,dc.device_name deviceName,
+   		df.package_id packageId,dfs.package_statu packageStatu,df.send_merchant_no sendMerchantNo,df.in_storage_time inStorageTime,df.out_storage_time outStorageTime
+   </sql>
+
+  <select id="exportDeviceFile" parameterType="cn.com.glsx.supplychain.jxc.dto.JXCMTDeviceFileDTO" resultType="cn.com.glsx.supplychain.jxc.dto.JXCMTDeviceFileDTO">
+    select
+    <include refid="return_Column_List"/>
+    from device_file_snapshot AS dfs
+    LEFT JOIN device_file AS df ON(dfs.sn = df.sn)
+    LEFT JOIN device_card_manager AS dcmc ON(dcmc.id = dfs.card_id)
+    LEFT JOIN device_code AS dc ON(dc.id = df.device_code)
+    LEFT JOIN device_type AS dt ON(dt.id = dc.type_id)
+    LEFT JOIN device_user_manager dum ON(dfs.user_id=dum.id)
+    <where>
+      <if test="devTypeId != null">
+        and dt.id = #{devTypeId,jdbcType=INTEGER}
+      </if>
+      <if test="packageStatu != null and packageStatu !=''">
+        and dfs.package_statu = #{packageStatu,jdbcType=VARCHAR}
+      </if>
+      <if test="sn != null and sn != ''">
+        and df.sn = #{sn,jdbcType=VARCHAR}
+      </if>
+      <if test="iccid != null and iccid != ''">
+        and dcmc.iccid = #{iccid,jdbcType=VARCHAR}
+      </if>
+      <if test="imsi != null and imsi != ''">
+        and dcmc.imsi = #{imsi,jdbcType=VARCHAR}
+      </if>
+      <if test="userFlag != null and userFlag != ''">
+        and dum.user_flag = #{userFlag,jdbcType=VARCHAR}
+      </if>
+      <if test="deviceCode != null and deviceCode != ''">
+        and df.device_code = #{deviceCode,jdbcType=VARCHAR}
+      </if>
+      <if test="packageId != null and packageId !=0">
+        and df.package_id = #{packageId,jdbcType=INTEGER}
+      </if>
+      <if test="sendMerchantNo != null and sendMerchantNo !=0">
+        AND df.send_merchant_no = #{sendMerchantNo,jdbcType=INTEGER}
+      </if>
+      <if test="outStorageStartDate != null">
+        and CONVERT(DATE_FORMAT(df.OUT_STORAGE_TIME,'%Y%m%d%'),SIGNED) &gt;=
+        CONVERT(DATE_FORMAT(#{outStorageStartDate},'%Y%m%d'),SIGNED)
+      </if>
+      <if test="outStorageEndDate != null">
+        and CONVERT(DATE_FORMAT(df.OUT_STORAGE_TIME,'%Y%m%d'),SIGNED) &lt;=
+        CONVERT(DATE_FORMAT(#{outStorageEndDate},'%Y%m%d'),SIGNED)
+      </if>
+      <if test="packageUserStartDate != null">
+        and CONVERT(DATE_FORMAT(dfs.PACKAGE_USER_TIME,'%Y%m%d%'),SIGNED) &gt;=
+        CONVERT(DATE_FORMAT(#{packageUserStartDate},'%Y%m%d'),SIGNED)
+      </if>
+      <if test="packageUserEndDate != null">
+        and CONVERT(DATE_FORMAT(dfs.PACKAGE_USER_TIME,'%Y%m%d'),SIGNED) &lt;=
+        CONVERT(DATE_FORMAT(#{packageUserEndDate},'%Y%m%d'),SIGNED)
+      </if>
+    </where>
+    ORDER BY df.ID desc
+  </select>
+  
+</mapper>

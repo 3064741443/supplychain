@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.UserInfoMapper">
+	
+	<resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.UserInfo">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="ROLE" property="role" jdbcType="INTEGER" />
+		<result column="WAREHOUSE_ID" property="warehouseId" jdbcType="INTEGER" />
+		<result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+		<result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+		<result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+		<result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+		<result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+		<result column="IS_SUP" property="isSup" jdbcType="INTEGER" />
+				
+		<association property="wareHouseInfo" resultMap="WareHouseInfoMap"/>
+	</resultMap>
+	
+	<resultMap id="WareHouseInfoMap" type="cn.com.glsx.supplychain.model.WareHouseInfo">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="NAME" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		ID,USER_NAME,PASSWORD,ROLE,WAREHOUSE_ID,CREATED_DATE,CREATED_BY,UPDATED_DATE,UPDATED_BY,DELETED_FLAG,IS_SUP
+	</sql>
+	
+	<sql id="Search_Column_List">
+		u.ID,u.USER_NAME,u.PASSWORD,u.ROLE,u.WAREHOUSE_ID,w.NAME,u.CREATED_DATE,u.CREATED_BY,u.UPDATED_DATE,u.UPDATED_BY,u.DELETED_FLAG,u.IS_SUP
+	</sql>
+	
+	<!-- 查询登录信息 -->
+	<select id="logins" resultMap="BaseResultMap" parameterType="cn.com.glsx.supplychain.model.UserInfo">
+  	  select
+			<include refid="Search_Column_List"/>
+		from user_info u LEFT JOIN warehouse_info w ON u.WAREHOUSE_ID = w.ID
+		<where>
+		   <if test="userName != null">
+		        AND u.USER_NAME = '${userName}'
+		   </if>
+	    </where>
+  	</select>
+  
+	<!-- 查询用户列表 -->
+	<select id="listUserInfo" resultMap="BaseResultMap" parameterType="cn.com.glsx.supplychain.model.UserInfo">
+		select
+			<include refid="Search_Column_List"/>
+		from user_info u LEFT JOIN warehouse_info w ON u.WAREHOUSE_ID = w.ID
+		<where>
+		   <if test="userName != null">
+		        AND u.USER_NAME LIKE CONCAT('%',#{userName},'%')
+		   </if>
+		   <if test="role != null and role != 0">
+		        AND ROLE = #{role,jdbcType=INTEGER}
+		   </if>
+	    </where>
+	    ORDER BY u.CREATED_DATE DESC
+	</select>
+	
+	<!-- 通过用户名称查询用户信息 -->
+   <select id="getUserInfoByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from user_info
+		<where>
+		   <if test="userName != null">
+		        AND USER_NAME = #{userName,jdbcType=VARCHAR}
+		   </if>
+	    </where>
+   </select>
+   
+     <!-- 修改数据查询 -->
+  <select id="getUserInfoByByUpdate" parameterType="cn.com.glsx.supplychain.model.UserInfo" resultMap="BaseResultMap">
+	  	select 
+	    	<include refid="Base_Column_List" />
+	    from user_info
+	    <where>
+		   <if test="id != null">
+		        AND ID NOT IN(#{id,jdbcType=INTEGER})
+		   </if>
+		   <if test="userName != null">
+		        AND USER_NAME = #{userName,jdbcType=VARCHAR}
+		   </if>
+	    </where> 
+  </select>
+	
+	<!-- 通过用户ID查询用户信息 -->
+   <select id="getUserInfoById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    	select 
+    		<include refid="Base_Column_List" />
+    	from user_info
+    	<where>
+	    <if test="_parameter != null">
+	        AND ID = #{_parameter != null,jdbcType=INTEGER}
+	    </if>
+	  </where>
+   </select>
+  
+   <!-- 统计列表记录数 -->
+   <select id="count" parameterType="cn.com.glsx.supplychain.model.UserInfo" resultType="java.lang.Integer">
+    select  
+    	count(*)
+    from user_info
+    <where>
+	    <if test="userName != null">
+	        AND USER_NAME LIKE CONCAT('%',#{userName},'%')
+	     </if>
+	     <if test="warehouseId != null">
+	        AND WAREHOUSE_ID = #{warehouseId,jdbcType=VARCHAR}
+	     </if>
+	  </where>
+   </select>
+  
+	
+	<!-- 删除用户信息 -->
+  	<delete id="deleteUserInfo" parameterType="java.lang.Integer">
+	    delete from user_info
+	    where ID = #{id,jdbcType=INTEGER}
+  	</delete>
+  	
+    <!-- 插入用户信息 -->
+    <insert id="insertUserInfo" parameterType="cn.com.glsx.supplychain.model.UserInfo">
+	    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+	      SELECT LAST_INSERT_ID()
+	    </selectKey>
+	    insert into user_info(
+	    	<if test="userName != null and userName != ''">USER_NAME</if>
+		    <if test="password != null and password != ''">,PASSWORD</if>
+		    <if test="role != null and role != 0">,ROLE</if>
+		    <if test="warehouseId != null and warehouseId != 0">,WAREHOUSE_ID</if>
+		    <if test="createdDate != null">,CREATED_DATE</if>
+		    <if test="createdBy != null and createdBy !=''">,CREATED_BY</if>
+		    <if test="updatedDate != null">,UPDATED_DATE</if>
+		    <if test="updatedBy != null and updatedBy !=''">,UPDATED_BY</if>
+		    <if test="deletedFlag != null and deletedFlag !=''">,DELETED_FLAG</if>		 
+	    )values(
+	    	<if test="userName != null and userName != ''">#{userName}</if>
+		    <if test="password != null and password != ''">,#{password}</if>
+		    <if test="role != null and role != 0">,#{role}</if>
+		    <if test="warehouseId != null and warehouseId != 0">,#{warehouseId}</if>
+		    <if test="createdDate != null">,#{createdDate}</if>
+		    <if test="createdBy != null and createdBy !=''">,#{createdBy}</if>
+		    <if test="updatedDate != null">,#{updatedDate}</if>
+		    <if test="updatedBy != null and updatedBy !=''">,#{updatedBy}</if>
+		    <if test="deletedFlag != null and deletedFlag !=''">,'N'</if>	
+	    )
+  </insert>
+  
+  <!-- 更新用户信息 -->
+  <update id="update" parameterType="cn.com.glsx.supplychain.model.UserInfo">
+    update user_info
+    <set>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        ROLE = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null">
+        WAREHOUSE_ID = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.am.StatementSellReconMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.StatementSellRecon">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="RECON_CODE" jdbcType="VARCHAR" property="reconCode" />
+    <result column="CHANNEL" jdbcType="TINYINT" property="channel" />
+    <result column="SALE_GROUP_CODE" jdbcType="VARCHAR" property="saleGroupCode" />
+    <result column="SALE_GROUP_NAME" jdbcType="VARCHAR" property="saleGroupName" />
+    <result column="SALE_GROUP_NAME_CUS" jdbcType="VARCHAR" property="saleGroupNameCus" />
+    <result column="SALE_GROUP_ADDR" jdbcType="VARCHAR" property="saleGroupAddr" />
+    <result column="SALE_GROUP_PHONE" jdbcType="VARCHAR" property="saleGroupPhone" />
+    <result column="SALE_GROUP_CONTACT" jdbcType="VARCHAR" property="saleGroupContact" />
+    <result column="CUSTOMER_CODE" jdbcType="VARCHAR" property="customerCode" />
+    <result column="CUSTOMER_NAME" jdbcType="VARCHAR" property="customerName" />
+    <result column="WAREHOUSE_CODE" jdbcType="VARCHAR" property="warehouseCode" />
+    <result column="WAREHOUSE_NAME" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="CUSTOMER_ADDR" jdbcType="VARCHAR" property="customerAddr" />
+    <result column="CUSTOMER_PHONE" jdbcType="VARCHAR" property="customerPhone" />
+    <result column="CUSTOMER_CONTACT" jdbcType="VARCHAR" property="customerContact" />
+    <result column="MERCHANT_CODE" jdbcType="VARCHAR" property="merchantCode" />
+    <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName" />
+    <result column="RECON_TIME_START" jdbcType="TIMESTAMP" property="reconTimeStart" />
+    <result column="RECON_TIME_END" jdbcType="TIMESTAMP" property="reconTimeEnd" />
+    <result column="STATUS" jdbcType="TINYINT" property="status" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, RECON_CODE, CHANNEL, SALE_GROUP_CODE, SALE_GROUP_NAME,SALE_GROUP_NAME_CUS, SALE_GROUP_ADDR, SALE_GROUP_PHONE, 
+    SALE_GROUP_CONTACT, CUSTOMER_CODE, CUSTOMER_NAME, CUSTOMER_ADDR, CUSTOMER_PHONE, 
+    CUSTOMER_CONTACT, MERCHANT_CODE, MERCHANT_NAME, RECON_TIME_START, RECON_TIME_END, 
+    STATUS, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,WAREHOUSE_CODE,CUSTOMER_NAME
+  </sql>
+  
+  <select id="pageStatementSellRecon" parameterType="cn.com.glsx.supplychain.model.am.StatementSellRecon" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from am_statement_sell_recon
+  	<where> DELETED_FLAG = 'N'
+  		<if test="merchantName != null">
+  			AND (MERCHANT_NAME like concat('%',#{merchantName,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="merchantCode != null">
+  			OR MERCHANT_CODE like concat('%',#{merchantCode,jdbcType=VARCHAR},'%'))
+  		</if>
+  		<if test="status != null">
+  			AND `STATUS` = #{status,jdbcType=TINYINT}
+  		</if>
+  	</where>
+  </select>
+  
+  <select id="countStatementSellRecon"  resultType="java.lang.Integer">
+  	select count(1) from am_statement_sell_recon where DATE_FORMAT(#{reconTime},'%Y-%m-%d')&gt;=`recon_time_start` and DATE_FORMAT(#{reconTime},'%Y-%m-%d') &lt;=`recon_time_end` and #{merchantCode}=MERCHANT_CODE;
+  </select>
+</mapper>

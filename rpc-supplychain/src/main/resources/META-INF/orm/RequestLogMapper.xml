@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.RequestLogMapper">
+	<resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.RequestLog">
+		<id column="ID" jdbcType="INTEGER" property="id" />
+		<result column="ICCID" jdbcType="VARCHAR" property="iccid" />
+		<result column="IMEI" jdbcType="VARCHAR" property="imei" />
+		<result column="DEVICE_ID" jdbcType="INTEGER" property="deviceId" />
+		<result column="ERROR_CODE" jdbcType="INTEGER" property="errorCode" />
+		<result column="ERROR_MSG" jdbcType="VARCHAR" property="errorMsg" />
+		<result column="RESULT" jdbcType="VARCHAR" property="result" />
+		<result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+		<result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+		<result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+	</resultMap>
+	
+	<sql id="Base_Column">
+    ID, DEVICE_ID, ICCID, IMEI, RESULT, ERROR_CODE, ERROR_MSG, CREATED_BY, CREATED_DATE, 
+    UPDATED_BY, UPDATED_DATE, DELETED_FLAG
+  </sql>
+
+	<insert id="insert" parameterType="cn.com.glsx.supplychain.model.RequestLog">
+		insert into result_log(
+		<if test="deviceId != null and deviceId != 0">DEVICE_ID,</if>
+		<if test="iccid != null and iccid != ''">ICCID,</if>
+		<if test="imei != null and imei != ''">IMEI,</if>
+		<if test="result != null and result != ''">RESULT,</if>
+		<if test="errorCode != null and errorCode != 0">ERROR_CODE,</if>
+		<if test="errorMsg != null and errorMsg !=''">ERROR_MSG,</if>
+		<if test="createdDate != null!=''">CREATED_DATE,</if>
+		<if test="createdBy != null and createdBy!=''">CREATED_BY,</if>
+		<if test="updatedDate != null">UPDATED_DATE,</if>
+		<if test="updatedBy != null and updatedBy !=''">UPDATED_BY,</if>
+		<if test="deletedFlag != null and deletedFlag !=''">DELETED_FLAG</if>
+		)values(
+		<if test="deviceId != null and deviceId != 0">#{deviceId},</if>
+		<if test="iccid != null and iccid != ''">#{iccid},</if>
+		<if test="imei != null and imei != ''">#{imei},</if>
+		<if test="result != null and result != ''">#{result},</if>
+		<if test="errorCode != null and errorCode != 0">#{errorCode},</if>
+		<if test="errorMsg != null and errorMsg !=''">#{errorMsg},</if>
+		<if test="createdDate != null!=''">#{createdDate},</if>
+		<if test="createdBy != null and createdBy!=''">#{createdBy},</if>
+		<if test="updatedDate != null">#{updatedDate},</if>
+		<if test="updatedBy != null and updatedBy !=''">#{updatedBy},</if>
+		<if test="deletedFlag != null and deletedFlag !=''">'N'</if>
+		)
+	</insert>
+<!-- 查询订单列表 -->
+  <select id="getRequestLog" parameterType="cn.com.glsx.supplychain.model.RequestLog" resultMap="BaseResultMap" >
+      SELECT
+		   <include refid="Base_Column" />
+   	  FROM result_log
+    <where>
+	    <if test="imei != null">
+	        AND IMEI = #{imei}
+	      </if>
+	  </where>
+  </select>
+</mapper>

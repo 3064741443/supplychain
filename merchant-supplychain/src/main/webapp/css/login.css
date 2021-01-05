@@ -1,0 +1,212 @@
+/* =============================================================================
+   HTML5 CSS Reset Minified - Eric Meyer
+   ========================================================================== */
+
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}
+body{line-height:1}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+nav ul{list-style:none}
+blockquote,q{quotes:none}
+blockquote:before,blockquote:after,q:before,q:after{content:none}
+a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent;text-decoration:none}
+mark{background-color:#ff9;color:#000;font-style:italic;font-weight:bold}
+del{text-decoration:line-through}
+abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}
+table{border-collapse:collapse;border-spacing:0}
+hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}
+input,select{vertical-align:middle}
+li{list-style:none}
+
+
+/* =============================================================================
+   My CSS
+   ========================================================================== */
+
+/* ---- base ---- */
+
+html,body{ 
+	width:100%;
+	height:100%;
+	background:#111;
+}
+
+html{
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+body{
+  font:normal 75% Arial, Helvetica, sans-serif;
+}
+
+canvas{
+  display:block;
+  vertical-align:bottom;
+}
+
+
+/* ---- stats.js ---- */
+
+.count-particles{
+  background: #000022;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 80px;
+  color: #13E8E9;
+  font-size: .8em;
+  text-align: left;
+  text-indent: 4px;
+  line-height: 14px;
+  padding-bottom: 2px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+
+.js-count-particles{
+  font-size: 1.1em;
+}
+
+#stats,
+.count-particles{
+  -webkit-user-select: none;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+#stats{
+  border-radius: 3px 3px 0 0;
+  overflow: hidden;
+}
+
+.count-particles{
+  border-radius: 0 0 3px 3px;
+}
+
+
+/* ---- particles.js container ---- */
+
+#particles-js{
+  width: 100%;
+  height: 100%;
+  background-color: #092533;
+  background-image: url('');
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}
+.login_warp{
+	position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.login_con{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	/* width: 316px;
+	height: 286px;
+	margin: -184px 0px 0px -230px; */
+	margin: 0px;
+    transform: translate(-50%, -50%);
+	background-color: rgba(0,0,0,0.7);
+	padding: 40px 60px;
+}
+h2.login_tit{
+	font-weight: normal;
+	text-align: center;
+	color: #fff;
+	font-size: 24px;
+	margin: 0px 0px 30px;
+}
+.login_mod p{
+	text-align: center;
+	margin-bottom: 25px;
+}
+.login_mod input.in_text{
+	width: 294px;
+	height: 24px;
+	line-height: 34px;
+	font-size: 14px;
+	padding: 4px 10px;
+	color: #333;
+	border: 1px solid #ccc;
+	/* margin-bottom: 20px; */
+}
+.login_mod input.in_text_sm{
+	width: 84px;
+	float: left;
+}
+.login_mod .tips{
+	font-size: 13px;
+	float: left;
+	color: #eee;
+	margin-top: 5px;
+	margin-left: 10px;
+}
+.login_mod .tips a{
+	color: #eee;
+	margin-right: 0px;
+}
+.login_mod .btn_login{
+	display: inline-block;
+	width: 318px;
+	height: 34px;
+	background-color: #048b42;
+	
+	color: #fff;
+	border: none;
+	font-size: 16px;
+	box-shadow: 2px 2px 2px #048b42;
+	border-radius: 4px;
+	cursor: pointer;
+	
+}
+.login_mod .btn_login:hover{
+	background-color: #00a84d;
+}
+h1.title_img{
+	text-indent: -9999px;
+	width: 304px;
+	height: 80px;
+	background: url('../images/gh-login-logo.png') 0 0 no-repeat;
+	position: absolute;
+	top: -102px;
+	left: 50%;
+	margin-left: -152px;
+}
+.footer{
+	position: fixed;
+	bottom: 20px;
+	width: 450px;
+	left: 50%;
+	margin-left: -225px;
+	text-align: center;
+	color: #ccc;
+	font-size: 12px;
+}
+.code{
+	float: left;
+	margin-left: 10px;
+}
+.code img{
+	height: 34px;
+}
+.login-msg{
+	color: #f00;
+	margin-bottom: 10px;
+}
+.login_mod p.err-msg{
+	color: #FF5722;
+    text-align: left;
+    text-indent: 2px;
+    margin-top: -20px;
+    margin-bottom: 10px;
+    display: none;
+}
+#loginError{
+	text-align: center;
+	margin-top: -10px;
+}

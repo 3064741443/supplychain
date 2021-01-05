@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.glsx.supplychain.mapper.SyncResultLogMapper">
+
+    <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.SyncResultLog">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <result column="ICCID" jdbcType="VARCHAR" property="iccid"/>
+        <result column="IMEI" jdbcType="VARCHAR" property="imei"/>
+        <result column="FLAG" jdbcType="VARCHAR" property="flag"/>
+        <result column="RESULT" jdbcType="VARCHAR" property="result"/>
+        <result column="ERROR_CODE" jdbcType="VARCHAR" property="errorCode"/>
+        <result column="ERROR_MSG" jdbcType="INTEGER" property="errorMsg"/>
+        <result column="CREATED_BY" jdbcType="INTEGER" property="createdBy"/>
+        <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate"/>
+        <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		ID,ICCID,IMEI,FLAG,RESULT,ERROR_CODE,ERROR_MSG,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATED_DATE,DELETED_FLAG
+	</sql>
+
+    <insert id="insert" parameterType="cn.com.glsx.supplychain.model.SyncResultLog">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sync_result_log(
+        <if test="iccid != null and iccid != ''">ICCID</if>
+        <if test="imei != null and imei != ''">,IMEI</if>
+        <if test="flag != null and flag != ''">,FLAG</if>
+        <if test="result != null and result != ''">,RESULT</if>
+        <if test="errorCode != null and errorCode !=''">,ERROR_CODE</if>
+        <if test="errorMsg != null and errorMsg !=''">,ERROR_MSG</if>
+        <if test="createdBy != null and createdBy !=''">,CREATED_BY</if>
+        <if test="createdDate != null">,CREATED_DATE</if>
+        <if test="updatedBy != null and updatedBy !=''">,UPDATED_BY</if>
+        <if test="updatedDate != null">,UPDATED_DATE</if>
+        <if test="deletedFlag != null and deletedFlag !=''">,DELETED_FLAG</if>
+        )values(
+        <if test="iccid != null and iccid != ''">#{iccid}</if>
+        <if test="imei != null and imei != ''">,#{imei}</if>
+        <if test="flag != null and flag != ''">,#{flag}</if>
+        <if test="result != null and result != ''">,#{result}</if>
+        <if test="errorCode != null and errorCode !=''">,#{errorCode}</if>
+        <if test="errorMsg != null and errorMsg !=''">,#{errorMsg}</if>
+        <if test="createdBy != null and createdBy !=''">,#{createdBy}</if>
+        <if test="createdDate != null">,#{createdDate}</if>
+        <if test="updatedBy != null and updatedBy !=''">,#{updatedBy}</if>
+        <if test="updatedDate != null">,#{updatedDate}</if>
+        <if test="deletedFlag != null and deletedFlag !=''">,#{deletedFlag}</if>
+        )
+    </insert>
+
+    <select id="listSyncResultLog" parameterType="cn.com.glsx.supplychain.model.SyncResultLog" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sync_result_log where 1=1
+        <if test="iccid != null and iccid != ''">
+            and ICCID = #{iccid,jdbcType=VARCHAR}
+        </if>
+        <if test="imei != null and imei != ''">
+            and IMEI = #{imei,jdbcType=VARCHAR}
+        </if>
+        <if test="flag != null and flag != ''">
+            and FLAG = #{flag,jdbcType=VARCHAR}
+        </if>
+        <if test="result != null and result != ''">
+            and RESULT = #{result,jdbcType=VARCHAR}
+        </if>
+        <if test="errorCode != null and errorCode != ''">
+            and ERRORCODE = #{errorCode,jdbcType=VARCHAR}
+        </if>
+        <if test="errorMsg != null and errorMsg != ''">
+            and ERRORMSG = #{errorMsg,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into sync_result_log
+        (ICCID,IMEI,FLAG,RESULT,ERROR_CODE,ERROR_MSG,CREATED_BY,CREATED_DATE,UPDATED_BY,UPDATED_DATE,DELETED_FLAG)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (   #{item.iccid,jdbcType=VARCHAR},
+                #{item.imei,jdbcType=VARCHAR},
+                #{item.flag,jdbcType=VARCHAR},
+                #{item.result,jdbcType=VARCHAR},
+                #{item.errorCode,jdbcType=VARCHAR},
+                #{item.errorMsg,jdbcType=VARCHAR},
+                #{item.createdBy,jdbcType=VARCHAR},
+                #{item.createdDate,jdbcType=TIMESTAMP},
+                #{item.updatedBy,jdbcType=VARCHAR},
+                #{item.updatedDate,jdbcType=TIMESTAMP},
+                #{item.deletedFlag,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

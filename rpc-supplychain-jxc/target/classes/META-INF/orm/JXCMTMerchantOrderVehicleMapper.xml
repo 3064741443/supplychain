@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.jxc.mapper.JXCMTMerchantOrderVehicleMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.jxc.model.JXCMTMerchantOrderVehicle">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mo_order_code" jdbcType="VARCHAR" property="moOrderCode" />
+    <result column="mo_parent_brand_id" jdbcType="INTEGER" property="moParentBrandId" />
+    <result column="mo_parent_brand_name" jdbcType="VARCHAR" property="moParentBrandName" />
+    <result column="mo_sub_brand_id" jdbcType="INTEGER" property="moSubBrandId" />
+    <result column="mo_sub_brand_name" jdbcType="VARCHAR" property="moSubBrandName" />
+    <result column="mo_audi_id" jdbcType="INTEGER" property="moAudiId" />
+    <result column="mo_audi_name" jdbcType="VARCHAR" property="moAudiName" />
+    <result column="mo_motorcycle" jdbcType="VARCHAR" property="moMotorcycle" />
+    <result column="mo_remark" jdbcType="VARCHAR" property="moRemark" />
+    <result column="mo_total" jdbcType="INTEGER" property="moTotal" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="deleted_flag" jdbcType="VARCHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, mo_order_code, mo_parent_brand_id, mo_parent_brand_name, mo_sub_brand_id, mo_sub_brand_name, 
+    mo_audi_id, mo_audi_name, mo_motorcycle, mo_remark, mo_total, created_by, created_date, 
+    updated_by, updated_date, deleted_flag
+  </sql>
+  
+</mapper>

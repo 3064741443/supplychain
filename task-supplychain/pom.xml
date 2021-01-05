@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.com.glsx.framework</groupId>
+        <artifactId>framework-task</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>glsx.com.cn</groupId>
+    <artifactId>task-supplychain</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>task-supplychain</name>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <!-- 定时任务框架启动器 -->
+        <dependency>
+            <groupId>org.oreframework.boot</groupId>
+            <artifactId>ore-boot-starter-elasticjob</artifactId>
+            <version>1.0.10-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.glsx.biz</groupId>
+            <artifactId>biz-user-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.glsx.biz</groupId>
+            <artifactId>biz-user-service</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.glsx.biz</groupId>
+            <artifactId>biz-common-user</artifactId>
+            <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--流量服务-->
+        <dependency>
+            <groupId>com.glsx.biz</groupId>
+            <artifactId>oms-flowservice-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.com.glsx</groupId>
+            <artifactId>insurance-core</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>cn.com.glsx.supplychain</groupId>
+            <artifactId>rpc-supplychain-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.oreframework.boot</groupId>
+            <artifactId>ore-boot-starter-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.oreframework.boot</groupId>
+            <artifactId>ore-boot-starter-jms</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.glsx.biz</groupId>
+            <version>1.0.0-SNAPSHOT</version>
+            <artifactId>oms-fcservice-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.glsx.oms.bigdata</groupId>
+            <artifactId>gldb-service-fb-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.com.glsx.merchant.facade</groupId>
+            <artifactId>rpc-merchant-facade-api</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.com.glsx</groupId>
+            <artifactId>rpc-supplychain-jst-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -1,0 +1,85 @@
+<!--
+* INSPINIA - Responsive Admin Theme
+* Version 2.7
+*
+-->
+<!DOCTYPE html>
+<html>
+<!-- <html ng-app="inspinia"> -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Page title set in pageTitle directive -->
+    <title page-title></title>
+    <script th:inline="javascript">
+        var cdnPath = [[${cdnPath}]];
+        var logoutPath = [[${logoutPath}]];
+        var inspiniaPath ='http://resource.glsx.com.cn/static/inspinia/2.7/';
+        var omssupplychainAdminHost = "/admin-supplychain/";
+        var omsNgStandardHost = omssupplychainAdminHost;
+    </script>
+    <script>
+        var role="roleb";
+        //实例化XmlHttpRequest对象
+       /* var xhr=new XMLHttpRequest();
+        //使用GET方式请求指定网址的页面
+         xhr.open("GET",omssupplychainAdminHost+'',false);
+        //发送空内容请求
+         xhr.send(null);
+        if(xhr.status===200){//200状态码表示正常
+            console.log(xhr.responseText);
+        }else{
+            console.log("Error occurred:"+xhr.statusText);
+        }*/
+        var omsConfig = {
+            // angular 初始化项目之前
+            hookBeforeBoot: function(){
+                angular.module('inspinia').config(function($urlRouterProvider){
+                    // 配置默认路由
+                    $urlRouterProvider.otherwise("/supplychainmanage/orderInfo");
+                });
+            },
+            // 项目业务模块加载
+            routeList: function(){
+              var v = '4.2.1';//js版本号
+              var list= [
+                    omssupplychainAdminHost + "views/supplychainmanage/route.js?v=" + v,
+                    omssupplychainAdminHost + "views/userInfomanage/route.js?v=" + v,
+//                omssupplychainAdminHost+"views/hardwaremanage/route.js",
+//                omssupplychainAdminHost+"views/inventorymanage/route.js",
+                    omssupplychainAdminHost + "views/devicelogmanage/route.js?v=" + v,
+                    omssupplychainAdminHost + "views/warehousemanage/route.js?v=" + v,
+                    omssupplychainAdminHost + "views/supplyChainSalesMana/route.js?v=" + v,
+                    omssupplychainAdminHost + "views/businessSettlementMana/route.js?v=" + v,
+                    omssupplychainAdminHost + "views/reconciliationSplitMana/route.js?v=" + v
+                ];
+                if(role=='rolea'){
+                    list.splice()
+                }
+                return list
+            }(),
+            // 项目自定义样式加载
+            cssList: [
+
+            ],
+            // 项目文案配置
+            omsSettings: {
+                omsName: "广联运营平台"
+            }
+        };
+    </script>
+    <!-- 动态加载css & js 文件 -->
+    <script src="static/js/common/loadScripts.js"></script>
+
+</head>
+<!-- ControllerAs syntax -->
+<!-- Main controller with serveral data used in Inspinia theme on diferent view -->
+
+<body ng-controller="MainCtrl as main">
+    <!-- Main view  -->
+    <div ui-view></div>
+</body>
+
+</html>

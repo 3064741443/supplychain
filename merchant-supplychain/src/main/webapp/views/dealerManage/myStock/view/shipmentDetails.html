@@ -1,0 +1,15 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">实际出货数量详情</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body no-padding" style="overflow-x: auto;">
+		<div class="ibox float-e-margins m-b-none">
+			<div class="ibox-content">
+				<div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns"/>
+			</div>
+		</div>
+	</div>
+</div>

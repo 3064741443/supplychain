@@ -1,0 +1,80 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <form role="form" class="form-horizontal clearfix" name="business_form">
+        <div class="row col-lg-8 col-sm-11 col-xs-10 justified">
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">商户名称</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入商户名称"  ng-model="formData.fromMerchantName"/>
+                        <div ng-model="formData.id" style="display: none;"></div> 
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">物料编码/名称</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="请输入物料编码/名称"  ng-model="formData.materialCode" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-sm-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">设备类型</label>
+                    <div class="col-lg-8">
+                        <ui-select name="deviceTypeName" ng-model="formData.deviceType" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in typeList">
+                                <div ng-bind="item.text "></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-lg-6">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">调拨状态</label>
+                    <div class="col-lg-8">
+                        <ui-select name="type" ng-model="formData.status" theme="bootstrap">
+                            <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                            <ui-select-choices repeat="item in allotTypeList">
+                                <div ng-bind="item.text"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">调拨时间：</label>
+                    <div class="col-sm-4">
+                        <input date-range-picker name="deliTime"
+							class="form-control date-picker" type="text" ng-model="formData.deliTime" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 pull-right">
+            <button class="btn btn-primary " style="margin-right: 15px" type="button" ng-click="search()">查询</button>
+            <button class="btn btn-primary " type="button" ng-click="callOut()" style="margin-right: 15px">调出</button>
+        </div>
+    </form>
+	<div>
+           <button class="btn btn-primary" ng-class="{active:calloutListShow}" type="button" ng-click="calloutSearch()">调出列表</button>
+           <button class="btn btn-primary" ng-class="{active:!calloutListShow}" type="button" ng-click="callinSearch()" >调入列表</button>
+    </div>
+    <div class="ibox float-e-margins relative">
+        <div class="ibox-content">
+            <div process-datatable dt-options="dtOptions" dt-instance="dtInstance" dt-columns="dtColumns" ng-show="calloutListShow">
+            </div>
+            <div process-datatable dt-options="dtOptions2" dt-instance="dtInstance2" dt-columns="dtColumns2" ng-show="callinListShow">
+            </div> 
+        </div>
+    </div>
+</div>

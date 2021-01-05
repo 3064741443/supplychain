@@ -1,0 +1,31 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">物料信息详情</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+    <table dt-options="dtOptions" class="table table-bordered table-hover full-width">
+        <colgroup>
+            <col width="20%" />
+            <col width="30%" />
+            <col width="20%" />
+            <col width="30%" />
+        </colgroup>
+        <tbody>
+        <tr ng-repeat="item in productDetailList">
+            <td class="text-right">物料编号 :</td>
+            <td class="text-left" >{{item.materialCode}}</td>
+            <td class="text-right">物料名称 :</td>
+            <td class="text-left">{{item.materialName}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="cancel()">关闭</button>
+    </div>
+</div>

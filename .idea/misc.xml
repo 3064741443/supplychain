@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Archetypes.Configuration">
+    <option name="archetypesFileLocation" value="archetypes.xml" />
+    <option name="workingDirectory" value="" />
+  </component>
+  <component name="FindBugsConfigurable">
+    <option name="make" value="true" />
+    <option name="effort" value="default" />
+    <option name="priority" value="Medium" />
+    <option name="excludeFilter" value="" />
+  </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/admin-supplychain" />
+    <file type="web" url="file://$PROJECT_DIR$/admin-supplychain-jxc" />
+    <file type="web" url="file://$PROJECT_DIR$/merchant-supplychain" />
+    <file type="web" url="file://$PROJECT_DIR$/rpc-supplychain" />
+    <file type="web" url="file://$PROJECT_DIR$/rpc-supplychain-jst" />
+    <file type="web" url="file://$PROJECT_DIR$/rpc-supplychain-jxc" />
+    <file type="web" url="file://$PROJECT_DIR$/rpc-supplychain-rdn" />
+    <file type="web" url="file://$PROJECT_DIR$/rpc-supplychain-udp" />
+    <file type="web" url="file://$PROJECT_DIR$/task-supplychain" />
+    <file type="web" url="file://$PROJECT_DIR$/web-supplychain" />
+    <file type="web" url="file://$PROJECT_DIR$/webapp-supplychain-jst" />
+  </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/merchant-supplychain/pom.xml" />
+        <option value="$PROJECT_DIR$/admin-supplychain/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-api/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-jst-api/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-jst/pom.xml" />
+        <option value="$PROJECT_DIR$/webapp-supplychain-jst/pom.xml" />
+        <option value="$PROJECT_DIR$/task-supplychain/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-udp-api/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-udp/pom.xml" />
+        <option value="$PROJECT_DIR$/admin-supplychain-jxc/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-jxc-api/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-jxc/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-rdn/pom.xml" />
+        <option value="$PROJECT_DIR$/rpc-supplychain-rdn-api/pom.xml" />
+        <option value="$PROJECT_DIR$/web-supplychain/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
+  <component name="SuppressionsComponent">
+    <option name="suppComments" value="[]" />
+  </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="myConfigurationMap">
+      <map>
+        <entry key="$PROJECT_DIR$">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="branchUrls">
+                <list>
+                  <option value="svn://192.168.3.233/supplychain/branches" />
+                  <option value="svn://192.168.3.233/supplychain/build" />
+                  <option value="svn://192.168.3.233/supplychain/ddh-member" />
+                  <option value="svn://192.168.3.233/supplychain/tags" />
+                </list>
+              </option>
+              <option name="trunkUrl" value="svn://192.168.3.233/supplychain/trunk" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

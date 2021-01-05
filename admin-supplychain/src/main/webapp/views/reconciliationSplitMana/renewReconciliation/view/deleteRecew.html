@@ -1,0 +1,92 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">删除-{{ whereFrom }}续费对账数据</h4>
+        <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">
+            <span aria-hidden="true">×</span> <span class="sr-only">Close</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tabs-container">
+            <form role="form" class="form-horizontal form-fixed form-fixed-8" novalidate name="delete_form"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label required">销售组／名称 :</label>
+                    <div class="control-content">
+                        <div class="row" style="margin-left:5px">
+                            <div class="col-lg-6">
+                                <ui-select name="saleGroup" ng-model="formData.saleGroup"  ng-required="true" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in saleGroupList">
+                                        <div ng-bind="item.text"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                    ng-show="delete_form.saleGroup.$invalid && delete_form.submitted">
+                                    <small class="text-danger" ng-show="delete_form.saleGroup.$error.required">请选择销售组</small>
+                                </div>	 			                                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show="whereFrom == '微信'">
+                    <label class="col-lg-3 control-label required">公众号 :</label>
+                    <div class="control-content">
+                        <div class="row" style="margin-left:5px">
+                            <div class="col-lg-6">
+                                <ui-select name="gzh" ng-model="formData.gzh"  ng-required="{{ gzhInvalid }}" theme="bootstrap">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in gzhList">
+                                        <div ng-bind="item.text"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                    ng-show="delete_form.gzh.$invalid && delete_form.submitted">
+                                    <small class="text-danger" ng-show="delete_form.gzh.$error.required">请选择公众号</small>
+                                </div>	 			                                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-1 control-label required">结算客户编码／名称：</label>
+                    <div class="control-content">
+                        <div class="row" style="margin-left:5px">
+                            <div class="col-lg-10">
+                                <ui-select name="customer" ng-required="true" ng-model="formData.customer" theme="bootstrap" ng-keyup="customerKeyUp()">
+                                    <ui-select-match placeholder="请选择">{{$select.selected.text}}</ui-select-match>
+                                    <ui-select-choices repeat="item in customerList">
+                                        <div ng-bind="item.text"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <div class="m-t-xs"
+                                    ng-show="delete_form.customer.$invalid && delete_form.submitted">
+                                    <small class="text-danger" ng-show="delete_form.customer.$error.required">请选择客户</small>
+                                </div>		                            	
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-1 control-label required" style="margin-left:4%">请选择删除月份 :</label>
+                    <div class="col-sm-6" style="margin-left:-1%">
+                        <input date-range-picker options="singleDateSettings" name="chooseDate" class="form-control date-picker" type="text" ng-model="formData.chooseDate" />
+                        <div class="m-t-xs"
+                                    ng-show="timeErrShow">
+                                    <small class="text-danger" ng-show="timeErrShow">请选择月份</small>
+                        </div>
+                    </div>
+                </div>  
+                <label style="margin-left: 17%">删除后，该月份的对账数据以及拆分结果都会被删除</label>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" ng-switch="curTabIndex">
+        <button type="submit" class="btn btn-primary" ng-click="ok();">确认删除</button>
+        <button type="button" class="btn btn-white" ng-click="cancel();">取消</button>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="glsx.com.cn.task.mapper.SyncLastidRecordMerChantStockMapper">
+  <resultMap id="BaseResultMap" type="glsx.com.cn.task.model.SyncLastidRecordMerChantStock">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="LAST_BS_SALES_ID" jdbcType="INTEGER" property="lastBsSalesId" />
+    <result column="LAST_BS_SALES_TIMESTAMP" jdbcType="INTEGER" property="lastBsSalesTimestamp" />
+    <result column="LAST_AM_STATEMENT_COLLECTION_TIMESTAMP" jdbcType="INTEGER" property="lastAmStatementCollectionTimestamp" />
+    <result column="LAST_AM_STATEMENT_FINANCE_TIMESTAMP" jdbcType="INTEGER" property="lastAmStatementFinanceTimestamp" />
+    <result column="LAST_BS_AFTER_SALE_ORDER_TIMESTAMP" jdbcType="INTEGER" property="lastBsAfterSaleOrderTimestamp" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, LAST_BS_SALES_ID, LAST_BS_SALES_TIMESTAMP, LAST_AM_STATEMENT_COLLECTION_TIMESTAMP, 
+    LAST_AM_STATEMENT_FINANCE_TIMESTAMP, LAST_BS_AFTER_SALE_ORDER_TIMESTAMP
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sync_lastid_record_merchant_stock
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sync_lastid_record_merchant_stock
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="glsx.com.cn.task.model.SyncLastidRecordMerChantStock">
+    insert into sync_lastid_record_merchant_stock (ID, LAST_BS_SALES_ID, LAST_BS_SALES_TIMESTAMP, 
+      LAST_AM_STATEMENT_COLLECTION_TIMESTAMP, LAST_AM_STATEMENT_FINANCE_TIMESTAMP, 
+      LAST_BS_AFTER_SALE_ORDER_TIMESTAMP)
+    values (#{id,jdbcType=INTEGER}, #{lastBsSalesId,jdbcType=INTEGER}, #{lastBsSalesTimestamp,jdbcType=INTEGER}, 
+      #{lastAmStatementCollectionTimestamp,jdbcType=INTEGER}, #{lastAmStatementFinanceTimestamp,jdbcType=INTEGER}, 
+      #{lastBsAfterSaleOrderTimestamp,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="glsx.com.cn.task.model.SyncLastidRecordMerChantStock">
+    insert into sync_lastid_record_merchant_stock
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="lastBsSalesId != null">
+        LAST_BS_SALES_ID,
+      </if>
+      <if test="lastBsSalesTimestamp != null">
+        LAST_BS_SALES_TIMESTAMP,
+      </if>
+      <if test="lastAmStatementCollectionTimestamp != null">
+        LAST_AM_STATEMENT_COLLECTION_TIMESTAMP,
+      </if>
+      <if test="lastAmStatementFinanceTimestamp != null">
+        LAST_AM_STATEMENT_FINANCE_TIMESTAMP,
+      </if>
+      <if test="lastBsAfterSaleOrderTimestamp != null">
+        LAST_BS_AFTER_SALE_ORDER_TIMESTAMP,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="lastBsSalesId != null">
+        #{lastBsSalesId,jdbcType=INTEGER},
+      </if>
+      <if test="lastBsSalesTimestamp != null">
+        #{lastBsSalesTimestamp,jdbcType=INTEGER},
+      </if>
+      <if test="lastAmStatementCollectionTimestamp != null">
+        #{lastAmStatementCollectionTimestamp,jdbcType=INTEGER},
+      </if>
+      <if test="lastAmStatementFinanceTimestamp != null">
+        #{lastAmStatementFinanceTimestamp,jdbcType=INTEGER},
+      </if>
+      <if test="lastBsAfterSaleOrderTimestamp != null">
+        #{lastBsAfterSaleOrderTimestamp,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="glsx.com.cn.task.model.SyncLastidRecordMerChantStock">
+    update sync_lastid_record_merchant_stock
+    <set>
+      <if test="lastBsSalesId != null">
+        LAST_BS_SALES_ID = #{lastBsSalesId,jdbcType=INTEGER},
+      </if>
+      <if test="lastBsSalesTimestamp != null">
+        LAST_BS_SALES_TIMESTAMP = #{lastBsSalesTimestamp,jdbcType=INTEGER},
+      </if>
+      <if test="lastAmStatementCollectionTimestamp != null">
+        LAST_AM_STATEMENT_COLLECTION_TIMESTAMP = #{lastAmStatementCollectionTimestamp,jdbcType=INTEGER},
+      </if>
+      <if test="lastAmStatementFinanceTimestamp != null">
+        LAST_AM_STATEMENT_FINANCE_TIMESTAMP = #{lastAmStatementFinanceTimestamp,jdbcType=INTEGER},
+      </if>
+      <if test="lastBsAfterSaleOrderTimestamp != null">
+        LAST_BS_AFTER_SALE_ORDER_TIMESTAMP = #{lastBsAfterSaleOrderTimestamp,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="glsx.com.cn.task.model.SyncLastidRecordMerChantStock">
+    update sync_lastid_record_merchant_stock
+    set LAST_BS_SALES_ID = #{lastBsSalesId,jdbcType=INTEGER},
+      LAST_BS_SALES_TIMESTAMP = #{lastBsSalesTimestamp,jdbcType=INTEGER},
+      LAST_AM_STATEMENT_COLLECTION_TIMESTAMP = #{lastAmStatementCollectionTimestamp,jdbcType=INTEGER},
+      LAST_AM_STATEMENT_FINANCE_TIMESTAMP = #{lastAmStatementFinanceTimestamp,jdbcType=INTEGER},
+      LAST_BS_AFTER_SALE_ORDER_TIMESTAMP = #{lastBsAfterSaleOrderTimestamp,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

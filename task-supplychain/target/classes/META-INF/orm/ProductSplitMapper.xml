@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="glsx.com.cn.task.mapper.am.ProductSplitMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.am.ProductSplit" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="SERVICE_TYPE" property="serviceType" jdbcType="TINYINT"/>
+    <result column="PRODUCT_CODE" property="productCode" jdbcType="VARCHAR" />
+    <result column="PRODUCT_NAME" property="productName" jdbcType="VARCHAR" />
+    <result column="MERCHANT_CODE" property="merchantCode" jdbcType="VARCHAR"/>
+    <result column="MERCHANT_NAME" property="merchantName" jdbcType="VARCHAR"/>
+    <result column="CHANNEL" property="channel" jdbcType="TINYINT" />
+    <result column="ALIAS" property="alias" jdbcType="VARCHAR" />
+    <result column="DEVICE_QUANTITY" property="deviceQuantity" jdbcType="INTEGER" />
+    <result column="SALE_MODE" property="saleMode" jdbcType="TINYINT" />
+    <result column="SERVICE_TIME" property="serviceTime" jdbcType="TIMESTAMP" />
+    <result column="PACKAGE_ONE" property="packageOne" jdbcType="VARCHAR" />
+    <result column="CREATED_BY" property="createdBy" jdbcType="VARCHAR" />
+    <result column="CREATED_DATE" property="createdDate" jdbcType="TIMESTAMP" />
+    <result column="UPDATED_BY" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="UPDATED_DATE" property="updatedDate" jdbcType="TIMESTAMP" />
+    <result column="DELETED_FLAG" property="deletedFlag" jdbcType="VARCHAR" />
+    <result column="PLUS_JRFK" property="plusJrfk" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID,SERVICE_TYPE, PRODUCT_CODE, PRODUCT_NAME, CHANNEL, MERCHANT_NAME, ALIAS, DEVICE_QUANTITY, SALE_MODE,
+    SERVICE_TIME, PACKAGE_ONE, CREATED_BY, CREATED_DATE, UPDATED_BY, UPDATED_DATE, DELETED_FLAG,PLUS_JRFK
+  </sql>
+
+  <sql id="PS_Base_Column_List" >
+    ps.ID,ps.SERVICE_TYPE, ps.PRODUCT_CODE, ps.PRODUCT_NAME,ps.MERCHANT_CODE, ps.CHANNEL, ps.MERCHANT_NAME, ps.ALIAS, ps.DEVICE_QUANTITY, ps.SALE_MODE,
+    ps.SERVICE_TIME, ps.PACKAGE_ONE, ps.CREATED_BY, ps.CREATED_DATE, ps.UPDATED_BY, ps.UPDATED_DATE, ps.DELETED_FLAG,ps.PLUS_JRFK
+  </sql>
+
+  <select id="listProductSplit" parameterType="cn.com.glsx.supplychain.model.am.ProductSplit" resultMap="BaseResultMap">
+    select
+    <include refid="PS_Base_Column_List"/>
+    from am_product_split ps
+    where ps.DELETED_FLAG = "N"
+    <if test="productName != null">
+      AND ps.PRODUCT_NAME LIKE "%"#{productName,jdbcType=VARCHAR}"%"
+    </if>
+    ORDER BY ps.CREATED_DATE DESC
+  </select>
+
+  <select id="getProductSplitByServiceTypeThreeFour" parameterType="cn.com.glsx.supplychain.model.am.ProductSplit" resultMap="BaseResultMap">
+    select
+    <include refid="PS_Base_Column_List"/>
+    from am_product_split ps
+    where ps.DELETED_FLAG = "N" and ps.PLUS_JRFK = "N"
+    and ps.SERVICE_TYPE in (3,4)
+    <if test="merchantCode != null">
+      and  ps.MERCHANT_CODE = #{merchantCode,jdbcType=VARCHAR}
+    </if>
+    <if test="channel != null">
+      and  ps.CHANNEL = #{channel,jdbcType=VARCHAR}
+    </if>
+    ORDER BY ps.CREATED_DATE DESC
+  </select>
+
+  <insert id="add" parameterType="cn.com.glsx.supplychain.model.am.ProductSplit" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into am_product_split
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="productCode != null" >
+        PRODUCT_CODE,
+      </if>
+      <if test="productName != null" >
+        PRODUCT_NAME,
+      </if>
+      <if test="channel != null" >
+        CHANNEL,
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME,
+      </if>
+      <if test="alias != null" >
+        ALIAS,
+      </if>
+      <if test="deviceQuantity != null" >
+        DEVICE_QUANTITY,
+      </if>
+      <if test="saleMode != null" >
+        SALE_MODE,
+      </if>
+      <if test="serviceTime != null" >
+        SERVICE_TIME,
+      </if>
+      <if test="packageOne != null" >
+        PACKAGE_ONE,
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY,
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE,
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY,
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE,
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG,
+      </if>
+      <if test="plusJrfk != null" >
+        PLUS_JRFK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="productCode != null" >
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=TINYINT},
+      </if>
+      <if test="merchantName != null" >
+        #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="alias != null" >
+        #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceQuantity != null" >
+        #{deviceQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="saleMode != null" >
+        #{saleMode,jdbcType=TINYINT},
+      </if>
+      <if test="serviceTime != null" >
+        #{serviceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packageOne != null" >
+        #{packageOne,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="plusJrfk != null" >
+        #{plusJrfk,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateById" parameterType="cn.com.glsx.supplychain.model.am.ProductSplit" >
+    update am_product_split
+    <set >
+      <if test="productCode != null" >
+        PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null" >
+        PRODUCT_NAME = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        CHANNEL = #{channel,jdbcType=TINYINT},
+      </if>
+      <if test="merchantName != null" >
+        MERCHANT_NAME = #{merchantName,jdbcType=VARCHAR},
+      </if>
+      <if test="alias != null" >
+        ALIAS = #{alias,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceQuantity != null" >
+        DEVICE_QUANTITY = #{deviceQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="saleMode != null" >
+        SALE_MODE = #{saleMode,jdbcType=TINYINT},
+      </if>
+      <if test="serviceTime != null" >
+        SERVICE_TIME = #{serviceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packageOne != null" >
+        PACKAGE_ONE = #{packageOne,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null" >
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null" >
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletedFlag != null" >
+        DELETED_FLAG = #{deletedFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="plusJrfk != null" >
+        PLUS_JRFK = #{plusJrfk,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.glsx.supplychain.mapper.WareHouseInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.glsx.supplychain.model.WareHouseInfo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="BELONG" jdbcType="VARCHAR" property="belong" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="CONTACTS" jdbcType="VARCHAR" property="contacts" />
+    <result column="CREATED_DATE" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="UPDATED_DATE" jdbcType="TIMESTAMP" property="updatedDate" />
+    <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, BELONG, NAME, ADDRESS, MOBILE, CONTACTS, CREATED_DATE, CREATED_BY, UPDATED_DATE, UPDATED_BY, 
+    DELETED_FLAG
+  </sql>
+  
+  <select id="getWareHouseInfo" resultMap="BaseResultMap">
+  	  select ID,NAME from warehouse_info	
+  </select>
+  
+  <!-- 查询仓库用户信息 -->
+  <select id="listWareHouseInfo" parameterType="cn.com.glsx.supplychain.model.WareHouseInfo" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from warehouse_info
+       <where>
+		   <if test="name != null and name != ''">
+		        AND NAME LIKE CONCAT('%',#{name},'%')
+		   </if>
+		   <if test="mobile != null and mobile != ''">
+		        AND MOBILE LIKE CONCAT('%',#{mobile},'%')
+		   </if>
+		   <if test="belong != null and belong !=''">
+		   		AND BELONG = #{belong,jdbcType=VARCHAR}
+		   </if>
+	    </where>
+	ORDER BY CREATED_DATE DESC
+  </select>
+  
+  <!-- 根据条件查询仓库列表 -->
+  <select id="getWareHouseInfoList" parameterType="cn.com.glsx.supplychain.model.WareHouseInfo" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List"/>
+  	from warehouse_info
+  	<where>
+ 		<if test="name != null and name != ''">
+	        AND NAME LIKE CONCAT('%',#{name},'%')
+		</if>
+		<if test="mobile != null and mobile != ''">
+	        AND MOBILE LIKE CONCAT('%',#{mobile},'%')
+		</if>
+ 		<if test="belong != null and belong !=''">
+	   		AND BELONG = #{belong,jdbcType=VARCHAR}
+	 	</if>
+  	</where>
+  </select>
+  
+   <!--统计仓库数量 -->
+  <select id="count" parameterType="cn.com.glsx.supplychain.model.WareHouseInfo" resultType="java.lang.Integer">
+    select 
+    	count(*)
+    from warehouse_info
+    <where>
+		   <if test="name != null">
+		        AND NAME = #{name,jdbcType=VARCHAR}
+		   </if>
+		   <if test="mobile != null">
+		        AND MOBILE = #{mobile,jdbcType=VARCHAR}
+		   </if>
+	    </where>
+  </select>
+  
+   <!-- 通过仓库ID查询用户信息 -->
+  <select id="getWareHouseById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from warehouse_info
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 通过仓库名称查询用户信息 -->
+  <select id="getWareHouseByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    	<include refid="Base_Column_List" />
+    from warehouse_info
+    where NAME = #{name,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 修改数据查询 -->
+  <select id="getWareHouseByUpdate" parameterType="cn.com.glsx.supplychain.model.WareHouseInfo" resultMap="BaseResultMap">
+	  	select 
+	    	<include refid="Base_Column_List" />
+	    from warehouse_info
+	    <where>
+		   <if test="id != null">
+		        AND ID NOT IN(#{id,jdbcType=INTEGER})
+		   </if>
+		   <if test="name != null">
+		        AND NAME = #{name,jdbcType=VARCHAR}
+		   </if>
+	    </where> 
+  </select>
+  
+  
+   <!-- 删除仓库信息 -->
+  <delete id="deleteWareHouseInfo" parameterType="java.lang.Integer">
+    delete from warehouse_info
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <!-- 插入仓库信息 -->
+  <insert id="insert" parameterType="cn.com.glsx.supplychain.model.WareHouseInfo">
+	<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+		SELECT LAST_INSERT_ID()
+	</selectKey>
+	insert into warehouse_info (ID, NAME, BELONG,ADDRESS, MOBILE,CONTACTS, CREATED_DATE, CREATED_BY,
+	UPDATED_DATE, UPDATED_BY, DELETED_FLAG
+	)
+	values (#{id,jdbcType=INTEGER},#{name,jdbcType=VARCHAR},#{belong,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR},
+	#{contacts,jdbcType=VARCHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR},#{updatedDate,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=VARCHAR},'N'
+	)
+</insert>
+  
+   <!-- 更新仓库信息 -->
+  <update id="update" parameterType="cn.com.glsx.supplychain.model.WareHouseInfo">
+    update warehouse_info
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="belong != null">
+        BELONG = #{belong,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contacts != null">
+        CONTACTS = #{contacts,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null">
+        CREATED_DATE = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null">
+        UPDATED_DATE = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedBy != null">
+        UPDATED_BY = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="deletedFlag != null">
+        DELETED_FLAG = #{deletedFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
